@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "@react-navigation/native": "^6.1.7",
-    "expo": "^44.0.6",
-    "expo-cli": "^4.0.17",
-    "react-native-modal": "^13.0.1"
-  }
-}
