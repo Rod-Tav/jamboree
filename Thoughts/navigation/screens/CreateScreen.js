@@ -39,7 +39,7 @@ const CreateScreen = () => {
       title,
       content,
       mood,
-      imageUris: imageSources, // Include the selected image URIs
+      imageUris: imageSources,
     };
 
     try {
@@ -72,7 +72,6 @@ const CreateScreen = () => {
           <View style={styles.headerStyle}>
             <Text style={styles.headerText}>Submit Note</Text>
           </View>
-          {/* Pass imageSources and setImageSources as props to ImagePickerScreen */}
           <ImagePickerScreen
             imageSources={imageSources}
             setImageSources={setImageSources}

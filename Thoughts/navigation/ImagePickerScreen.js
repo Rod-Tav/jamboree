@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   TouchableOpacity,
@@ -10,8 +10,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 
-const ImagePickerScreen = () => {
-  const [selectedImages, setSelectedImages] = useState([]);
+const ImagePickerScreen = ({ imageSources, setImageSources }) => {
   const navigation = useNavigation();
 
   const handleImagePress = (uri) => {
@@ -37,7 +36,7 @@ const ImagePickerScreen = () => {
       });
 
       if (!result.cancelled && result.assets.length > 0) {
-        setSelectedImages(result.assets);
+        setImageSources(result.assets); // Update the selected images in the parent component
       }
     } catch (error) {
       console.error("Error selecting images:", error);
@@ -47,7 +46,7 @@ const ImagePickerScreen = () => {
   return (
     <View>
       <ScrollView horizontal contentContainerStyle={styles.imageContainer}>
-        {selectedImages.map((image) => (
+        {imageSources.map((image) => (
           <TouchableOpacity
             key={image.uri}
             onPress={() => handleImagePress(image.uri)}
