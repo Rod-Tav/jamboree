@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -9,9 +9,9 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import styles from "../../styles"; // Styles for the screens
+import styles from "../../styles";
 import ImagePickerScreen from "../ImagePickerScreen";
 import MoodPicker from "../MoodPicker";
 
@@ -19,7 +19,19 @@ const CreateScreen = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [mood, setMood] = useState("");
-  const navigation = useNavigation(); // Navigation hook
+  const [imageSources, setImageSources] = useState([]);
+  const navigation = useNavigation();
+  const isFocused = useIsFocused();
+
+  // Reset state when the screen is focused
+  useEffect(() => {
+    if (isFocused) {
+      setTitle("");
+      setContent("");
+      setMood("");
+      setImageSources([]);
+    }
+  }, [isFocused]);
 
   const handleAddNote = async () => {
     const note = {
@@ -27,25 +39,23 @@ const CreateScreen = () => {
       title,
       content,
       mood,
+      imageUris: imageSources, // Include the selected image URIs
     };
 
     try {
-      // Get the existing notes from AsyncStorage
       const existingNotes = await AsyncStorage.getItem("NOTES");
       const notes = existingNotes ? JSON.parse(existingNotes) : [];
 
-      // Add the new note to the array
       notes.push(note);
 
-      // Save the updated notes to AsyncStorage
       await AsyncStorage.setItem("NOTES", JSON.stringify(notes));
 
-      // Reset the form fields
+      // Reset all states after successfully saving the note
       setTitle("");
       setContent("");
       setMood("");
+      setImageSources([]);
 
-      // Navigate back to the HomeScreen
       navigation.navigate("Home");
     } catch (error) {
       console.error("Error saving note:", error);
@@ -62,7 +72,11 @@ const CreateScreen = () => {
           <View style={styles.headerStyle}>
             <Text style={styles.headerText}>Submit Note</Text>
           </View>
-          <ImagePickerScreen />
+          {/* Pass imageSources and setImageSources as props to ImagePickerScreen */}
+          <ImagePickerScreen
+            imageSources={imageSources}
+            setImageSources={setImageSources}
+          />
           <TextInput
             style={styles.textInput}
             onChangeText={(text) => setTitle(text)}

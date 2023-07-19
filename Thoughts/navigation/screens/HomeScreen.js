@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, FlatList } from "react-native";
+import React, { useState } from "react";
+import { View, Text, FlatList, Image } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import styles from "../../styles"; // Styles for the screens
+import styles from "../../styles";
 
 const HomeScreen = () => {
   const [notes, setNotes] = useState([]);
@@ -22,10 +22,18 @@ const HomeScreen = () => {
   });
 
   const renderItem = ({ item }) => (
-    <View style={styles.noteItem}>
+    <View style={styles.noteContainer}>
+      {/* Use condition to check if imageUri is available */}
+      {item.imageUri && (
+        <Image
+          source={{ uri: item.imageUri }}
+          style={styles.noteImage}
+          onError={() => console.warn("Failed to load image")}
+        />
+      )}
+      <Text style={styles.noteMood}>Mood: {item.mood}</Text>
       <Text style={styles.noteTitle}>{item.title}</Text>
       <Text style={styles.noteContent}>{item.content}</Text>
-      <Text style={styles.noteMood}>Mood: {item.mood}</Text>
     </View>
   );
 
@@ -36,8 +44,9 @@ const HomeScreen = () => {
       </View>
       <FlatList
         data={notes}
-        renderItem={renderItem} // Use the renderItem function to render each task
-        keyExtractor={(item, index) => index.toString()}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id} // Use the 'id' property as the keyExtractor
+        contentContainerStyle={styles.list} // Add this style for spacing between list items
       />
     </View>
   );

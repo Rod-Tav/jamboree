@@ -1,44 +1,39 @@
 import { StyleSheet } from "react-native";
+
 const viewPadding = 10;
 
 export default StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#FFFFFF",
   },
   list: {
+    paddingVertical: viewPadding,
+  },
+  noteContainer: {
+    backgroundColor: "#F0F0F0",
+    padding: viewPadding,
+    marginBottom: viewPadding,
+  },
+  noteImage: {
     width: "100%",
+    height: 200,
+    marginBottom: viewPadding,
   },
-  listItem: {
-    paddingTop: 2,
-    paddingBottom: 2,
+  noteTitle: {
     fontSize: 18,
-    flex: 1,
-    flexWrap: "wrap",
+    fontWeight: "bold",
+    marginBottom: viewPadding / 2,
   },
-  listItemCont: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginHorizontal: 10,
-    marginVertical: 5,
+  noteContent: {
+    fontSize: 16,
   },
-  textInput: {
-    height: 40,
-    paddingRight: 10,
-    paddingLeft: 10,
-    borderColor: "gray",
-    width: "65%",
-    borderWidth: 1,
-  },
-  button: {
-    backgroundColor: "lightgrey",
-    justifyContent: "center",
-    alignItems: "center",
-    height: 40,
-    width: "30%",
+  noteMood: {
+    fontSize: 14,
+    color: "#888888",
+    marginBottom: viewPadding / 2,
   },
   headerText: {
-    justifyContent: "center",
     fontSize: 20,
     fontWeight: "bold",
   },
