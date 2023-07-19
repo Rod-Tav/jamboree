@@ -1,80 +1,91 @@
-import React, { useState, useEffect } from "react";
-import { View, TouchableOpacity, Image, Text } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  TouchableOpacity,
+  Image,
+  Text,
+  ScrollView,
+  StyleSheet,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import ImagePickerMultipleScreen from "./ImagePickerMultipleScreen";
+import * as ImagePicker from "expo-image-picker";
 
-const ImagePickerScreen = ({ imageSources, setImageSources }) => {
+const ImagePickerScreen = () => {
   const [selectedImages, setSelectedImages] = useState([]);
-  const [imageReady, setImageReady] = useState(false);
   const navigation = useNavigation();
 
-  useEffect(() => {
-    // Calculate scaled dimensions based on original aspect ratio and maximum size (200)
-    if (selectedImages.length > 0) {
-      const selectedImagesWithDimensions = [];
-
-      selectedImages.forEach((uri) => {
-        Image.getSize(uri, (width, height) => {
-          let scaledWidth = width;
-          let scaledHeight = height;
-
-          if (scaledWidth > 200 || scaledHeight > 200) {
-            const aspectRatio = scaledWidth / scaledHeight;
-            if (scaledWidth > scaledHeight) {
-              scaledWidth = 200;
-              scaledHeight = 200 / aspectRatio;
-            } else {
-              scaledHeight = 200;
-              scaledWidth = 200 * aspectRatio;
-            }
-          }
-
-          // Store the image URI and its dimensions in the state
-          selectedImagesWithDimensions.push({
-            uri,
-            width: scaledWidth,
-            height: scaledHeight,
-          });
-
-          // Check if all images have been processed
-          if (selectedImagesWithDimensions.length === selectedImages.length) {
-            setImageSources(selectedImagesWithDimensions);
-            setImageReady(true);
-          }
-        });
-      });
-    }
-  }, [selectedImages]);
-
   const handleImagePress = (uri) => {
-    // Handle opening the image in full screen or any other action if needed
-    // For example, you can navigate to a new screen to display the image in full size
     navigation.navigate("FullScreenImage", { imageUri: uri });
+  };
+
+  const handleImagePicker = async () => {
+    try {
+      const permissionResult =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+      if (permissionResult.granted === false) {
+        alert("Permission to access camera roll is required!");
+        return;
+      }
+
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: false,
+        quality: 1,
+        allowsMultipleSelection: true,
+        selectionLimit: 5,
+      });
+
+      if (!result.cancelled && result.assets.length > 0) {
+        setSelectedImages(result.assets);
+      }
+    } catch (error) {
+      console.error("Error selecting images:", error);
+    }
   };
 
   return (
     <View>
-      {/* Display the selected images if imageSources is available and ready */}
-      {imageReady &&
-        imageSources.map((image) => (
+      <ScrollView horizontal contentContainerStyle={styles.imageContainer}>
+        {selectedImages.map((image) => (
           <TouchableOpacity
             key={image.uri}
             onPress={() => handleImagePress(image.uri)}
           >
-            <Image
-              source={{ uri: image.uri }}
-              style={{
-                width: image.width,
-                height: image.height,
-                resizeMode: "contain",
-              }}
-            />
+            <View style={styles.imageWrapper}>
+              <Image
+                source={{ uri: image.uri }}
+                style={styles.image}
+                resizeMode="cover"
+              />
+            </View>
           </TouchableOpacity>
         ))}
-      {/* Render the ImagePickerMultipleScreen in a separate screen */}
-      <ImagePickerMultipleScreen setSelectedImages={setSelectedImages} />
+      </ScrollView>
+      <View>
+        <TouchableOpacity onPress={handleImagePicker}>
+          <Text>Choose Image</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  imageContainer: {
+    flexDirection: "row",
+    paddingVertical: 10,
+  },
+  imageWrapper: {
+    width: 200,
+    height: 200,
+    marginRight: 10,
+    borderRadius: 8,
+    overflow: "hidden",
+  },
+  image: {
+    flex: 1,
+  },
+});
 
 export default ImagePickerScreen;
