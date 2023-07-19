@@ -39,7 +39,7 @@ const CreateScreen = () => {
       title,
       content,
       mood,
-      imageUris: imageSources,
+      imageSources,
     };
 
     try {
@@ -62,6 +62,10 @@ const CreateScreen = () => {
     }
   };
 
+  const changeImageSources = (newImageSources) => {
+    setImageSources(newImageSources);
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -70,28 +74,46 @@ const CreateScreen = () => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={[styles.container, { paddingBottom: 10 }]}>
           <View style={styles.headerStyle}>
-            <Text style={styles.headerText}>Submit Note</Text>
+            <Text style={styles.headerText}>What's on your mind?</Text>
           </View>
-          <ImagePickerScreen
-            imageSources={imageSources}
-            setImageSources={setImageSources}
-          />
+
+          {/* Styled ImagePickerScreen */}
+          <View>
+            <ImagePickerScreen
+              imageSources={imageSources}
+              changeImageSources={changeImageSources}
+            />
+          </View>
+
+          {/* Title Input */}
           <TextInput
-            style={styles.textInput}
+            style={styles.titleInput}
             onChangeText={(text) => setTitle(text)}
             value={title}
             placeholder="Title"
+            maxLength={50} // Limit the title to a single line
           />
+
+          {/* Content Input */}
           <TextInput
-            style={styles.textInput}
+            style={styles.contentInput}
             onChangeText={(text) => setContent(text)}
             value={content}
             placeholder="Content"
             multiline
           />
-          <MoodPicker value={mood} onValueChange={(value) => setMood(value)} />
-          <TouchableOpacity onPress={handleAddNote} style={styles.button}>
-            <Text>Add Note</Text>
+
+          {/* Mood Picker */}
+          <View style={styles.moodInput}>
+            <MoodPicker
+              value={mood}
+              onValueChange={(value) => setMood(value)}
+            />
+          </View>
+
+          {/* Styled Add Note Button */}
+          <TouchableOpacity onPress={handleAddNote} style={styles.addButton}>
+            <Text style={styles.addButtonText}>Log Your Thought</Text>
           </TouchableOpacity>
         </View>
       </TouchableWithoutFeedback>

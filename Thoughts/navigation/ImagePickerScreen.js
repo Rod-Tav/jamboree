@@ -7,16 +7,10 @@ import {
   ScrollView,
   StyleSheet,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
-const ImagePickerScreen = ({ imageSources, setImageSources }) => {
-  const navigation = useNavigation();
-
-  const handleImagePress = (uri) => {
-    navigation.navigate("FullScreenImage", { imageUri: uri });
-  };
-
+const ImagePickerScreen = ({ imageSources, changeImageSources }) => {
   const handleImagePicker = async () => {
     try {
       const permissionResult =
@@ -35,8 +29,8 @@ const ImagePickerScreen = ({ imageSources, setImageSources }) => {
         selectionLimit: 5,
       });
 
-      if (!result.cancelled && result.assets.length > 0) {
-        setImageSources(result.assets); // Update the selected images in the parent component
+      if (!result.canceled && result.assets.length > 0) {
+        changeImageSources(result.assets); // Update the selected images in the parent component
       }
     } catch (error) {
       console.error("Error selecting images:", error);
@@ -46,24 +40,19 @@ const ImagePickerScreen = ({ imageSources, setImageSources }) => {
   return (
     <View>
       <ScrollView horizontal contentContainerStyle={styles.imageContainer}>
-        {imageSources.map((image) => (
-          <TouchableOpacity
-            key={image.uri}
-            onPress={() => handleImagePress(image.uri)}
-          >
-            <View style={styles.imageWrapper}>
-              <Image
-                source={{ uri: image.uri }}
-                style={styles.image}
-                resizeMode="cover"
-              />
-            </View>
-          </TouchableOpacity>
+        {imageSources.map((image, index) => (
+          <View key={image.id || index} style={styles.imageWrapper}>
+            <Image
+              source={{ uri: image.uri }}
+              style={styles.image}
+              resizeMode="cover"
+            />
+          </View>
         ))}
       </ScrollView>
       <View>
         <TouchableOpacity onPress={handleImagePicker}>
-          <Text>Choose Image</Text>
+          <Ionicons name="images" size={30}></Ionicons>
         </TouchableOpacity>
       </View>
     </View>

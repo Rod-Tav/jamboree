@@ -1,5 +1,6 @@
 import React from "react";
 import RNPickerSelect from "react-native-picker-select";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const MoodPicker = ({ value, onValueChange }) => {
   const moodOptions = [
@@ -15,6 +16,9 @@ const MoodPicker = ({ value, onValueChange }) => {
       onValueChange={onValueChange}
       items={moodOptions}
       placeholder={{ label: "Select Mood", value: null }}
+      Icon={() => {
+        return <Ionicons name="caret-down-outline" />;
+      }}
     />
   );
 };
