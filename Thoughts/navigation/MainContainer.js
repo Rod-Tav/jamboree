@@ -49,6 +49,7 @@ function MainContainer() {
             null,
           ],
           tabBarShowLabel: false,
+          headerShown: false,
         })}
       >
         <Tab.Screen name={homeName} component={HomeScreen} />

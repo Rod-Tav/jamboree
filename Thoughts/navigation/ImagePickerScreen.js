@@ -1,16 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   TouchableOpacity,
   Image,
-  Text,
   ScrollView,
   StyleSheet,
+  Text,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import Icon from "react-native-vector-icons/Feather";
+import ImageViewing from "react-native-image-viewing";
+import styles from "../styles/styles";
 
 const ImagePickerScreen = ({ imageSources, changeImageSources }) => {
+  const [isImageViewVisible, setIsImageViewVisible] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
   const handleImagePicker = async () => {
     try {
       const permissionResult =
@@ -37,43 +43,52 @@ const ImagePickerScreen = ({ imageSources, changeImageSources }) => {
     }
   };
 
+  const handleImagePress = (imageIndex) => {
+    setSelectedImageIndex(imageIndex);
+    setIsImageViewVisible(true);
+  };
+
+  const closeImageView = () => {
+    setIsImageViewVisible(false);
+  };
+
   return (
     <View>
       <ScrollView horizontal contentContainerStyle={styles.imageContainer}>
         {imageSources.map((image, index) => (
-          <View key={image.id || index} style={styles.imageWrapper}>
-            <Image
-              source={{ uri: image.uri }}
-              style={styles.image}
-              resizeMode="cover"
-            />
-          </View>
+          <TouchableOpacity
+            key={image.uri}
+            onPress={() => handleImagePress(index)}
+          >
+            <View style={styles.imageWrapper}>
+              <Image
+                source={{ uri: image.uri }}
+                style={styles.image}
+                resizeMode="cover"
+              />
+            </View>
+          </TouchableOpacity>
         ))}
       </ScrollView>
       <View>
-        <TouchableOpacity onPress={handleImagePicker}>
-          <Ionicons name="images" size={30}></Ionicons>
+        <TouchableOpacity
+          onPress={handleImagePicker}
+          style={styles.buttonContainer}
+        >
+          <View style={styles.iconContainer}>
+            <Icon name="image" size={30} style={styles.icon} />
+          </View>
+          <Text>Add Images...</Text>
         </TouchableOpacity>
       </View>
+      <ImageViewing
+        images={imageSources.map((image) => ({ uri: image.uri }))}
+        imageIndex={selectedImageIndex}
+        visible={isImageViewVisible}
+        onRequestClose={closeImageView}
+      />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  imageContainer: {
-    flexDirection: "row",
-    paddingVertical: 10,
-  },
-  imageWrapper: {
-    width: 200,
-    height: 200,
-    marginRight: 10,
-    borderRadius: 8,
-    overflow: "hidden",
-  },
-  image: {
-    flex: 1,
-  },
-});
 
 export default ImagePickerScreen;

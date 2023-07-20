@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import styles from "../../styles";
+import styles from "../../styles/styles";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 const HomeScreen = () => {

@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import styles from "../../styles";
+import styles from "../../styles/styles";
 import ImagePickerScreen from "../ImagePickerScreen";
 import MoodPicker from "../MoodPicker";
 
@@ -23,16 +23,6 @@ const CreateScreen = () => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
 
-  // Reset state when the screen is focused
-  useEffect(() => {
-    if (isFocused) {
-      setTitle("");
-      setContent("");
-      setMood("");
-      setImageSources([]);
-    }
-  }, [isFocused]);
-
   const handleAddNote = async () => {
     const note = {
       id: new Date().getTime().toString(),
@@ -41,6 +31,15 @@ const CreateScreen = () => {
       mood,
       imageSources,
     };
+
+    if (
+      note.title == "" &&
+      note.content == "" &&
+      note.mood == "" &&
+      note.imageSources.length == 0
+    ) {
+      return;
+    }
 
     try {
       const existingNotes = await AsyncStorage.getItem("NOTES");
@@ -67,57 +66,49 @@ const CreateScreen = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
-    >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={[styles.container, { paddingBottom: 10 }]}>
-          <View style={styles.headerStyle}>
-            <Text style={styles.headerText}>What's on your mind?</Text>
-          </View>
-
-          {/* Styled ImagePickerScreen */}
-          <View>
-            <ImagePickerScreen
-              imageSources={imageSources}
-              changeImageSources={changeImageSources}
-            />
-          </View>
-
-          {/* Title Input */}
-          <TextInput
-            style={styles.titleInput}
-            onChangeText={(text) => setTitle(text)}
-            value={title}
-            placeholder="Title"
-            maxLength={50} // Limit the title to a single line
-          />
-
-          {/* Content Input */}
-          <TextInput
-            style={styles.contentInput}
-            onChangeText={(text) => setContent(text)}
-            value={content}
-            placeholder="Content"
-            multiline
-          />
-
-          {/* Mood Picker */}
-          <View style={styles.moodInput}>
-            <MoodPicker
-              value={mood}
-              onValueChange={(value) => setMood(value)}
-            />
-          </View>
-
-          {/* Styled Add Note Button */}
-          <TouchableOpacity onPress={handleAddNote} style={styles.addButton}>
-            <Text style={styles.addButtonText}>Log Your Thought</Text>
-          </TouchableOpacity>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={[styles.container, { paddingBottom: 10 }]}>
+        <View style={styles.headerStyle}>
+          <Text style={styles.headerText}>What's on your mind?</Text>
         </View>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+
+        {/* Styled ImagePickerScreen */}
+        <View>
+          <ImagePickerScreen
+            imageSources={imageSources}
+            changeImageSources={changeImageSources}
+          />
+        </View>
+
+        {/* Title Input */}
+        <TextInput
+          style={styles.titleInput}
+          onChangeText={(text) => setTitle(text)}
+          value={title}
+          placeholder="Title"
+          maxLength={50}
+        />
+
+        {/* Content Input */}
+        <TextInput
+          style={styles.contentInput}
+          onChangeText={(text) => setContent(text)}
+          value={content}
+          placeholder="Title"
+          multiline
+        />
+
+        {/* Mood Picker */}
+        <View style={styles.moodInput}>
+          <MoodPicker value={mood} onValueChange={(value) => setMood(value)} />
+        </View>
+
+        {/* Styled Add Note Button */}
+        <TouchableOpacity onPress={handleAddNote} style={styles.addButton}>
+          <Text style={styles.addButtonText}>Log Your Thought</Text>
+        </TouchableOpacity>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
