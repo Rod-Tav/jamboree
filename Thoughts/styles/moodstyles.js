@@ -38,7 +38,7 @@ export default StyleSheet.create({
     borderBottomColor: "#ccc",
   },
   selectedMoodOption: {
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "lightgrey",
   },
   customMoodInput: {
     padding: 10,
@@ -47,14 +47,19 @@ export default StyleSheet.create({
     marginBottom: 20,
   },
   modalButtonContainer: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
+    flexDirection: "column-reverse",
+    alignItems: "center",
   },
-  modalButton: {
+  doneButton: {
     padding: 10,
-    marginLeft: 10,
-    borderWidth: 1,
-    borderColor: "#ccc",
+    backgroundColor: "lightblue",
     borderRadius: 5,
+    marginVertical: 5,
+  },
+  cancelButton: {
+    padding: 10,
+    backgroundColor: "grey",
+    borderRadius: 5,
+    marginVertical: 5,
   },
 });

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -14,65 +14,68 @@ import styles from "../../styles/styles";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 const HomeScreen = () => {
-  const [notes, setNotes] = useState([]);
+  const [thoughts, setThoughts] = useState([]);
 
-  const loadNotes = async () => {
+  const loadThoughts = async () => {
     try {
-      const storedNotes = await AsyncStorage.getItem("NOTES");
-      setNotes(storedNotes ? JSON.parse(storedNotes) : []);
+      const storedThoughts = await AsyncStorage.getItem("THOUGHTS");
+      setThoughts(storedThoughts ? JSON.parse(storedThoughts) : []);
     } catch (error) {
-      console.error("Error loading notes:", error);
+      console.error("Error loading thoughts:", error);
     }
   };
 
-  // Reload notes whenever the screen is focused
+  // Reload thoughts whenever the screen is focused
   useFocusEffect(() => {
-    loadNotes();
+    loadThoughts();
   });
 
-  const deleteNote = async (noteId) => {
+  const deleteThought = async (thoughtId) => {
     try {
-      // Filter out the note to be deleted from the 'notes' array
-      const updatedNotes = notes.filter((note) => note.id !== noteId);
+      // Filter out the thought to be deleted from the 'Thoughts' array
+      const updatedThoughts = thoughts.filter(
+        (thought) => thought.id !== thoughtId
+      );
 
-      // Update the 'notes' state to reflect the deletion
-      setNotes(updatedNotes);
+      // Update the 'Thoughts' state to reflect the deletion
+      setThoughts(updatedThoughts);
 
-      // Save the updated 'notes' array to AsyncStorage
-      await AsyncStorage.setItem("NOTES", JSON.stringify(updatedNotes));
+      // Save the updated 'thoughts' array to AsyncStorage
+      await AsyncStorage.setItem("THOUGHTS", JSON.stringify(updatedThoughts));
     } catch (error) {
-      console.error("Error deleting note:", error);
+      console.error("Error deleting thought:", error);
     }
   };
 
-  const renderItem = ({ item }) => (
-    <View key={item.id} style={styles.noteContainer}>
-      {item.imageSources && (
-        <ScrollView horizontal contentContainerStyle={styles2.imageContainer}>
-          {item.imageSources.map((image, index) => (
-            <View key={index} style={styles2.imageWrapper}>
-              <Image
-                source={{ uri: image.uri }}
-                style={styles2.image}
-                resizeMode="cover"
-              />
-            </View>
-          ))}
-        </ScrollView>
-      )}
-      {item.mood ? (
-        <Text style={styles.noteMood}>Mood: {item.mood}</Text>
-      ) : null}
-      <Text style={styles.noteTitle}>{item.title}</Text>
-      <Text style={styles.noteContent}>{item.content}</Text>
-      <TouchableOpacity
-        style={styles.deleteButton}
-        onPress={() => deleteNote(item.id)}
-      >
-        <Ionicons name="trash" size={20} color="red" />
-      </TouchableOpacity>
-    </View>
-  );
+  const renderItem = ({ item }) => {
+    return (
+      <View key={item.id} style={styles.thoughtContainer}>
+        {item.imageSources && (
+          <ScrollView horizontal contentContainerStyle={styles.imageContainer}>
+            {item.imageSources.map((image, index) => (
+              <View key={index} style={styles.imageWrapper}>
+                <Image
+                  source={{ uri: image.uri }}
+                  style={styles.image}
+                  resizeMode="cover"
+                />
+              </View>
+            ))}
+          </ScrollView>
+        )}
+        <Text>{item.time}</Text>
+        {item.mood ? <Text style={styles.thoughtMood}>{item.mood}</Text> : null}
+        <Text style={styles.thoughtTitle}>{item.title}</Text>
+        <Text style={styles.thoughtContent}>{item.content}</Text>
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={() => deleteThought(item.id)}
+        >
+          <Ionicons name="trash" size={20} color="red" />
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -80,7 +83,7 @@ const HomeScreen = () => {
         <Text style={styles.headerText}>What's on your mind?</Text>
       </View>
       <FlatList
-        data={notes.slice().reverse()}
+        data={thoughts.slice().reverse()}
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()} // Convert the id to a string if it's not already
         contentContainerStyle={styles.list} // Add this style for spacing between list items
@@ -88,22 +91,5 @@ const HomeScreen = () => {
     </View>
   );
 };
-
-const styles2 = StyleSheet.create({
-  imageContainer: {
-    flexDirection: "row",
-    paddingVertical: 10,
-  },
-  imageWrapper: {
-    width: 200,
-    height: 200,
-    marginRight: 10,
-    borderRadius: 8,
-    overflow: "hidden",
-  },
-  image: {
-    flex: 1,
-  },
-});
 
 export default HomeScreen;

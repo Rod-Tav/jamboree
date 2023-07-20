@@ -8,8 +8,8 @@ import {
   Text,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import Icon from "react-native-vector-icons/Feather";
+import SkinnyIcon from "react-native-snappy";
 import ImageViewing from "react-native-image-viewing";
 import styles from "../styles/styles";
 
@@ -75,10 +75,19 @@ const ImagePickerScreen = ({ imageSources, changeImageSources }) => {
           onPress={handleImagePicker}
           style={styles.buttonContainer}
         >
-          <View style={styles.iconContainer}>
-            <Icon name="image" size={30} style={styles.icon} />
+          <View style={styles.buttonIcon}>
+            <SkinnyIcon
+              name="image"
+              size={24}
+              strokeWidth={1.5}
+              color="#979C9E"
+              style={styles.icon}
+            />
           </View>
-          <Text>Add Images...</Text>
+          <Text style={styles.buttonText}>Add Images...</Text>
+          <View style={styles.buttonIcon2}>
+            <Icon name="image" size={24} color="#F2F2F2" style={styles.icon} />
+          </View>
         </TouchableOpacity>
       </View>
       <ImageViewing

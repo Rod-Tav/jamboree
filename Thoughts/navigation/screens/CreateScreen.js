@@ -14,6 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "../../styles/styles";
 import ImagePickerScreen from "../ImagePickerScreen";
 import MoodPicker from "../MoodPicker";
+import SkinnyIcon from "react-native-snappy";
 
 const CreateScreen = () => {
   const [title, setTitle] = useState("");
@@ -23,33 +24,92 @@ const CreateScreen = () => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
 
-  const handleAddNote = async () => {
-    const note = {
+  const formatDate = () => {
+    const daysOfWeek = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    const monthsOfYear = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+
+    const currentDate = new Date();
+    const dayOfWeek = daysOfWeek[currentDate.getDay()];
+    const month = monthsOfYear[currentDate.getMonth()];
+    const dayOfMonth = currentDate.getDate();
+    let daySuffix = "th";
+
+    if (dayOfMonth === 1 || dayOfMonth === 21 || dayOfMonth === 31) {
+      daySuffix = "st";
+    } else if (dayOfMonth === 2 || dayOfMonth === 22) {
+      daySuffix = "nd";
+    } else if (dayOfMonth === 3 || dayOfMonth === 23) {
+      daySuffix = "rd";
+    }
+
+    const formattedDay = dayOfWeek;
+    const formattedDate = `${month} ${dayOfMonth}${daySuffix}`;
+    const formattedTime = currentDate.toLocaleTimeString([], {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+
+    return {
+      day: formattedDay,
+      date: formattedDate,
+      time: formattedTime,
+    };
+  };
+
+  const handleAddThought = async () => {
+    const formattedDate = formatDate();
+
+    const thought = {
       id: new Date().getTime().toString(),
       title,
       content,
       mood,
       imageSources,
+      day: formattedDate.day,
+      date: formattedDate.date,
+      time: formattedDate.time,
     };
 
     if (
-      note.title == "" &&
-      note.content == "" &&
-      note.mood == "" &&
-      note.imageSources.length == 0
+      thought.title == "" &&
+      thought.content == "" &&
+      thought.mood == "" &&
+      thought.imageSources.length == 0
     ) {
       return;
     }
 
     try {
-      const existingNotes = await AsyncStorage.getItem("NOTES");
-      const notes = existingNotes ? JSON.parse(existingNotes) : [];
+      const existingThoughts = await AsyncStorage.getItem("THOUGHTS");
+      const thoughts = existingThoughts ? JSON.parse(existingThoughts) : [];
 
-      notes.push(note);
+      thoughts.push(thought);
 
-      await AsyncStorage.setItem("NOTES", JSON.stringify(notes));
+      await AsyncStorage.setItem("THOUGHTS", JSON.stringify(thoughts));
 
-      // Reset all states after successfully saving the note
+      // Reset all states after successfully saving the thought
       setTitle("");
       setContent("");
       setMood("");
@@ -57,7 +117,7 @@ const CreateScreen = () => {
 
       navigation.navigate("Home");
     } catch (error) {
-      console.error("Error saving note:", error);
+      console.error("Error saving thought:", error);
     }
   };
 
@@ -94,18 +154,32 @@ const CreateScreen = () => {
           style={styles.contentInput}
           onChangeText={(text) => setContent(text)}
           value={content}
-          placeholder="Title"
+          placeholder="Write your thoughts here..."
           multiline
         />
 
         {/* Mood Picker */}
-        <View style={styles.moodInput}>
-          <MoodPicker value={mood} onValueChange={(value) => setMood(value)} />
+        <View>
+          <MoodPicker value={mood} setValue={(value) => setMood(value)} />
         </View>
 
-        {/* Styled Add Note Button */}
-        <TouchableOpacity onPress={handleAddNote} style={styles.addButton}>
+        {/* Styled Add Thought Button */}
+        <TouchableOpacity onPress={handleAddThought} style={styles.addButton}>
+          <SkinnyIcon
+            name="check"
+            size={16}
+            strokeWidth={1.5}
+            color="white"
+            style={styles.buttonIcon}
+          />
           <Text style={styles.addButtonText}>Log Your Thought</Text>
+          <SkinnyIcon
+            name="check"
+            size={24}
+            strokeWidth={1.5}
+            color="#2F80ED"
+            style={styles.buttonIcon}
+          />
         </TouchableOpacity>
       </View>
     </TouchableWithoutFeedback>

@@ -1,21 +1,30 @@
 import React, { useState } from "react";
-import { Modal, View, Text, TouchableOpacity, TextInput } from "react-native";
+import {
+  Modal,
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  Keyboard,
+} from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import styles from "../styles/moodstyles";
+import moodstyles from "../styles/moodstyles";
+import styles from "../styles/styles";
+import SkinnyIcon from "react-native-snappy";
 
-const MoodPicker = ({ value, onValueChange }) => {
+const MoodPicker = ({ value, setValue }) => {
   const [isModalVisible, setModalVisible] = useState(false);
-  const [selectedMood, setSelectedMood] = useState("");
+  const [mood, setMood] = useState("");
   const [customMood, setCustomMood] = useState("");
 
   const moodOptions = [
-    { label: "Happy", value: "happy" },
-    { label: "Sad", value: "sad" },
-    { label: "Excited", value: "excited" },
-    { label: "Stressed", value: "stressed" },
-    { label: "Hopeful", value: "hopeful" },
-    { label: "Hopeless", value: "hopeless" },
-    { label: "Confused", value: "confused" },
+    { label: "Happy", value: "Happy" },
+    { label: "Sad", value: "Sad" },
+    { label: "Excited", value: "Excited" },
+    { label: "Stressed", value: "Stressed" },
+    { label: "Hopeful", value: "Hopeful" },
+    { label: "Hopeless", value: "Hopeless" },
+    { label: "Confused", value: "Confused" },
   ];
 
   const handleMoodPicker = () => {
@@ -23,27 +32,25 @@ const MoodPicker = ({ value, onValueChange }) => {
   };
 
   const handleMoodSelection = (selectedValue) => {
-    setSelectedMood(selectedValue === "custom" ? selectedValue : null);
-    if (selectedValue === "custom") {
-      setCustomMood("");
-    }
+    setCustomMood("");
+    setMood(selectedValue);
+    setTimeout(() => {
+      Keyboard.dismiss();
+    }, 100);
   };
 
-  const handleCustomMoodChange = (text) => {
-    setSelectedMood("");
-    setCustomMood(text);
+  const handleCustomMoodSelection = (selectedValue) => {
+    setCustomMood(selectedValue);
+    setMood("");
   };
 
   const handleDone = () => {
-    const selected = selectedMood || customMood.trim();
-    if (selected) {
-      onValueChange(selected);
-    }
+    setValue(mood || customMood);
     setModalVisible(false);
   };
 
   const handleCancel = () => {
-    setSelectedMood(null);
+    setMood("");
     setCustomMood("");
     setModalVisible(false);
   };
@@ -54,24 +61,35 @@ const MoodPicker = ({ value, onValueChange }) => {
         onPress={handleMoodPicker}
         style={styles.buttonContainer}
       >
-        <View style={styles.iconContainer}>
-          <Ionicons name="add" size={30} style={styles.icon} />
+        <View style={styles.buttonIcon}>
+          <SkinnyIcon name="plus" size={16} strokeWidth={1.5} color="#979C9E" />
         </View>
-        <Text>How are you feeling?</Text>
+        {value == "" ? (
+          <Text style={styles.buttonText}>How are you feeling?</Text>
+        ) : (
+          <Text>{value}</Text>
+        )}
+        <View style={styles.buttonIcon}>
+          <SkinnyIcon
+            name="image"
+            size={20}
+            strokeWidth={1.5}
+            color="#F2F2F2"
+          />
+        </View>
       </TouchableOpacity>
 
       <Modal visible={isModalVisible} animationType="slide" transparent>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>How are you feeling?</Text>
-
+        <View style={moodstyles.modalContainer}>
+          <View style={moodstyles.modalContent}>
+            <Text style={moodstyles.modalTitle}>How are you feeling?</Text>
             {moodOptions.map((option) => (
               <TouchableOpacity
                 key={option.value}
                 onPress={() => handleMoodSelection(option.value)}
                 style={[
-                  styles.moodOption,
-                  selectedMood === option.value && styles.selectedMoodOption,
+                  moodstyles.moodOption,
+                  mood === option.value && moodstyles.selectedMoodOption,
                 ]}
               >
                 <Text>{option.label}</Text>
@@ -79,20 +97,23 @@ const MoodPicker = ({ value, onValueChange }) => {
             ))}
 
             <TextInput
-              style={styles.customMoodInput}
+              style={moodstyles.customMoodInput}
               value={customMood}
-              onChangeText={handleCustomMoodChange}
-              placeholder="Enter your own mood"
+              onChangeText={handleCustomMoodSelection}
+              placeholder="Or add your own..."
             />
 
-            <View style={styles.modalButtonContainer}>
+            <View style={moodstyles.modalButtonContainer}>
               <TouchableOpacity
                 onPress={handleCancel}
-                style={styles.modalButton}
+                style={moodstyles.cancelButton}
               >
                 <Text>Cancel</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={handleDone} style={styles.modalButton}>
+              <TouchableOpacity
+                onPress={handleDone}
+                style={moodstyles.doneButton}
+              >
                 <Text>Done</Text>
               </TouchableOpacity>
             </View>
