@@ -54,21 +54,31 @@ const ImagePickerScreen = ({ imageSources, changeImageSources }) => {
 
   return (
     <View>
-      <ScrollView horizontal contentContainerStyle={styles.imageContainer}>
-        {imageSources.map((image, index) => (
-          <TouchableOpacity
-            key={image.uri}
-            onPress={() => handleImagePress(index)}
-          >
-            <View style={styles.imageWrapper}>
-              <Image
-                source={{ uri: image.uri }}
-                style={styles.image}
-                resizeMode="cover"
-              />
-            </View>
-          </TouchableOpacity>
-        ))}
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.imageContainer}
+      >
+        {imageSources.map((image, index) => {
+          const aspectRatio = image.width / image.height;
+          const imageWidth = 250 * aspectRatio;
+
+          return (
+            <TouchableOpacity
+              activeOpacity={0.85}
+              key={image.uri}
+              onPress={() => handleImagePress(index)}
+            >
+              <View style={[styles.imageWrapper, { width: imageWidth }]}>
+                <Image
+                  source={{ uri: image.uri }}
+                  style={styles.image}
+                  resizeMode="contain"
+                />
+              </View>
+            </TouchableOpacity>
+          );
+        })}
       </ScrollView>
       <View>
         <TouchableOpacity

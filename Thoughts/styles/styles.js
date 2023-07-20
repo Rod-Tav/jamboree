@@ -52,19 +52,16 @@ export default StyleSheet.create({
   },
   imageContainer: {
     flexDirection: "row",
-    height: "100%",
   },
   imageWrapper: {
     width: 300,
     height: 250,
     marginBottom: 16,
+    marginHorizontal: 2,
     borderRadius: 0,
     overflow: "hidden",
   },
   image: {
-    width: "100%",
-    height: 200,
-    resizeMode: "stretch",
     flex: 1,
   },
   titleInput: {
