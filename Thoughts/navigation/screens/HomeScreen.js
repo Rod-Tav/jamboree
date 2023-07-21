@@ -185,7 +185,9 @@ const RenderHomeContent = () => {
                 </Text>
               ) : null}
             </View>
-            <Text style={styles.thoughtTitle}>{thought.title}</Text>
+            {thought.title == "" ? null : (
+              <Text style={styles.thoughtTitle}>{thought.title}</Text>
+            )}
             <Text style={styles.thoughtContent}>{thought.content}</Text>
             <TouchableOpacity
               style={styles.deleteButton}
