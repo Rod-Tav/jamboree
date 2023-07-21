@@ -110,7 +110,12 @@ const ImagePickerScreen = ({ imageSources, changeImageSources }) => {
           </View>
           <Text style={styles.buttonText}>Add Images...</Text>
           <View style={styles.buttonIcon2}>
-            <Icon name="image" size={24} color="#F2F2F2" style={styles.icon} />
+            <Icon
+              name="image"
+              size={24}
+              color="transparent"
+              style={styles.icon}
+            />
           </View>
         </TouchableOpacity>
       </View>

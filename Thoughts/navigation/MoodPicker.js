@@ -7,33 +7,73 @@ import {
   TextInput,
   Keyboard,
 } from "react-native";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import moodstyles from "../styles/moodstyles";
 import styles from "../styles/styles";
 import SkinnyIcon from "react-native-snappy";
 
-const MoodPicker = ({ value, setValue }) => {
+const MoodPicker = ({
+  value,
+  setValue,
+  moodBgColorValue,
+  setMoodBgColorValue,
+  moodTextColorValue,
+  setMoodTextColorValue,
+}) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [mood, setMood] = useState("");
+  const [bgColor, setBgColor] = useState("");
+  const [textColor, setTextColor] = useState("");
   const [customMood, setCustomMood] = useState("");
 
   const moodOptions = [
-    { label: "Happy", value: "Happy" },
-    { label: "Sad", value: "Sad" },
-    { label: "Excited", value: "Excited" },
-    { label: "Stressed", value: "Stressed" },
-    { label: "Hopeful", value: "Hopeful" },
-    { label: "Hopeless", value: "Hopeless" },
-    { label: "Confused", value: "Confused" },
+    {
+      label: "Happy",
+      value: "Happy",
+      bgColor: "#ECFCE5",
+      textColor: "#198155",
+    },
+    { label: "Sad", value: "Sad", bgColor: "#E7E5FC", textColor: "#281981" },
+    {
+      label: "Excited",
+      value: "Excited",
+      bgColor: "#FCE5F7",
+      textColor: "#81197D",
+    },
+    {
+      label: "Stressed",
+      value: "Stressed",
+      bgColor: "#FCF3E5",
+      textColor: "#815E19",
+    },
+    {
+      label: "Hopeful",
+      value: "Hopeful",
+      bgColor: "#E5FCF9",
+      textColor: "#196881",
+    },
+    {
+      label: "Hopeless",
+      value: "Hopeless",
+      bgColor: "#FCE5E5",
+      textColor: "#811919",
+    },
+    {
+      label: "Confused",
+      value: "Confused",
+      bgColor: "#FCFBE5",
+      textColor: "#7F8119",
+    },
   ];
 
   const handleMoodPicker = () => {
     setModalVisible(true);
   };
 
-  const handleMoodSelection = (selectedValue) => {
+  const handleMoodSelection = (option) => {
     setCustomMood("");
-    setMood(selectedValue);
+    setMood(option.value);
+    setBgColor(option.bgColor);
+    setTextColor(option.textColor);
     setTimeout(() => {
       Keyboard.dismiss();
     }, 100);
@@ -46,35 +86,72 @@ const MoodPicker = ({ value, setValue }) => {
 
   const handleDone = () => {
     setValue(mood || customMood);
+    setMoodBgColorValue(bgColor);
+    setMoodTextColorValue(textColor);
     setModalVisible(false);
   };
 
   const handleCancel = () => {
+    if (!value) {
+      handleClear();
+      setModalVisible(false);
+    } else if (value != mood) {
+      setMood(value);
+      setBgColor(moodBgColorValue);
+      setTextColor(moodTextColorValue);
+      setModalVisible(false);
+    } else {
+      setModalVisible(false);
+    }
+  };
+
+  const handleClear = () => {
     setMood("");
     setCustomMood("");
-    setModalVisible(false);
+    setMoodBgColorValue("");
+    setMoodTextColorValue("");
+    setValue("");
   };
 
   return (
     <View>
       <TouchableOpacity
         onPress={handleMoodPicker}
-        style={styles.buttonContainer}
+        style={[
+          styles.buttonContainer,
+          moodBgColorValue !== "" && { backgroundColor: bgColor },
+        ]}
       >
         <View style={styles.buttonIcon}>
-          <SkinnyIcon name="plus" size={16} strokeWidth={1.5} color="#979C9E" />
+          {moodTextColorValue !== "" ? (
+            <TouchableOpacity onPress={handleClear}>
+              <SkinnyIcon
+                name="x"
+                size={16}
+                strokeWidth={1.5}
+                color={moodTextColorValue !== "" ? textColor : "#979C9E"}
+              />
+            </TouchableOpacity>
+          ) : (
+            <SkinnyIcon
+              name="plus"
+              size={16}
+              strokeWidth={1.5}
+              color="#979C9E"
+            />
+          )}
         </View>
         {value == "" ? (
           <Text style={styles.buttonText}>How are you feeling?</Text>
         ) : (
-          <Text>{value}</Text>
+          <Text style={textColor !== "" && { color: textColor }}>{value}</Text>
         )}
         <View style={styles.buttonIcon}>
           <SkinnyIcon
             name="image"
             size={20}
             strokeWidth={1.5}
-            color="#F2F2F2"
+            color="transparent"
           />
         </View>
       </TouchableOpacity>
@@ -87,13 +164,19 @@ const MoodPicker = ({ value, setValue }) => {
               {moodOptions.map((option) => (
                 <TouchableOpacity
                   key={option.value}
-                  onPress={() => handleMoodSelection(option.value)}
+                  onPress={() => handleMoodSelection(option)}
                   style={[
                     moodstyles.moodOption,
-                    mood === option.value && moodstyles.selectedMoodOption,
+                    { backgroundColor: option.bgColor },
+                    moodstyles.moodBorder,
+                    mood === option.value && { borderColor: option.textColor },
                   ]}
                 >
-                  <Text style={moodstyles.moodText}>{option.label}</Text>
+                  <Text
+                    style={[moodstyles.moodText, { color: option.textColor }]}
+                  >
+                    {option.label}
+                  </Text>
                 </TouchableOpacity>
               ))}
             </View>

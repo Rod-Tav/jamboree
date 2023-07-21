@@ -20,6 +20,8 @@ const CreateScreen = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [mood, setMood] = useState("");
+  const [moodBgColor, setMoodBgColor] = useState("");
+  const [moodTextColor, setMoodTextColor] = useState("");
   const [imageSources, setImageSources] = useState([]);
   const navigation = useNavigation();
   const isFocused = useIsFocused();
@@ -86,6 +88,8 @@ const CreateScreen = () => {
       title,
       content,
       mood,
+      moodBgColor,
+      moodTextColor,
       imageSources,
       day: formattedDate.day,
       date: formattedDate.date,
@@ -113,6 +117,8 @@ const CreateScreen = () => {
       setTitle("");
       setContent("");
       setMood("");
+      setMoodBgColor("");
+      setMoodTextColor("");
       setImageSources([]);
 
       navigation.navigate("Home");
@@ -160,7 +166,14 @@ const CreateScreen = () => {
 
         {/* Mood Picker */}
         <View>
-          <MoodPicker value={mood} setValue={(value) => setMood(value)} />
+          <MoodPicker
+            value={mood}
+            setValue={(mood) => setMood(mood)}
+            moodBgColorValue={moodBgColor}
+            setMoodBgColorValue={(bgColor) => setMoodBgColor(bgColor)}
+            moodTextColorValue={moodTextColor}
+            setMoodTextColorValue={(textColor) => setMoodTextColor(textColor)}
+          />
         </View>
 
         {/* Styled Add Thought Button */}

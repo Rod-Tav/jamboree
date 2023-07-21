@@ -49,13 +49,14 @@ export default StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 2,
     borderRadius: 16,
-    backgroundColor: "#ECFCE5",
   },
   moodText: {
-    color: "#198155",
     fontSize: 14,
   },
-  selectedMoodOption: { backgroundColor: "#E7E5FC" },
+  moodBorder: {
+    borderWidth: "1",
+    borderColor: "transparent",
+  },
   customMoodInput: {
     width: "100%",
     borderWidth: 1,
