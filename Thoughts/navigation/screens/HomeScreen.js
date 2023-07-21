@@ -152,21 +152,19 @@ const RenderHomeContent = () => {
             style={styles.thoughtContainer}
             onPress={() => navigation.navigate("Detail", { thought })}
           >
-            {thought.imageSources && (
+            {thought.imageSources && thought.imageSources.length > 0 && (
               <ScrollView
                 horizontal
                 contentContainerStyle={styles.imageContainer}
                 centerContent={true}
               >
-                {thought.imageSources.map((image, index) => (
-                  <View key={index} style={styles.imageWrapper}>
-                    <Image
-                      source={{ uri: image.uri }}
-                      style={styles.image}
-                      resizeMode="cover"
-                    />
-                  </View>
-                ))}
+                <View style={styles.imageWrapper}>
+                  <Image
+                    source={{ uri: thought.imageSources[0].uri }}
+                    style={styles.image}
+                    resizeMode="cover"
+                  />
+                </View>
               </ScrollView>
             )}
             <View style={styles.thoughtTimeAndMood}>
@@ -185,10 +183,14 @@ const RenderHomeContent = () => {
                 </Text>
               ) : null}
             </View>
-            {thought.title == "" ? null : (
-              <Text style={styles.thoughtTitle}>{thought.title}</Text>
-            )}
-            <Text style={styles.thoughtContent}>{thought.content}</Text>
+            <View style={styles.thoughtTextContainer}>
+              {thought.title == "" ? null : (
+                <Text style={styles.thoughtTitle}>{thought.title}</Text>
+              )}
+              {thought.content == "" ? null : (
+                <Text style={styles.thoughtContent}>{thought.content}</Text>
+              )}
+            </View>
             <TouchableOpacity
               style={styles.deleteButton}
               onPress={() => deleteThought(thought.id)}
@@ -207,6 +209,7 @@ const RenderHomeContent = () => {
       thoughts: thoughtsArray.reverse(),
     })
   );
+
   return (
     <View style={styles.container}>
       <FlatList

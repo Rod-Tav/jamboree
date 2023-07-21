@@ -128,7 +128,7 @@ export default StyleSheet.create({
   list: {
     display: "flex",
     flexDirection: "column",
-    gap: 16,
+    gap: 14,
     overflow: "visible",
   },
 
@@ -147,6 +147,7 @@ export default StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#F2F4F5",
     gap: 14,
+    paddingBottom: 14,
     display: "flex",
     flexDirection: "column",
     // padding: viewPadding,
@@ -176,12 +177,15 @@ export default StyleSheet.create({
     height: 200,
     marginBottom: viewPadding,
   },
+  thoughtTextContainer: {
+    display: "flex",
+    flexDirection: "column",
+  },
   thoughtTitle: {
     fontSize: 20,
-    // lineHeight: 12,
     fontWeight: 700,
-    marginBottom: viewPadding / 2,
     color: "#090A0A",
+    marginBottom: 10,
   },
   thoughtContent: {
     color: "#090A0A",
@@ -194,5 +198,8 @@ export default StyleSheet.create({
     paddingVertical: 2,
     borderRadius: 8,
     overflow: "hidden",
+  },
+  deleteButton: {
+    display: "none",
   },
 });
