@@ -53,6 +53,13 @@ const ImagePickerScreen = ({ imageSources, changeImageSources }) => {
     setIsImageViewVisible(false);
   };
 
+  let currentPos = 0;
+  const snapOffsets = imageSources.map((image, index) => {
+    const aspectRatio = image.width / image.height;
+    const offset = currentPos;
+    currentPos += 200 * aspectRatio;
+    return offset;
+  });
   return (
     <View>
       <View style={styles.imagesEntireContainer}>
@@ -62,6 +69,7 @@ const ImagePickerScreen = ({ imageSources, changeImageSources }) => {
           centerContent={true}
           contentContainerStyle={styles.imageContainer}
           pagingEnabled={true}
+          snapToOffsets={snapOffsets}
         >
           {imageSources.map((image, index) => {
             const aspectRatio = image.width / image.height;
