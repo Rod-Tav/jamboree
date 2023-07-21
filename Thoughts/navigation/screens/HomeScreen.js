@@ -214,7 +214,7 @@ const RenderHomeContent = () => {
         contentContainerStyle={styles.list}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
-          <View>
+          <View style={styles.topOfHome}>
             <View style={styles.headerStyle}>
               <Text style={styles.headerText}>Welcome back!</Text>
             </View>

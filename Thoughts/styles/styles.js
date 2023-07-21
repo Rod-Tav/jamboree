@@ -16,6 +16,11 @@ export default StyleSheet.create({
     marginTop: 44,
     borderRadius: 16,
   },
+  topOfHome: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 16,
+  },
   headerText: {
     fontSize: 24,
     fontWeight: "bold",
@@ -121,7 +126,10 @@ export default StyleSheet.create({
     fontWeight: "normal",
   },
   list: {
-    paddingVertical: viewPadding,
+    display: "flex",
+    flexDirection: "column",
+    gap: 16,
+    overflow: "visible",
   },
 
   dayText: {
