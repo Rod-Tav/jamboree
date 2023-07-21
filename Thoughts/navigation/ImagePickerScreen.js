@@ -6,6 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  Dimensions,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import Icon from "react-native-vector-icons/Feather";
@@ -54,32 +55,37 @@ const ImagePickerScreen = ({ imageSources, changeImageSources }) => {
 
   return (
     <View>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.imageContainer}
-      >
-        {imageSources.map((image, index) => {
-          const aspectRatio = image.width / image.height;
-          const imageWidth = 250 * aspectRatio;
+      <View style={styles.imagesEntireContainer}>
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          centerContent={true}
+          contentContainerStyle={styles.imageContainer}
+          pagingEnabled={true}
+        >
+          {imageSources.map((image, index) => {
+            const aspectRatio = image.width / image.height;
+            const imageWidth = 200 * aspectRatio;
 
-          return (
-            <TouchableOpacity
-              activeOpacity={0.85}
-              key={image.uri}
-              onPress={() => handleImagePress(index)}
-            >
-              <View style={[styles.imageWrapper, { width: imageWidth }]}>
-                <Image
-                  source={{ uri: image.uri }}
-                  style={styles.image}
-                  resizeMode="contain"
-                />
-              </View>
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
+            return (
+              <TouchableOpacity
+                activeOpacity={0.85}
+                key={image.uri}
+                onPress={() => handleImagePress(index)}
+              >
+                <View style={[styles.imageWrapper, { width: imageWidth }]}>
+                  <Image
+                    source={{ uri: image.uri }}
+                    style={styles.image}
+                    resizeMode="cover"
+                  />
+                </View>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
+      </View>
+
       <View>
         <TouchableOpacity
           onPress={handleImagePicker}

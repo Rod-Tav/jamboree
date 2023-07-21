@@ -50,14 +50,16 @@ export default StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
   },
-  imageContainer: {
-    flexDirection: "row",
+  imagesEntireContainer: {
+    backgroundColor: "#F2F2F2",
+    marginBottom: 16,
+    borderRadius: 16,
+    overflow: "hidden",
   },
+  imageContainer: {},
   imageWrapper: {
     width: 300,
-    height: 250,
-    marginBottom: 16,
-    marginHorizontal: 2,
+    height: 200,
     borderRadius: 0,
     overflow: "hidden",
   },
