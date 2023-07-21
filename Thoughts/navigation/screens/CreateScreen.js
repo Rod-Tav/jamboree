@@ -24,57 +24,21 @@ const CreateScreen = () => {
   const [moodTextColor, setMoodTextColor] = useState("");
   const [imageSources, setImageSources] = useState([]);
   const navigation = useNavigation();
-  const isFocused = useIsFocused();
+  const [clearMoodToggle, setClearMoodToggle] = useState(false);
 
   const formatDate = () => {
-    const daysOfWeek = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ];
-    const monthsOfYear = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-
-    const currentDate = new Date();
-    const dayOfWeek = daysOfWeek[currentDate.getDay()];
-    const month = monthsOfYear[currentDate.getMonth()];
-    const dayOfMonth = currentDate.getDate();
-    let daySuffix = "th";
-
-    if (dayOfMonth === 1 || dayOfMonth === 21 || dayOfMonth === 31) {
-      daySuffix = "st";
-    } else if (dayOfMonth === 2 || dayOfMonth === 22) {
-      daySuffix = "nd";
-    } else if (dayOfMonth === 3 || dayOfMonth === 23) {
-      daySuffix = "rd";
-    }
-
-    const formattedDay = dayOfWeek;
-    const formattedDate = `${month} ${dayOfMonth}${daySuffix}`;
-    const formattedTime = currentDate.toLocaleTimeString([], {
+    const date = new Date();
+    const year = date.toLocaleString("default", { year: "numeric" });
+    const month = date.toLocaleString("default", { month: "2-digit" });
+    const day = date.toLocaleString("default", { day: "2-digit" });
+    const formattedDate = year + "-" + month + "-" + day;
+    const formattedTime = date.toLocaleTimeString([], {
       hour: "numeric",
       minute: "2-digit",
       hour12: true,
     });
 
     return {
-      day: formattedDay,
       date: formattedDate,
       time: formattedTime,
     };
@@ -82,6 +46,8 @@ const CreateScreen = () => {
 
   const handleAddThought = async () => {
     const formattedDate = formatDate();
+
+    setClearMoodToggle(!clearMoodToggle);
 
     const thought = {
       id: new Date().getTime().toString(),
@@ -91,7 +57,6 @@ const CreateScreen = () => {
       moodBgColor,
       moodTextColor,
       imageSources,
-      day: formattedDate.day,
       date: formattedDate.date,
       time: formattedDate.time,
     };
@@ -107,9 +72,14 @@ const CreateScreen = () => {
 
     try {
       const existingThoughts = await AsyncStorage.getItem("THOUGHTS");
-      const thoughts = existingThoughts ? JSON.parse(existingThoughts) : [];
+      const thoughts = existingThoughts ? JSON.parse(existingThoughts) : {};
 
-      thoughts.push(thought);
+      // If there are no thoughts for the current date, create an empty array
+      if (!thoughts[formattedDate.date]) {
+        thoughts[formattedDate.date] = [];
+      }
+
+      thoughts[formattedDate.date].push(thought);
 
       await AsyncStorage.setItem("THOUGHTS", JSON.stringify(thoughts));
 
@@ -173,6 +143,7 @@ const CreateScreen = () => {
             setMoodBgColorValue={(bgColor) => setMoodBgColor(bgColor)}
             moodTextColorValue={moodTextColor}
             setMoodTextColorValue={(textColor) => setMoodTextColor(textColor)}
+            clearMoodToggle={clearMoodToggle}
           />
         </View>
 
@@ -190,7 +161,7 @@ const CreateScreen = () => {
             name="check"
             size={24}
             strokeWidth={1.5}
-            color="#2F80ED"
+            color="transparent"
             style={styles.buttonIcon}
           />
         </TouchableOpacity>

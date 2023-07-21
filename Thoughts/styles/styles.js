@@ -51,7 +51,7 @@ export default StyleSheet.create({
     justifyContent: "center",
   },
   imagesEntireContainer: {
-    backgroundColor: "#F2F2F2",
+    backgroundColor: "white",
     marginBottom: 16,
     borderRadius: 16,
     overflow: "hidden",
@@ -123,27 +123,68 @@ export default StyleSheet.create({
   list: {
     paddingVertical: viewPadding,
   },
-  thoughtContainer: {
-    backgroundColor: "#F0F0F0",
-    padding: viewPadding,
-    marginBottom: viewPadding,
+
+  dayText: {
+    fontSize: 15,
+    color: "#4F4F4F",
+    fontWeight: 700,
+    fontStyle: "normal",
+    lineHeight: 25,
+    letterSpacing: 3,
+    textTransform: "uppercase",
   },
+
+  thoughtContainer: {
+    backgroundColor: "white",
+    borderBottomWidth: 1,
+    borderBottomColor: "#F2F4F5",
+    gap: 14,
+    display: "flex",
+    flexDirection: "column",
+    // padding: viewPadding,
+    // marginBottom: viewPadding,
+  },
+
+  thoughtTimeAndMood: {
+    display: "flex",
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "space-between",
+  },
+
+  thoughtTime: {
+    fontSize: 12,
+    color: "#4F4F4F",
+    fontWeight: 700,
+    fontStyle: "normal",
+    lineHeight: 15,
+    letterSpacing: 2.4,
+    textTransform: "uppercase",
+  },
+
   thoughtImage: {
     width: "100%",
+    borderRadius: 8,
     height: 200,
     marginBottom: viewPadding,
   },
   thoughtTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: 20,
+    // lineHeight: 12,
+    fontWeight: 700,
     marginBottom: viewPadding / 2,
+    color: "#090A0A",
   },
   thoughtContent: {
-    fontSize: 16,
+    color: "#090A0A",
+    fontSize: 12,
+    fontWeight: 300,
   },
   thoughtMood: {
-    fontSize: 14,
-    color: "#888888",
-    marginBottom: viewPadding / 2,
+    fontSize: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+    borderRadius: 8,
+    overflow: "hidden",
   },
 });

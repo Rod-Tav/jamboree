@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Modal,
   View,
@@ -18,12 +18,24 @@ const MoodPicker = ({
   setMoodBgColorValue,
   moodTextColorValue,
   setMoodTextColorValue,
+  clearMoodToggle,
 }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [mood, setMood] = useState("");
   const [bgColor, setBgColor] = useState("");
   const [textColor, setTextColor] = useState("");
   const [customMood, setCustomMood] = useState("");
+  const [customColor, setCustomColor] = useState("");
+
+  const colorOrder = [6, 4, 7, 1, 5, 2, 3];
+
+  useEffect(() => {
+    setMood("");
+    setBgColor("");
+    setTextColor("");
+    setCustomMood("");
+    setCustomColor("");
+  }, [clearMoodToggle]);
 
   const moodOptions = [
     {
@@ -74,6 +86,7 @@ const MoodPicker = ({
     setMood(option.value);
     setBgColor(option.bgColor);
     setTextColor(option.textColor);
+    setCustomColor("");
     setTimeout(() => {
       Keyboard.dismiss();
     }, 100);
@@ -89,6 +102,13 @@ const MoodPicker = ({
     setMoodBgColorValue(bgColor);
     setMoodTextColorValue(textColor);
     setModalVisible(false);
+  };
+
+  const handleSelectColor = (option) => {
+    setBgColor(option.bgColor);
+    setMood("");
+    setCustomColor(option.textColor);
+    setTextColor(option.textColor);
   };
 
   const handleCancel = () => {
@@ -144,7 +164,16 @@ const MoodPicker = ({
         {value == "" ? (
           <Text style={styles.buttonText}>How are you feeling?</Text>
         ) : (
-          <Text style={textColor !== "" && { color: textColor }}>{value}</Text>
+          <Text
+            style={
+              textColor !== "" && [
+                moodstyles.moodTextMain,
+                { color: textColor },
+              ]
+            }
+          >
+            {value}
+          </Text>
         )}
         <View style={styles.buttonIcon}>
           <SkinnyIcon
@@ -180,14 +209,32 @@ const MoodPicker = ({
                 </TouchableOpacity>
               ))}
             </View>
-
             <TextInput
               style={moodstyles.customMoodInput}
               value={customMood}
               onChangeText={handleCustomMoodSelection}
               placeholder="Or add your own..."
             />
-
+            {/* Color selection buttons */}
+            <View style={moodstyles.customColorContainer}>
+              {colorOrder.map((index) => {
+                const option = moodOptions[index - 1];
+                return (
+                  <TouchableOpacity
+                    key={option.value}
+                    onPress={() => handleSelectColor(option)}
+                    style={[
+                      moodstyles.customColorButton,
+                      { backgroundColor: option.bgColor },
+                      moodstyles.moodBorder,
+                      customColor === option.textColor && {
+                        borderColor: option.textColor,
+                      },
+                    ]}
+                  ></TouchableOpacity>
+                );
+              })}
+            </View>
             <View style={moodstyles.modalButtonContainer}>
               <TouchableOpacity
                 onPress={handleDone}

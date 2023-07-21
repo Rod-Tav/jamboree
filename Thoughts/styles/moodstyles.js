@@ -42,20 +42,32 @@ export default StyleSheet.create({
     alignContent: "center",
     flexWrap: "wrap",
     justifyContent: "center",
-    width: "75%",
+    width: "83%",
     gap: 5,
   },
   moodOption: {
     paddingHorizontal: 10,
-    paddingVertical: 2,
+    paddingVertical: 3,
     borderRadius: 16,
   },
   moodText: {
-    fontSize: 14,
+    fontSize: 12,
+    paddingHorizontal: 10,
+  },
+  moodTextMain: {
+    display: "flex",
+    justifyContent: "center",
+    flexDirection: "row",
+    textAlign: "center",
+    fontSize: 16,
   },
   moodBorder: {
     borderWidth: "1",
     borderColor: "transparent",
+  },
+  colorOptionBorder: {
+    borderWidth: "1",
+    borderColor: "#E3E5E5",
   },
   customMoodInput: {
     width: "100%",
@@ -72,6 +84,19 @@ export default StyleSheet.create({
   modalButtonContainer: {
     width: "100%",
     alignItems: "center",
+  },
+  customColorContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  customColorButton: {
+    height: 29,
+    width: 29,
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: "#E3E5E5",
   },
   doneButton: {
     width: "100%",
