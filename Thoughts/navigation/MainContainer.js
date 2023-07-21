@@ -2,6 +2,7 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import SkinnyIcon from "react-native-snappy";
 
 // Screens
 import HomeScreen from "./screens/HomeScreen";
@@ -36,8 +37,8 @@ function MainContainer() {
             // You can return any component that you like here!
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-          tabBarActiveTintColor: "grey",
-          tabBarInactiveTintColor: "grey",
+          tabBarActiveTintColor: "#828282",
+          tabBarInactiveTintColor: "#828282",
           tabBarLabelStyle: {
             paddingBottom: 10,
             fontSize: 10,

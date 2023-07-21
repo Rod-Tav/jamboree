@@ -83,18 +83,20 @@ const MoodPicker = ({ value, setValue }) => {
         <View style={moodstyles.modalContainer}>
           <View style={moodstyles.modalContent}>
             <Text style={moodstyles.modalTitle}>How are you feeling?</Text>
-            {moodOptions.map((option) => (
-              <TouchableOpacity
-                key={option.value}
-                onPress={() => handleMoodSelection(option.value)}
-                style={[
-                  moodstyles.moodOption,
-                  mood === option.value && moodstyles.selectedMoodOption,
-                ]}
-              >
-                <Text>{option.label}</Text>
-              </TouchableOpacity>
-            ))}
+            <View style={moodstyles.modalMoodSelection}>
+              {moodOptions.map((option) => (
+                <TouchableOpacity
+                  key={option.value}
+                  onPress={() => handleMoodSelection(option.value)}
+                  style={[
+                    moodstyles.moodOption,
+                    mood === option.value && moodstyles.selectedMoodOption,
+                  ]}
+                >
+                  <Text style={moodstyles.moodText}>{option.label}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
 
             <TextInput
               style={moodstyles.customMoodInput}
@@ -105,16 +107,17 @@ const MoodPicker = ({ value, setValue }) => {
 
             <View style={moodstyles.modalButtonContainer}>
               <TouchableOpacity
-                onPress={handleCancel}
-                style={moodstyles.cancelButton}
-              >
-                <Text>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
                 onPress={handleDone}
                 style={moodstyles.doneButton}
               >
-                <Text>Done</Text>
+                <Text style={moodstyles.doneButtonText}>Done</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={handleCancel}
+                style={moodstyles.cancelButton}
+              >
+                <Text style={moodstyles.cancelButtonText}>Cancel</Text>
               </TouchableOpacity>
             </View>
           </View>
