@@ -1,13 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
 import styles from "../../styles/styles";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import ImageViewing from "react-native-image-viewing";
 
 const DetailScreen = ({ route, navigation }) => {
   const { thought } = route.params;
+  const [isOptionsVisible, setIsOptionsVisible] = useState(false);
+  const [isImageViewVisible, setIsImageViewVisible] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const handleImagePress = (imageIndex) => {
+    setSelectedImageIndex(imageIndex);
+    setIsImageViewVisible(true);
+  };
+  const closeImageView = () => {
+    setIsImageViewVisible(false);
+  };
 
   // Function to handle edit option
   const handleEdit = () => {
+    setIsOptionsVisible(false);
     // Implement your logic to navigate to the edit screen here
     // For example:
     // navigation.navigate('Edit', { thought });
@@ -15,6 +27,7 @@ const DetailScreen = ({ route, navigation }) => {
 
   // Function to handle delete option
   const handleDelete = () => {
+    setIsOptionsVisible(false);
     // Implement your logic to delete the thought here
     // For example:
     // Call the deleteThought function or any other logic you have
@@ -34,41 +47,55 @@ const DetailScreen = ({ route, navigation }) => {
     navigation.setOptions({
       title: "Thought Detail", // Set the title of the header
       headerRight: () => (
-        <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity
-            onPress={handleEdit}
-            style={{ paddingHorizontal: 10 }}
-          >
-            <Ionicons name="create-outline" size={24} color="black" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={handleDelete}
-            style={{ paddingHorizontal: 10 }}
-          >
-            <Ionicons name="trash-outline" size={24} color="red" />
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+          onPress={handleEdit}
+          style={{ paddingHorizontal: 10 }}
+        >
+          <Ionicons name="ellipsis-horizontal" size={24} color="#828282" />
+        </TouchableOpacity>
       ),
     });
   }, [navigation]);
+
+  let currentPos = 0;
+  const snapOffsets = thought.imageSources.map((image, index) => {
+    const aspectRatio = image.width / image.height;
+    const offset = currentPos;
+    currentPos += 200 * aspectRatio;
+    return offset;
+  });
 
   return (
     <View style={styles.headerStyle}>
       {thought.imageSources && (
         <ScrollView
-          horizontal
-          contentContainerStyle={styles.imageContainer}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
           centerContent={true}
+          contentContainerStyle={styles.imageContainer}
+          pagingEnabled={true}
+          snapToOffsets={snapOffsets}
         >
-          {thought.imageSources.map((image, index) => (
-            <View key={index} style={styles.imageWrapper}>
-              <Image
-                source={{ uri: image.uri }}
-                style={styles.image}
-                resizeMode="cover"
-              />
-            </View>
-          ))}
+          {thought.imageSources.map((image, index) => {
+            const aspectRatio = image.width / image.height;
+            const imageWidth = 200 * aspectRatio;
+
+            return (
+              <TouchableOpacity
+                activeOpacity={0.85}
+                key={image.uri}
+                onPress={() => handleImagePress(index)}
+              >
+                <View style={[styles.imageWrapper, { width: imageWidth }]}>
+                  <Image
+                    source={{ uri: image.uri }}
+                    style={styles.image}
+                    resizeMode="cover"
+                  />
+                </View>
+              </TouchableOpacity>
+            );
+          })}
         </ScrollView>
       )}
 
@@ -100,6 +127,12 @@ const DetailScreen = ({ route, navigation }) => {
       >
         <Ionicons name="trash" size={20} color="red" />
       </TouchableOpacity>
+      <ImageViewing
+        images={thought.imageSources.map((image) => ({ uri: image.uri }))}
+        imageIndex={selectedImageIndex}
+        visible={isImageViewVisible}
+        onRequestClose={closeImageView}
+      />
     </View>
   );
 };

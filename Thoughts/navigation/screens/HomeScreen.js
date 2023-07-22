@@ -203,12 +203,12 @@ const RenderHomeContent = () => {
     );
   };
 
-  const groupedThoughts = Object.entries(thoughts).map(
-    ([date, thoughtsArray]) => ({
+  const groupedThoughts = Object.entries(thoughts)
+    .reverse()
+    .map(([date, thoughtsArray]) => ({
       date,
       thoughts: thoughtsArray.reverse(),
-    })
-  );
+    }));
 
   return (
     <View style={styles.container}>
