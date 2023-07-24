@@ -1,4 +1,5 @@
 import React from "react";
+import { StatusBar } from "react-native";
 import {
   useFonts,
   Inter_300Light,
@@ -19,6 +20,8 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
+
+  StatusBar.setBarStyle("dark-content");
 
   return <MainContainer />;
 }

@@ -1,14 +1,7 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import { View, Text, FlatList, Image, TouchableOpacity } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import { useNavigation, useIsFocused } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "../../styles/styles";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -39,6 +32,7 @@ const HomeScreen = () => {
 
 const RenderHomeContent = () => {
   const [thoughts, setThoughts] = useState({});
+  const [imageHeights, setImageHeights] = useState({});
   const navigation = useNavigation();
   const loadThoughts = async () => {
     try {
@@ -56,42 +50,6 @@ const RenderHomeContent = () => {
 
   const handleWrite = () => {
     navigation.navigate("Create");
-  };
-
-  const deleteThought = async (thoughtId) => {
-    try {
-      // Find the date associated with the thoughtId
-      const thoughtDate = Object.keys(thoughts).find((date) =>
-        thoughts[date].some((thought) => thought.id === thoughtId)
-      );
-
-      if (!thoughtDate) {
-        // If thoughtDate is not found, the thoughtId doesn't exist
-        console.warn("Thought not found.");
-        return;
-      }
-
-      // Filter out the thought to be deleted from the thoughts array for the specific date
-      const updatedThoughts = thoughts[thoughtDate].filter(
-        (thought) => thought.id !== thoughtId
-      );
-
-      // If the updatedThoughts array is empty, remove the date key from the thoughts object
-      if (updatedThoughts.length === 0) {
-        delete thoughts[thoughtDate];
-      } else {
-        // Otherwise, update the thoughts object with the new array
-        thoughts[thoughtDate] = updatedThoughts.reverse();
-      }
-
-      // Update the 'Thoughts' state to reflect the deletion
-      setThoughts({ ...thoughts });
-
-      // Save the updated 'thoughts' object to AsyncStorage
-      await AsyncStorage.setItem("THOUGHTS", JSON.stringify(thoughts));
-    } catch (error) {
-      console.error("Error deleting thought:", error);
-    }
   };
 
   const formatDate = (ogDate) => {
@@ -142,6 +100,17 @@ const RenderHomeContent = () => {
     return formattedDay + " - " + formattedDate;
   };
 
+  const handleImageLoad =
+    (imageUri) =>
+    ({ nativeEvent }) => {
+      const { width, height } = nativeEvent.source;
+      const aspectRatio = width / height;
+      setImageHeights((prevImageHeights) => ({
+        ...prevImageHeights,
+        [imageUri]: aspectRatio,
+      }));
+    };
+
   const renderItem = ({ item }) => {
     return (
       <View style={styles.headerStyle}>
@@ -153,50 +122,54 @@ const RenderHomeContent = () => {
             onPress={() => navigation.navigate("Detail", { thought })}
           >
             {thought.imageSources && thought.imageSources.length > 0 && (
-              <ScrollView
-                horizontal
-                contentContainerStyle={styles.imageContainer}
-                centerContent={true}
+              <View
+                style={[
+                  styles.imageWrapperHome,
+                  {
+                    aspectRatio: imageHeights[thought.imageSources[0].uri]
+                      ? imageHeights[thought.imageSources[0].uri]
+                      : 1, // Use 1 as the default aspect ratio if not loaded yet
+                  },
+                ]}
               >
-                <View style={styles.imageWrapper}>
-                  <Image
-                    source={{ uri: thought.imageSources[0].uri }}
-                    style={styles.image}
-                    resizeMode="cover"
-                  />
-                </View>
-              </ScrollView>
+                <Image
+                  source={{ uri: thought.imageSources[0].uri }}
+                  style={styles.imageHome}
+                  resizeMode="cover"
+                  onLoad={handleImageLoad(thought.imageSources[0].uri)}
+                />
+              </View>
             )}
-            <View style={styles.thoughtTimeAndMood}>
-              <Text style={styles.thoughtTime}>{thought.time}</Text>
-              {thought.mood ? (
-                <Text
-                  style={[
-                    styles.thoughtMood,
-                    {
-                      backgroundColor: thought.moodBgColor,
-                      color: thought.moodTextColor,
-                    },
-                  ]}
-                >
-                  {thought.mood}
-                </Text>
-              ) : null}
-            </View>
-            <View style={styles.thoughtTextContainer}>
-              {thought.title == "" ? null : (
-                <Text style={styles.thoughtTitle}>{thought.title}</Text>
+            <View style={styles.thoughtTimeAndMoodAndText}>
+              <View style={styles.thoughtTimeAndMood}>
+                <Text style={styles.thoughtTime}>{thought.time}</Text>
+                {thought.mood ? (
+                  <Text
+                    style={[
+                      styles.thoughtMood,
+                      {
+                        backgroundColor: thought.moodBgColor,
+                        color: thought.moodTextColor,
+                      },
+                    ]}
+                  >
+                    {thought.mood}
+                  </Text>
+                ) : null}
+              </View>
+              {thought.title == "" && thought.content == "" ? null : (
+                <View style={styles.thoughtTextContainer}>
+                  {thought.title == "" ? null : (
+                    <Text style={styles.thoughtTitle}>{thought.title}</Text>
+                  )}
+                  {thought.content == "" ? null : (
+                    <Text numberOfLines={1} style={styles.thoughtContent}>
+                      {thought.content}
+                    </Text>
+                  )}
+                </View>
               )}
-              {thought.content == "" ? null : (
-                <Text style={styles.thoughtContent}>{thought.content}</Text>
-              )}
             </View>
-            <TouchableOpacity
-              style={styles.deleteButton}
-              onPress={() => deleteThought(thought.id)}
-            >
-              <Ionicons name="trash" size={20} color="red" />
-            </TouchableOpacity>
           </TouchableOpacity>
         ))}
       </View>

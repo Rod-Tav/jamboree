@@ -9,11 +9,21 @@ export default StyleSheet.create({
     flexDirection: "column",
     gap: 16,
     backgroundColor: "white",
-    paddingTop: 24,
+    // paddingTop: 24,
     paddingBottom: 16,
     paddingLeft: "7%",
     paddingRight: "7%",
-    marginTop: 44,
+    paddingTop: "12%",
+    borderRadius: 16,
+  },
+  createContainer: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    gap: 16,
+    backgroundColor: "white",
+    // paddingTop: 24,
+    paddingBottom: 16,
     borderRadius: 16,
   },
   topOfHome: {
@@ -67,6 +77,15 @@ export default StyleSheet.create({
     height: 200,
     borderRadius: 0,
     overflow: "hidden",
+  },
+  imageWrapperHome: {
+    aspectRatio: 4 / 3,
+    borderRadius: 16,
+    overflow: "hidden",
+    maxWidth: "100%",
+  },
+  imageHome: {
+    flex: 1,
   },
   image: {
     flex: 1,
@@ -147,13 +166,15 @@ export default StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#F2F4F5",
     gap: 14,
-    paddingBottom: 14,
+    paddingTop: 16,
+    paddingBottom: 16,
+
     display: "flex",
     flexDirection: "column",
     // padding: viewPadding,
     // marginBottom: viewPadding,
   },
-
+  thoughtTimeAndMoodAndText: { display: "flex", gap: 10 },
   thoughtTimeAndMood: {
     display: "flex",
     flexDirection: "row",
@@ -180,12 +201,13 @@ export default StyleSheet.create({
   thoughtTextContainer: {
     display: "flex",
     flexDirection: "column",
+    gap: 10,
   },
   thoughtTitle: {
     fontSize: 20,
     fontWeight: 700,
     color: "#090A0A",
-    marginBottom: 10,
+    // marginBottom: 10,
   },
   thoughtContent: {
     color: "#090A0A",
@@ -201,5 +223,84 @@ export default StyleSheet.create({
   },
   deleteButton: {
     display: "none",
+  },
+  bottomSheetContainer: {
+    padding: 16,
+    backgroundColor: "white",
+  },
+  bottomSheetOption: {
+    fontSize: 18,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E0E0E0",
+  },
+  detailContainer: {
+    height: "100%",
+    backgroundColor: "white",
+    paddingTop: "7%",
+    paddingBottom: 16,
+    paddingLeft: "7%",
+    paddingRight: "7%",
+  },
+
+  detailTimeAndMood: {
+    display: "flex",
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "space-between",
+    borderBottomWidth: 1,
+    borderBottomColor: "#F2F4F5",
+    paddingBottom: 12,
+  },
+  detailThoughtContent: {
+    color: "#090A0A",
+    fontSize: 12,
+    fontWeight: 300,
+    lineHeight: 20,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "flex-end", // Show the modal at the bottom of the screen
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
+  },
+  modalContent: {
+    backgroundColor: "white",
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    paddingVertical: 20,
+    alignItems: "center",
+  },
+  optionButton: {
+    padding: 10,
+    marginVertical: 8,
+    borderRadius: 4,
+  },
+  optionButtonText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  modalContentContainer: {
+    justifyContent: "flex-end",
+    margin: 0,
+  },
+  modalContent: {
+    backgroundColor: "white",
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    paddingVertical: 20,
+    alignItems: "center",
+    opacity: 1, // Adjust the opacity of the modal content
+  },
+  optionButton: {
+    padding: 10,
+    marginVertical: 8,
+    // backgroundColor: "#f1f1f1",
+    borderRadius: 4,
+  },
+  optionButtonText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
   },
 });

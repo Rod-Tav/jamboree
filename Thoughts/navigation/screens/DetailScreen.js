@@ -1,14 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
 import styles from "../../styles/styles";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import Icon from "react-native-vector-icons/AntDesign";
 import ImageViewing from "react-native-image-viewing";
+import { useMemo, useRef, useCallback } from "react";
+import Modal from "react-native-modal";
+import SkinnyIcon from "react-native-snappy";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const DetailScreen = ({ route, navigation }) => {
   const { thought } = route.params;
-  const [isOptionsVisible, setIsOptionsVisible] = useState(false);
   const [isImageViewVisible, setIsImageViewVisible] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [bottomSheetIndex, setBottomSheetIndex] = useState(-1);
+  const [imageHeights, setImageHeights] = useState({});
+  const [showCustomActionSheet, setShowCustomActionSheet] = useState(false);
+
   const handleImagePress = (imageIndex) => {
     setSelectedImageIndex(imageIndex);
     setIsImageViewVisible(true);
@@ -17,20 +24,54 @@ const DetailScreen = ({ route, navigation }) => {
     setIsImageViewVisible(false);
   };
 
-  // Function to handle edit option
-  const handleEdit = () => {
-    setIsOptionsVisible(false);
+  const bottomSheetRef = useRef(null);
+
+  const snapPoints = useMemo(() => ["20%"], []);
+
+  const handleMore = () => {
+    setShowCustomActionSheet(true);
+  };
+
+  const handleEdit = useCallback(() => {
     // Implement your logic to navigate to the edit screen here
     // For example:
     // navigation.navigate('Edit', { thought });
-  };
+  }, []);
 
-  // Function to handle delete option
-  const handleDelete = () => {
-    setIsOptionsVisible(false);
-    // Implement your logic to delete the thought here
-    // For example:
-    // Call the deleteThought function or any other logic you have
+  const handleDelete = async () => {
+    const thoughtsNotParsed = await AsyncStorage.getItem("THOUGHTS");
+    const thoughts = JSON.parse(thoughtsNotParsed);
+    const thoughtId = thought.id;
+    try {
+      // Find the date associated with the thoughtId
+      const thoughtDate = Object.keys(thoughts).find((date) =>
+        thoughts[date].some((thought) => thought.id === thoughtId)
+      );
+
+      if (!thoughtDate) {
+        // If thoughtDate is not found, the thoughtId doesn't exist
+        console.warn("Thought not found.");
+        return;
+      }
+
+      // Filter out the thought to be deleted from the thoughts array for the specific date
+      const updatedThoughts = thoughts[thoughtDate].filter(
+        (thought) => thought.id !== thoughtId
+      );
+
+      // If the updatedThoughts array is empty, remove the date key from the thoughts object
+      if (updatedThoughts.length === 0) {
+        delete thoughts[thoughtDate];
+      } else {
+        // Otherwise, update the thoughts object with the new array
+        thoughts[thoughtDate] = updatedThoughts;
+      }
+
+      // Save the updated 'thoughts' object to AsyncStorage
+      await AsyncStorage.setItem("THOUGHTS", JSON.stringify(thoughts));
+    } catch (error) {
+      console.error("Error deleting thought:", error);
+    }
   };
 
   const formatDate = (date) => {
@@ -42,16 +83,42 @@ const DetailScreen = ({ route, navigation }) => {
     return month + "/" + day + "/" + year;
   };
 
+  const handleSelectOption = (option) => {
+    setShowCustomActionSheet(false);
+
+    if (option === "Edit") {
+      handleEdit();
+    } else if (option === "Delete") {
+      handleDelete();
+      navigation.goBack();
+    }
+  };
+
   // Set up the options for the header
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      title: "Thought Detail", // Set the title of the header
+      title: "", // Set the title of the header
+      headerStyle: {
+        backgroundColor: "white",
+      },
       headerRight: () => (
-        <TouchableOpacity
-          onPress={handleEdit}
-          style={{ paddingHorizontal: 10 }}
-        >
-          <Ionicons name="ellipsis-horizontal" size={24} color="#828282" />
+        <TouchableOpacity onPress={handleMore}>
+          <Icon
+            name="ellipsis1"
+            size={24}
+            color="#090A0A"
+            style={{ paddingHorizontal: "7%" }}
+          />
+        </TouchableOpacity>
+      ),
+      headerLeft: () => (
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Icon
+            name="arrowleft"
+            size={22}
+            color="#090A0A"
+            style={{ marginHorizontal: "7%" }}
+          />
         </TouchableOpacity>
       ),
     });
@@ -65,76 +132,187 @@ const DetailScreen = ({ route, navigation }) => {
     return offset;
   });
 
-  return (
-    <View style={styles.headerStyle}>
-      {thought.imageSources && (
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          centerContent={true}
-          contentContainerStyle={styles.imageContainer}
-          pagingEnabled={true}
-          snapToOffsets={snapOffsets}
-        >
-          {thought.imageSources.map((image, index) => {
-            const aspectRatio = image.width / image.height;
-            const imageWidth = 200 * aspectRatio;
+  const handleImageLoad =
+    (imageUri) =>
+    ({ nativeEvent }) => {
+      const { width, height } = nativeEvent.source;
+      const aspectRatio = width / height;
+      setImageHeights((prevImageHeights) => ({
+        ...prevImageHeights,
+        [imageUri]: aspectRatio,
+      }));
+    };
 
-            return (
+  const handleCancelCustomActionSheet = () => {
+    setShowCustomActionSheet(false);
+  };
+
+  return (
+    <ScrollView style={{ backgroundColor: "white", height: "100%" }}>
+      <View style={[styles.detailContainer]}>
+        <View style={styles.imagesEntireContainer}>
+          {thought.imageSources.length !== 0 &&
+            (thought.imageSources.length > 1 ? (
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                centerContent={true}
+                contentContainerStyle={styles.imageContainer}
+                pagingEnabled={true}
+                snapToOffsets={snapOffsets}
+              >
+                {thought.imageSources.map((image, index) => {
+                  const aspectRatio = image.width / image.height;
+                  const imageWidth = 200 * aspectRatio;
+                  return (
+                    <TouchableOpacity
+                      activeOpacity={0.85}
+                      key={image.uri}
+                      onPress={() => handleImagePress(index)}
+                    >
+                      <View
+                        style={[styles.imageWrapper, { width: imageWidth }]}
+                      >
+                        <Image
+                          source={{ uri: image.uri }}
+                          style={styles.image}
+                          resizeMode="cover"
+                        />
+                      </View>
+                    </TouchableOpacity>
+                  );
+                })}
+              </ScrollView>
+            ) : (
               <TouchableOpacity
                 activeOpacity={0.85}
-                key={image.uri}
-                onPress={() => handleImagePress(index)}
+                key={thought.imageSources[0].uri}
+                onPress={() => handleImagePress(0)}
               >
-                <View style={[styles.imageWrapper, { width: imageWidth }]}>
+                <View
+                  style={[
+                    styles.imageWrapperHome,
+                    {
+                      aspectRatio: imageHeights[thought.imageSources[0].uri]
+                        ? imageHeights[thought.imageSources[0].uri]
+                        : 1, // Use 1 as the default aspect ratio if not loaded yet
+                    },
+                  ]}
+                >
                   <Image
-                    source={{ uri: image.uri }}
-                    style={styles.image}
+                    source={{ uri: thought.imageSources[0].uri }}
+                    style={styles.imageHome}
                     resizeMode="cover"
+                    onLoad={handleImageLoad(thought.imageSources[0].uri)}
                   />
                 </View>
               </TouchableOpacity>
-            );
-          })}
-        </ScrollView>
-      )}
-
-      <View style={styles.thoughtTimeAndMood}>
-        <Text style={styles.dayText}>
-          {formatDate(thought.date)} - {thought.time}
-        </Text>
-        {thought.mood ? (
-          <Text
-            style={[
-              styles.thoughtMood,
-              {
-                backgroundColor: thought.moodBgColor,
-                color: thought.moodTextColor,
-              },
-            ]}
-          >
-            {thought.mood}
-          </Text>
-        ) : null}
+            ))}
+        </View>
+        <View style={styles.thoughtTimeAndMoodAndText}>
+          {/* {thought.title == "" && thought.content == "" ? null : ( */}
+          <View style={styles.thoughtTextContainer}>
+            {thought.title == "" ? null : (
+              <Text style={styles.thoughtTitle}>{thought.title}</Text>
+            )}
+            <View style={styles.detailTimeAndMood}>
+              <Text style={styles.thoughtTime}>
+                {formatDate(thought.date)} - {thought.time}
+              </Text>
+              {thought.mood ? (
+                <Text
+                  style={[
+                    styles.thoughtMood,
+                    {
+                      backgroundColor: thought.moodBgColor,
+                      color: thought.moodTextColor,
+                    },
+                  ]}
+                >
+                  {thought.mood}
+                </Text>
+              ) : null}
+            </View>
+            {thought.content == "" ? null : (
+              <Text style={styles.detailThoughtContent}>{thought.content}</Text>
+            )}
+          </View>
+        </View>
+        <ImageViewing
+          images={thought.imageSources.map((image) => ({ uri: image.uri }))}
+          imageIndex={selectedImageIndex}
+          visible={isImageViewVisible}
+          onRequestClose={closeImageView}
+        />
+        {bottomSheetIndex !== -1 && (
+          <TouchableOpacity
+            style={{
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+            }}
+            onPress={closeBottomSheet}
+          />
+        )}
+        <CustomActionSheet
+          isVisible={showCustomActionSheet}
+          onCancel={handleCancelCustomActionSheet}
+          onSelectOption={handleSelectOption}
+        />
       </View>
-      {thought.title == "" ? null : (
-        <Text style={styles.thoughtTitle}>{thought.title}</Text>
-      )}
-      <Text style={styles.thoughtContent}>{thought.content}</Text>
-      <TouchableOpacity
-        style={styles.deleteButton}
-        onPress={() => deleteThought(thought.id)}
-      >
-        <Ionicons name="trash" size={20} color="red" />
-      </TouchableOpacity>
-      <ImageViewing
-        images={thought.imageSources.map((image) => ({ uri: image.uri }))}
-        imageIndex={selectedImageIndex}
-        visible={isImageViewVisible}
-        onRequestClose={closeImageView}
-      />
-    </View>
+    </ScrollView>
   );
 };
 
 export default DetailScreen;
+
+const CustomActionSheet = ({ isVisible, onCancel, onSelectOption }) => {
+  const handleOptionPress = (option) => {
+    onSelectOption(option);
+  };
+
+  return (
+    <Modal
+      isVisible={isVisible}
+      onBackdropPress={onCancel}
+      backdropColor="rgba(0, 0, 0, 0.5)"
+      backdropTransitionOutTiming={0}
+      style={styles.modalContentContainer}
+    >
+      <View style={styles.modalContent}>
+        <TouchableOpacity
+          onPress={() => handleOptionPress("Edit")}
+          style={styles.optionButton}
+        >
+          <View style={styles.buttonIcon}>
+            <SkinnyIcon
+              name="edit"
+              size={24}
+              strokeWidth={1.5}
+              color="black"
+              style={styles.icon}
+            />
+          </View>
+          <Text style={styles.optionButtonText}>Edit</Text>
+        </TouchableOpacity>
+        <View style={styles.buttonIcon}>
+          <SkinnyIcon
+            name="trash"
+            size={24}
+            strokeWidth={1.5}
+            color="black"
+            style={styles.icon}
+          />
+        </View>
+        <TouchableOpacity
+          onPress={() => handleOptionPress("Delete")}
+          style={styles.optionButton}
+        >
+          <Text style={styles.optionButtonText}>Delete</Text>
+        </TouchableOpacity>
+      </View>
+    </Modal>
+  );
+};

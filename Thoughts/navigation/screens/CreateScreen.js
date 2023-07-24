@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   Platform,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
+  ScrollView,
 } from "react-native";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -102,71 +103,85 @@ const CreateScreen = () => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={[styles.container, { paddingBottom: 10 }]}>
-        <View style={styles.headerStyle}>
-          <Text style={styles.headerText}>What's on your mind?</Text>
-        </View>
+    <View style={[styles.container]}>
+      <KeyboardAvoidingView behavior={"padding"}>
+        <ScrollView
+          style={{ backgroundColor: "white", height: "100%" }}
+          showsVerticalScrollIndicator={false}
+        >
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={[styles.createContainer, { paddingBottom: 14 }]}>
+              <View style={styles.headerStyle}>
+                <Text style={styles.headerText}>What's on your mind?</Text>
+              </View>
 
-        {/* Styled ImagePickerScreen */}
-        <View>
-          <ImagePickerScreen
-            imageSources={imageSources}
-            changeImageSources={changeImageSources}
-          />
-        </View>
+              {/* Styled ImagePickerScreen */}
+              <View>
+                <ImagePickerScreen
+                  imageSources={imageSources}
+                  changeImageSources={changeImageSources}
+                />
+              </View>
 
-        {/* Title Input */}
-        <TextInput
-          style={styles.titleInput}
-          onChangeText={(text) => setTitle(text)}
-          value={title}
-          placeholder="Title"
-          maxLength={50}
-        />
+              {/* Title Input */}
+              <TextInput
+                style={styles.titleInput}
+                onChangeText={(text) => setTitle(text)}
+                value={title}
+                placeholder="Title"
+                maxLength={50}
+              />
 
-        {/* Content Input */}
-        <TextInput
-          style={styles.contentInput}
-          onChangeText={(text) => setContent(text)}
-          value={content}
-          placeholder="Write your thoughts here..."
-          multiline
-        />
+              {/* Content Input */}
+              <TextInput
+                style={styles.contentInput}
+                onChangeText={(text) => setContent(text)}
+                value={content}
+                placeholder="Write your thoughts here..."
+                multiline
+              />
 
-        {/* Mood Picker */}
-        <View>
-          <MoodPicker
-            value={mood}
-            setValue={(mood) => setMood(mood)}
-            moodBgColorValue={moodBgColor}
-            setMoodBgColorValue={(bgColor) => setMoodBgColor(bgColor)}
-            moodTextColorValue={moodTextColor}
-            setMoodTextColorValue={(textColor) => setMoodTextColor(textColor)}
-            clearMoodToggle={clearMoodToggle}
-          />
-        </View>
+              {/* Mood Picker */}
+              <View>
+                <MoodPicker
+                  value={mood}
+                  setValue={(mood) => setMood(mood)}
+                  moodBgColorValue={moodBgColor}
+                  setMoodBgColorValue={(bgColor) => setMoodBgColor(bgColor)}
+                  moodTextColorValue={moodTextColor}
+                  setMoodTextColorValue={(textColor) =>
+                    setMoodTextColor(textColor)
+                  }
+                  clearMoodToggle={clearMoodToggle}
+                />
+              </View>
 
-        {/* Styled Add Thought Button */}
-        <TouchableOpacity onPress={handleAddThought} style={styles.addButton}>
-          <SkinnyIcon
-            name="check"
-            size={16}
-            strokeWidth={1.5}
-            color="white"
-            style={styles.buttonIcon}
-          />
-          <Text style={styles.addButtonText}>Log Your Thought</Text>
-          <SkinnyIcon
-            name="check"
-            size={24}
-            strokeWidth={1.5}
-            color="transparent"
-            style={styles.buttonIcon}
-          />
-        </TouchableOpacity>
-      </View>
-    </TouchableWithoutFeedback>
+              {/* Styled Add Thought Button */}
+              <TouchableOpacity
+                onPress={handleAddThought}
+                style={styles.addButton}
+              >
+                <SkinnyIcon
+                  name="check"
+                  size={16}
+                  strokeWidth={1.5}
+                  color="white"
+                  style={styles.buttonIcon}
+                />
+                <Text style={styles.addButtonText}>Log Your Thought</Text>
+                <SkinnyIcon
+                  name="check"
+                  size={24}
+                  strokeWidth={1.5}
+                  color="transparent"
+                  style={styles.buttonIcon}
+                />
+              </TouchableOpacity>
+            </View>
+          </TouchableWithoutFeedback>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </View>
   );
 };
 
