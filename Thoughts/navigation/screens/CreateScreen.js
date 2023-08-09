@@ -15,6 +15,7 @@ import styles from "../../styles/styles";
 import ImagePickerScreen from "../ImagePickerScreen";
 import MoodPicker from "../MoodPicker";
 import SkinnyIcon from "react-native-snappy";
+import * as FileSystem from "expo-file-system";
 
 const CreateScreen = () => {
   const [title, setTitle] = useState("");
@@ -78,10 +79,40 @@ const CreateScreen = () => {
     };
   }, [editThought, navigation, route.params]);
 
+  const imgDir = FileSystem.documentDirectory + "images/";
+
+  const ensureDirExists = async () => {
+    const dirInfo = await FileSystem.getInfoAsync(imgDir);
+    if (!dirInfo.exists) {
+      await FileSystem.makeDirectoryAsync(imgDir, { intermediates: true });
+    }
+  };
+  // Save image to file system
+  const saveImage = async (uri) => {
+    await ensureDirExists();
+    const filename = new Date().getTime() + ".jpeg";
+    const dest = imgDir + filename;
+    await FileSystem.copyAsync({ from: uri, to: dest });
+    return dest;
+  };
+
+  const storeImages = async (images) => {
+    const updatedImages = [];
+
+    for (const image of images) {
+      const newDest = await saveImage(image.uri);
+      updatedImages.push({ ...image, uri: newDest });
+    }
+
+    return updatedImages;
+  };
+
   const handleAddThought = async () => {
     const formattedDate = formatDate();
 
     setClearMoodToggle(!clearMoodToggle);
+
+    const newImageSources = await storeImages(imageSources);
 
     const newThought = {
       id: route.params?.editThought?.id || new Date().getTime().toString(),
@@ -90,7 +121,7 @@ const CreateScreen = () => {
       mood,
       moodBgColor,
       moodTextColor,
-      imageSources,
+      imageSources: newImageSources,
       date: route.params?.editThought?.date || formattedDate.date, // Use the original date when editing
       time: route.params?.editThought?.time || formattedDate.time, // Use the original time when editing
     };
