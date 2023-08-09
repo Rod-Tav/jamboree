@@ -32,7 +32,7 @@ export default StyleSheet.create({
     gap: 16,
   },
   headerText: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: "bold",
   },
   headerStyle: {

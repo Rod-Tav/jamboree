@@ -1,16 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   Keyboard,
-  Platform,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   ScrollView,
 } from "react-native";
-import { useNavigation, useIsFocused } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native"; // Import useRoute
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "../../styles/styles";
 import ImagePickerScreen from "../ImagePickerScreen";
@@ -26,6 +25,8 @@ const CreateScreen = () => {
   const [imageSources, setImageSources] = useState([]);
   const navigation = useNavigation();
   const [clearMoodToggle, setClearMoodToggle] = useState(false);
+  const route = useRoute();
+  const editThought = route.params?.editThought;
 
   const formatDate = () => {
     const date = new Date();
@@ -45,42 +46,84 @@ const CreateScreen = () => {
     };
   };
 
+  useEffect(() => {
+    const blurListener = navigation.addListener("blur", () => {
+      if (editThought) {
+        // Reset the editThought parameter when navigating away
+        route.params.editThought = false;
+        setTitle("");
+        setContent("");
+        setMood("");
+        setMoodBgColor("");
+        setMoodTextColor("");
+        setImageSources([]);
+      }
+    });
+
+    const focusListener = navigation.addListener("focus", () => {
+      if (editThought) {
+        // Initialize fields with editThought data if available
+        setTitle(editThought.title);
+        setContent(editThought.content);
+        setMood(editThought.mood);
+        setMoodBgColor(editThought.moodBgColor);
+        setMoodTextColor(editThought.moodTextColor);
+        setImageSources(editThought.imageSources);
+      }
+    });
+
+    return () => {
+      blurListener();
+      focusListener();
+    };
+  }, [editThought, navigation, route.params]);
+
   const handleAddThought = async () => {
     const formattedDate = formatDate();
 
     setClearMoodToggle(!clearMoodToggle);
 
-    const thought = {
-      id: new Date().getTime().toString(),
+    const newThought = {
+      id: route.params?.editThought?.id || new Date().getTime().toString(),
       title,
       content,
       mood,
       moodBgColor,
       moodTextColor,
       imageSources,
-      date: formattedDate.date,
-      time: formattedDate.time,
+      date: route.params?.editThought?.date || formattedDate.date, // Use the original date when editing
+      time: route.params?.editThought?.time || formattedDate.time, // Use the original time when editing
     };
-
     if (
-      thought.title == "" &&
-      thought.content == "" &&
-      thought.mood == "" &&
-      thought.imageSources.length == 0
+      newThought.title == "" &&
+      newThought.content == "" &&
+      newThought.mood == "" &&
+      newThought.imageSources.length == 0
     ) {
       return;
     }
-
     try {
       const existingThoughts = await AsyncStorage.getItem("THOUGHTS");
       const thoughts = existingThoughts ? JSON.parse(existingThoughts) : {};
 
-      // If there are no thoughts for the current date, create an empty array
-      if (!thoughts[formattedDate.date]) {
-        thoughts[formattedDate.date] = [];
-      }
+      if (route.params?.editThought) {
+        // If editing, find the thought and update it
+        const thoughtDate = route.params.editThought.date;
+        const thoughtId = route.params.editThought.id;
 
-      thoughts[formattedDate.date].push(thought);
+        if (thoughts[thoughtDate]) {
+          thoughts[thoughtDate] = thoughts[thoughtDate].map((thought) =>
+            thought.id === thoughtId ? newThought : thought
+          );
+        }
+      } else {
+        // If not editing, add a new thought
+        if (!thoughts[newThought.date]) {
+          thoughts[newThought.date] = [];
+        }
+
+        thoughts[newThought.date].push(newThought);
+      }
 
       await AsyncStorage.setItem("THOUGHTS", JSON.stringify(thoughts));
 
@@ -91,8 +134,7 @@ const CreateScreen = () => {
       setMoodBgColor("");
       setMoodTextColor("");
       setImageSources([]);
-
-      navigation.navigate("Home");
+      navigation.navigate("TrueHome"); // Navigate back to home screen
     } catch (error) {
       console.error("Error saving thought:", error);
     }
@@ -111,9 +153,15 @@ const CreateScreen = () => {
         >
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={[styles.createContainer, { paddingBottom: 14 }]}>
-              <View style={styles.headerStyle}>
-                <Text style={styles.headerText}>What's on your mind?</Text>
-              </View>
+              {editThought ? (
+                <View style={styles.headerStyle}>
+                  <Text style={styles.headerText}>Edit your thought</Text>
+                </View>
+              ) : (
+                <View style={styles.headerStyle}>
+                  <Text style={styles.headerText}>What's on your mind?</Text>
+                </View>
+              )}
 
               {/* Styled ImagePickerScreen */}
               <View>
@@ -168,7 +216,11 @@ const CreateScreen = () => {
                   color="white"
                   style={styles.buttonIcon}
                 />
-                <Text style={styles.addButtonText}>Log Your Thought</Text>
+                {editThought ? (
+                  <Text style={styles.addButtonText}>Save Edits</Text>
+                ) : (
+                  <Text style={styles.addButtonText}>Log Your Thought</Text>
+                )}
                 <SkinnyIcon
                   name="check"
                   size={24}

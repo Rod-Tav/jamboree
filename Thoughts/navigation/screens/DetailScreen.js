@@ -1,21 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
 import styles from "../../styles/styles";
 import Icon from "react-native-vector-icons/AntDesign";
 import ImageViewing from "react-native-image-viewing";
-import { useMemo, useRef, useCallback } from "react";
+import { useCallback } from "react";
 import Modal from "react-native-modal";
 import SkinnyIcon from "react-native-snappy";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 
-const DetailScreen = ({ route, navigation }) => {
+const DetailScreen = ({ route }) => {
   const { thought } = route.params;
+  const navigation = useNavigation();
   const [isImageViewVisible, setIsImageViewVisible] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [bottomSheetIndex, setBottomSheetIndex] = useState(-1);
   const [imageHeights, setImageHeights] = useState({});
   const [showCustomActionSheet, setShowCustomActionSheet] = useState(false);
-
   const handleImagePress = (imageIndex) => {
     setSelectedImageIndex(imageIndex);
     setIsImageViewVisible(true);
@@ -24,19 +25,14 @@ const DetailScreen = ({ route, navigation }) => {
     setIsImageViewVisible(false);
   };
 
-  const bottomSheetRef = useRef(null);
-
-  const snapPoints = useMemo(() => ["20%"], []);
-
   const handleMore = () => {
     setShowCustomActionSheet(true);
   };
 
   const handleEdit = useCallback(() => {
-    // Implement your logic to navigate to the edit screen here
-    // For example:
-    // navigation.navigate('Edit', { thought });
-  }, []);
+    navigation.navigate("Create", { editThought: thought });
+    setShowCustomActionSheet(false);
+  }, [navigation, thought]);
 
   const handleDelete = async () => {
     const thoughtsNotParsed = await AsyncStorage.getItem("THOUGHTS");
@@ -260,6 +256,7 @@ const DetailScreen = ({ route, navigation }) => {
           isVisible={showCustomActionSheet}
           onCancel={handleCancelCustomActionSheet}
           onSelectOption={handleSelectOption}
+          onEdit={handleEdit} // Pass the handleEdit function to CustomActionSheet
         />
       </View>
     </ScrollView>
@@ -268,7 +265,7 @@ const DetailScreen = ({ route, navigation }) => {
 
 export default DetailScreen;
 
-const CustomActionSheet = ({ isVisible, onCancel, onSelectOption }) => {
+const CustomActionSheet = ({ isVisible, onCancel, onSelectOption, onEdit }) => {
   const handleOptionPress = (option) => {
     onSelectOption(option);
   };
@@ -282,10 +279,7 @@ const CustomActionSheet = ({ isVisible, onCancel, onSelectOption }) => {
       style={styles.modalContentContainer}
     >
       <View style={styles.modalContent}>
-        <TouchableOpacity
-          onPress={() => handleOptionPress("Edit")}
-          style={styles.optionButton}
-        >
+        <TouchableOpacity onPress={onEdit} style={styles.optionButton}>
           <View style={styles.buttonIcon}>
             <SkinnyIcon
               name="edit"

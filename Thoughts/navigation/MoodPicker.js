@@ -35,6 +35,8 @@ const MoodPicker = ({
     setTextColor("");
     setCustomMood("");
     setCustomColor("");
+    setMoodBgColorValue("");
+    setMoodTextColorValue("");
   }, [clearMoodToggle]);
 
   const moodOptions = [
@@ -98,6 +100,8 @@ const MoodPicker = ({
   };
 
   const handleDone = () => {
+    if (!mood && !customMood) return;
+    if (customMood && !customColor) return;
     setValue(mood || customMood);
     setMoodBgColorValue(bgColor);
     setMoodTextColorValue(textColor);
@@ -131,6 +135,7 @@ const MoodPicker = ({
     setMoodBgColorValue("");
     setMoodTextColorValue("");
     setValue("");
+    setCustomColor("");
   };
 
   return (
@@ -139,7 +144,7 @@ const MoodPicker = ({
         onPress={handleMoodPicker}
         style={[
           styles.buttonContainer,
-          moodBgColorValue !== "" && { backgroundColor: bgColor },
+          moodBgColorValue !== "" && { backgroundColor: moodBgColorValue },
         ]}
       >
         <View style={styles.buttonIcon}>
@@ -149,7 +154,9 @@ const MoodPicker = ({
                 name="x"
                 size={16}
                 strokeWidth={1.5}
-                color={moodTextColorValue !== "" ? textColor : "#979C9E"}
+                color={
+                  moodTextColorValue !== "" ? moodTextColorValue : "#979C9E"
+                }
               />
             </TouchableOpacity>
           ) : (
@@ -158,6 +165,7 @@ const MoodPicker = ({
               size={16}
               strokeWidth={1.5}
               color="#979C9E"
+              padding={10}
             />
           )}
         </View>
@@ -166,9 +174,9 @@ const MoodPicker = ({
         ) : (
           <Text
             style={
-              textColor !== "" && [
+              moodTextColorValue !== "" && [
                 moodstyles.moodTextMain,
-                { color: textColor },
+                { color: moodTextColorValue },
               ]
             }
           >

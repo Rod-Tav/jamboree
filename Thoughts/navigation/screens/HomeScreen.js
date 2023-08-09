@@ -12,12 +12,10 @@ import DetailScreen from "./DetailScreen";
 const Stack = createStackNavigator();
 
 const HomeScreen = () => {
-  const navigation = useNavigation();
-
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name=" "
+        name="TrueHome"
         component={RenderHomeContent}
         options={{ headerShown: false }}
       />
@@ -34,10 +32,11 @@ const RenderHomeContent = () => {
   const [thoughts, setThoughts] = useState({});
   const [imageHeights, setImageHeights] = useState({});
   const navigation = useNavigation();
+
   const loadThoughts = async () => {
     try {
       const storedThoughts = await AsyncStorage.getItem("THOUGHTS");
-      setThoughts(storedThoughts ? JSON.parse(storedThoughts) : []);
+      setThoughts(storedThoughts ? JSON.parse(storedThoughts) : {});
     } catch (error) {
       console.error("Error loading thoughts:", error);
     }
