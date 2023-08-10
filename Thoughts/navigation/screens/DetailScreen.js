@@ -15,7 +15,6 @@ const DetailScreen = ({ route }) => {
   const [isImageViewVisible, setIsImageViewVisible] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [bottomSheetIndex, setBottomSheetIndex] = useState(-1);
-  const [imageHeights, setImageHeights] = useState({});
   const [showCustomActionSheet, setShowCustomActionSheet] = useState(false);
   const handleImagePress = (imageIndex) => {
     setSelectedImageIndex(imageIndex);
@@ -79,13 +78,13 @@ const DetailScreen = ({ route }) => {
     return month + "/" + day + "/" + year;
   };
 
-  const handleSelectOption = (option) => {
+  const handleSelectOption = async (option) => {
     setShowCustomActionSheet(false);
 
     if (option === "Edit") {
       handleEdit();
     } else if (option === "Delete") {
-      handleDelete();
+      await handleDelete();
       navigation.goBack();
     }
   };
@@ -96,24 +95,32 @@ const DetailScreen = ({ route }) => {
       title: "", // Set the title of the header
       headerStyle: {
         backgroundColor: "white",
+        elevation: 0,
+        shadowOpacity: 0,
+        borderBottomWidth: 0,
+      },
+      headerShadowVisible: false,
+      headerTitleStyle: {
+        display: "none",
       },
       headerRight: () => (
-        <TouchableOpacity onPress={handleMore}>
-          <Icon
-            name="ellipsis1"
-            size={24}
-            color="#090A0A"
-            style={{ paddingHorizontal: "7%" }}
-          />
+        <TouchableOpacity
+          onPress={handleMore}
+          style={{ paddingHorizontal: "14%" }}
+        >
+          <Icon name="ellipsis1" size={24} color="#090A0A" />
         </TouchableOpacity>
       ),
       headerLeft: () => (
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Icon
-            name="arrowleft"
-            size={22}
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={{ marginHorizontal: "14%" }}
+        >
+          <SkinnyIcon
+            name="arrow-left"
+            size={25}
+            strokeWidth={1.5}
             color="#090A0A"
-            style={{ marginHorizontal: "7%" }}
           />
         </TouchableOpacity>
       ),
@@ -128,17 +135,6 @@ const DetailScreen = ({ route }) => {
     return offset;
   });
 
-  const handleImageLoad =
-    (imageUri) =>
-    ({ nativeEvent }) => {
-      const { width, height } = nativeEvent.source;
-      const aspectRatio = width / height;
-      setImageHeights((prevImageHeights) => ({
-        ...prevImageHeights,
-        [imageUri]: aspectRatio,
-      }));
-    };
-
   const handleCancelCustomActionSheet = () => {
     setShowCustomActionSheet(false);
   };
@@ -146,9 +142,9 @@ const DetailScreen = ({ route }) => {
   return (
     <ScrollView style={{ backgroundColor: "white", height: "100%" }}>
       <View style={[styles.detailContainer]}>
-        <View style={styles.imagesEntireContainer}>
-          {thought.imageSources.length !== 0 &&
-            (thought.imageSources.length > 1 ? (
+        {thought.imageSources.length !== 0 && (
+          <View style={styles.imagesEntireContainer}>
+            {thought.imageSources.length > 1 ? (
               <ScrollView
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
@@ -189,9 +185,9 @@ const DetailScreen = ({ route }) => {
                   style={[
                     styles.imageWrapperHome,
                     {
-                      aspectRatio: imageHeights[thought.imageSources[0].uri]
-                        ? imageHeights[thought.imageSources[0].uri]
-                        : 1, // Use 1 as the default aspect ratio if not loaded yet
+                      aspectRatio:
+                        thought.imageSources[0].width /
+                        thought.imageSources[0].height,
                     },
                   ]}
                 >
@@ -199,12 +195,12 @@ const DetailScreen = ({ route }) => {
                     source={{ uri: thought.imageSources[0].uri }}
                     style={styles.imageHome}
                     resizeMode="cover"
-                    onLoad={handleImageLoad(thought.imageSources[0].uri)}
                   />
                 </View>
               </TouchableOpacity>
-            ))}
-        </View>
+            )}
+          </View>
+        )}
         <View style={styles.thoughtTimeAndMoodAndText}>
           {/* {thought.title == "" && thought.content == "" ? null : ( */}
           <View style={styles.thoughtTextContainer}>
@@ -285,26 +281,41 @@ const CustomActionSheet = ({ isVisible, onCancel, onSelectOption, onEdit }) => {
               name="edit"
               size={24}
               strokeWidth={1.5}
-              color="black"
-              style={styles.icon}
+              color="#828282"
             />
           </View>
           <Text style={styles.optionButtonText}>Edit</Text>
+          <View style={styles.buttonIcon}>
+            <SkinnyIcon
+              name="edit"
+              size={24}
+              strokeWidth={1.5}
+              color="transparent"
+            />
+          </View>
         </TouchableOpacity>
-        <View style={styles.buttonIcon}>
-          <SkinnyIcon
-            name="trash"
-            size={24}
-            strokeWidth={1.5}
-            color="black"
-            style={styles.icon}
-          />
-        </View>
+
         <TouchableOpacity
           onPress={() => handleOptionPress("Delete")}
           style={styles.optionButton}
         >
+          <View style={styles.buttonIcon}>
+            <SkinnyIcon
+              name="trash"
+              size={24}
+              strokeWidth={1.5}
+              color="#828282"
+            />
+          </View>
           <Text style={styles.optionButtonText}>Delete</Text>
+          <View style={styles.buttonIcon}>
+            <SkinnyIcon
+              name="trash"
+              size={24}
+              strokeWidth={1.5}
+              color="transparent"
+            />
+          </View>
         </TouchableOpacity>
       </View>
     </Modal>

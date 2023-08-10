@@ -122,7 +122,7 @@ const CreateScreen = () => {
       moodBgColor,
       moodTextColor,
       imageSources: newImageSources,
-      date: route.params?.editThought?.date || formattedDate.date, // Use the original date when editing
+      date: "2023-08-10",
       time: route.params?.editThought?.time || formattedDate.time, // Use the original time when editing
     };
     if (
@@ -153,7 +153,7 @@ const CreateScreen = () => {
           thoughts[newThought.date] = [];
         }
 
-        thoughts[newThought.date].push(newThought);
+        thoughts[newThought.date].unshift(newThought);
       }
 
       await AsyncStorage.setItem("THOUGHTS", JSON.stringify(thoughts));

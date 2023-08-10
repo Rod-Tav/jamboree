@@ -193,7 +193,14 @@ const MoodPicker = ({
         </View>
       </TouchableOpacity>
 
-      <Modal visible={isModalVisible} animationType="slide" transparent>
+      <Modal
+        visible={isModalVisible}
+        transparent
+        animationType="fade"
+        backdropColor="rgba(0, 0, 0, 0.5)"
+        backdropTransitionOutTiming={10}
+        style={styles.modalContentContainer}
+      >
         <View style={moodstyles.modalContainer}>
           <View style={moodstyles.modalContent}>
             <Text style={moodstyles.modalTitle}>How are you feeling?</Text>

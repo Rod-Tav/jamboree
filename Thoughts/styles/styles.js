@@ -58,7 +58,7 @@ export default StyleSheet.create({
   },
   buttonText: {
     color: "#979C9E",
-    fontWeight: "500",
+    fontWeight: "400",
     fontSize: 16,
     display: "flex",
     alignSelf: "center",
@@ -154,7 +154,7 @@ export default StyleSheet.create({
   dayText: {
     fontSize: 15,
     color: "#4F4F4F",
-    fontWeight: 700,
+    fontWeight: "700",
     fontStyle: "normal",
     lineHeight: 25,
     letterSpacing: 3,
@@ -185,7 +185,7 @@ export default StyleSheet.create({
   thoughtTime: {
     fontSize: 12,
     color: "#4F4F4F",
-    fontWeight: 700,
+    fontWeight: "700",
     fontStyle: "normal",
     lineHeight: 15,
     letterSpacing: 2.4,
@@ -205,14 +205,14 @@ export default StyleSheet.create({
   },
   thoughtTitle: {
     fontSize: 20,
-    fontWeight: 700,
+    fontWeight: "700",
     color: "#090A0A",
     // marginBottom: 10,
   },
   thoughtContent: {
     color: "#090A0A",
     fontSize: 12,
-    fontWeight: 300,
+    fontWeight: "300",
   },
   thoughtMood: {
     fontSize: 10,
@@ -237,7 +237,7 @@ export default StyleSheet.create({
   detailContainer: {
     height: "100%",
     backgroundColor: "white",
-    paddingTop: "7%",
+    paddingTop: "2%",
     paddingBottom: 16,
     paddingLeft: "7%",
     paddingRight: "7%",
@@ -255,7 +255,7 @@ export default StyleSheet.create({
   detailThoughtContent: {
     color: "#090A0A",
     fontSize: 12,
-    fontWeight: 300,
+    fontWeight: "300",
     lineHeight: 20,
   },
   modalContainer: {
@@ -263,23 +263,27 @@ export default StyleSheet.create({
     justifyContent: "flex-end", // Show the modal at the bottom of the screen
     backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
   },
-  modalContent: {
-    backgroundColor: "white",
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    paddingVertical: 20,
-    alignItems: "center",
-  },
+
   optionButton: {
     padding: 10,
     marginVertical: 8,
     borderRadius: 4,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   optionButtonText: {
     fontSize: 16,
-    fontWeight: "bold",
-    color: "#333",
+    fontWeight: "normal",
+    color: "#828282",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center", // Changed from alignContent to alignItems
+    height: "100%",
+    marginTop: 2,
   },
+
   modalContentContainer: {
     justifyContent: "flex-end",
     margin: 0,
@@ -289,18 +293,12 @@ export default StyleSheet.create({
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     paddingVertical: 20,
-    alignItems: "center",
+    paddingBottom: 35,
+    paddingHorizontal: 20,
     opacity: 1, // Adjust the opacity of the modal content
   },
-  optionButton: {
-    padding: 10,
-    marginVertical: 8,
-    // backgroundColor: "#f1f1f1",
-    borderRadius: 4,
-  },
-  optionButtonText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#333",
+
+  leftarrow: {
+    paddingHorizontal: 10000,
   },
 });

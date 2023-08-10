@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, Text, FlatList, Image, TouchableOpacity } from "react-native";
-import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "../../styles/styles";
@@ -8,6 +7,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import SkinnyIcon from "react-native-snappy";
 import { createStackNavigator } from "@react-navigation/stack";
 import DetailScreen from "./DetailScreen";
+import { useIsFocused } from "@react-navigation/native";
 
 const Stack = createStackNavigator();
 
@@ -16,7 +16,7 @@ const HomeScreen = () => {
     <Stack.Navigator>
       <Stack.Screen
         name="TrueHome"
-        component={RenderHomeContent}
+        component={HomeScreenContainer}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -28,24 +28,31 @@ const HomeScreen = () => {
   );
 };
 
-const RenderHomeContent = () => {
+const HomeScreenContainer = () => {
   const [thoughts, setThoughts] = useState({});
-  const [imageHeights, setImageHeights] = useState({});
-  const navigation = useNavigation();
+  const isFocused = useIsFocused(); // Get the focused state of the screen
 
-  const loadThoughts = async () => {
-    try {
-      const storedThoughts = await AsyncStorage.getItem("THOUGHTS");
-      setThoughts(storedThoughts ? JSON.parse(storedThoughts) : {});
-    } catch (error) {
-      console.error("Error loading thoughts:", error);
+  useEffect(() => {
+    if (isFocused) {
+      const loadThoughts = async () => {
+        try {
+          const storedThoughts = await AsyncStorage.getItem("THOUGHTS");
+          setThoughts(storedThoughts ? JSON.parse(storedThoughts) : {});
+        } catch (error) {
+          console.error("Error loading thoughts:", error);
+        }
+      };
+      loadThoughts();
     }
-  };
+  }, [isFocused]);
 
-  // Reload thoughts whenever the screen is focused
-  useFocusEffect(() => {
-    loadThoughts();
-  });
+  return <RenderHomeContent thoughts={thoughts} />;
+};
+
+const HomeImage = () => {};
+
+const RenderHomeContent = ({ thoughts }) => {
+  const navigation = useNavigation();
 
   const handleWrite = () => {
     navigation.navigate("Create");
@@ -99,17 +106,6 @@ const RenderHomeContent = () => {
     return formattedDay + " - " + formattedDate;
   };
 
-  const handleImageLoad =
-    (imageUri) =>
-    ({ nativeEvent }) => {
-      const { width, height } = nativeEvent.source;
-      const aspectRatio = width / height;
-      setImageHeights((prevImageHeights) => ({
-        ...prevImageHeights,
-        [imageUri]: aspectRatio,
-      }));
-    };
-
   const renderItem = ({ item }) => {
     return (
       <View style={styles.headerStyle}>
@@ -125,9 +121,9 @@ const RenderHomeContent = () => {
                 style={[
                   styles.imageWrapperHome,
                   {
-                    aspectRatio: imageHeights[thought.imageSources[0].uri]
-                      ? imageHeights[thought.imageSources[0].uri]
-                      : 1, // Use 1 as the default aspect ratio if not loaded yet
+                    aspectRatio:
+                      thought.imageSources[0].width /
+                      thought.imageSources[0].height,
                   },
                 ]}
               >
@@ -135,7 +131,6 @@ const RenderHomeContent = () => {
                   source={{ uri: thought.imageSources[0].uri }}
                   style={styles.imageHome}
                   resizeMode="cover"
-                  onLoad={handleImageLoad(thought.imageSources[0].uri)}
                 />
               </View>
             )}
@@ -175,17 +170,17 @@ const RenderHomeContent = () => {
     );
   };
 
-  const groupedThoughts = Object.entries(thoughts)
-    .reverse()
-    .map(([date, thoughtsArray]) => ({
+  const groupedThoughts = Object.entries(thoughts).map(
+    ([date, thoughtsArray]) => ({
       date,
-      thoughts: thoughtsArray.reverse(),
-    }));
+      thoughts: thoughtsArray,
+    })
+  );
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={groupedThoughts.slice()}
+        data={groupedThoughts.slice().reverse()}
         renderItem={renderItem}
         keyExtractor={(item) => item.date} // Use the date as the key for each rendered date group
         contentContainerStyle={styles.list}
