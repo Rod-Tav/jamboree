@@ -8,6 +8,11 @@ import SkinnyIcon from "react-native-snappy";
 import { createStackNavigator } from "@react-navigation/stack";
 import DetailScreen from "./DetailScreen";
 import { useIsFocused } from "@react-navigation/native";
+import BottomSheet, {
+  BottomSheetFlatList,
+  BottomSheetScrollView,
+} from "@gorhom/bottom-sheet"; // Import BottomSheetScrollView
+import { SafeAreaView } from "react-native-safe-area-context"; // Import SafeAreaView
 
 const Stack = createStackNavigator();
 
@@ -30,7 +35,8 @@ const HomeScreen = () => {
 
 const HomeScreenContainer = () => {
   const [thoughts, setThoughts] = useState({});
-  const isFocused = useIsFocused(); // Get the focused state of the screen
+  const [randomImage, setRandomImage] = useState(null);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     if (isFocused) {
@@ -44,14 +50,63 @@ const HomeScreenContainer = () => {
       };
       loadThoughts();
     }
+    const updateRandomImage = async () => {
+      const lastUpdate = await AsyncStorage.getItem("LAST_IMAGE_UPDATE");
+      const today = new Date().toLocaleDateString();
+
+      if (lastUpdate !== today) {
+        // Update the random image
+        const allImageInfo = allImages(groupedThoughts);
+        const newRandomImage =
+          allImageInfo[Math.floor(Math.random() * allImageInfo.length)];
+
+        setRandomImage(newRandomImage);
+
+        // Update the LAST_IMAGE_UPDATE date to today
+        await AsyncStorage.setItem("LAST_IMAGE_UPDATE", today);
+        await AsyncStorage.setItem(
+          "COVER_IMAGE",
+          JSON.stringify(newRandomImage)
+        );
+      } else {
+        const existingRandomImg = await AsyncStorage.getItem("COVER_IMAGE");
+        const randomImg = JSON.parse(existingRandomImg);
+        setRandomImage(randomImg);
+      }
+    };
+
+    updateRandomImage();
   }, [isFocused]);
 
-  return <RenderHomeContent thoughts={thoughts} />;
-};
+  const bottomSheetRef = useRef(null);
 
-const HomeImage = () => {};
+  const groupedThoughts = Object.entries(thoughts).map(
+    ([date, thoughtsArray]) => ({
+      date,
+      thoughts: thoughtsArray,
+    })
+  );
 
-const RenderHomeContent = ({ thoughts }) => {
+  const allImages = (data) => {
+    const imageInfo = [];
+
+    for (const entry of data) {
+      for (const thought of entry.thoughts) {
+        for (const imageSource of thought.imageSources) {
+          imageInfo.push({
+            uri: imageSource.uri,
+            width: imageSource.width,
+            height: imageSource.height,
+          });
+        }
+      }
+    }
+
+    return imageInfo;
+  };
+
+  const allImageInfo = allImages(groupedThoughts);
+
   const navigation = useNavigation();
 
   const handleWrite = () => {
@@ -170,46 +225,83 @@ const RenderHomeContent = ({ thoughts }) => {
     );
   };
 
-  const groupedThoughts = Object.entries(thoughts).map(
-    ([date, thoughtsArray]) => ({
-      date,
-      thoughts: thoughtsArray,
-    })
-  );
+  if (!randomImage) {
+    const placeholder = {
+      height: 2000,
+      uri: "",
+      width: 1500,
+    };
+    setRandomImage(placeholder);
+    return;
+  }
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={groupedThoughts.slice().reverse()}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.date} // Use the date as the key for each rendered date group
-        contentContainerStyle={styles.list}
-        showsVerticalScrollIndicator={false}
-        ListHeaderComponent={
-          <View style={styles.topOfHome}>
-            <View style={styles.headerStyle}>
-              <Text style={styles.headerText}>Welcome back!</Text>
+    <SafeAreaView style={{ flex: 1 }}>
+      {allImageInfo.length > 0 && ( // Check if there are any images
+        <View
+          style={[
+            styles.imageWrapperHome2,
+            {
+              aspectRatio: 0.75,
+            },
+          ]}
+        >
+          {randomImage.uri == "" ? (
+            <Image
+              source={require("../../images/placeholder.png")}
+              style={styles.homeBackground}
+              resizeMode="cover"
+            />
+          ) : (
+            <Image
+              source={{ uri: randomImage.uri }}
+              style={styles.homeBackground}
+              resizeMode="cover"
+            />
+          )}
+        </View>
+      )}
+
+      <BottomSheet
+        ref={bottomSheetRef}
+        snapPoints={["64%", "94%"]}
+        initialSnapIndex={0}
+        style={{ ...styles.container, paddingTop: 0 }}
+        handleHeight={0}
+        handleIndicatorStyle={{ display: "none" }}
+      >
+        <BottomSheetFlatList
+          data={groupedThoughts.slice().reverse()}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.date} // Use the date as the key for each rendered date group
+          contentContainerStyle={styles.list}
+          showsVerticalScrollIndicator={false}
+          ListHeaderComponent={
+            <View style={styles.topOfHome}>
+              <View style={styles.headerStyle}>
+                <Text style={styles.headerText}>Welcome back!</Text>
+              </View>
+              <TouchableOpacity onPress={handleWrite} style={styles.addButton}>
+                <Ionicons
+                  name="create-outline"
+                  size={24}
+                  height={26}
+                  color="white"
+                />
+                <Text style={styles.addButtonText}>What's new?</Text>
+                <SkinnyIcon
+                  name="check"
+                  size={24}
+                  strokeWidth={1.5}
+                  color="transparent"
+                  style={styles.buttonIcon}
+                />
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity onPress={handleWrite} style={styles.addButton}>
-              <Ionicons
-                name="create-outline"
-                size={24}
-                height={26}
-                color="white"
-              />
-              <Text style={styles.addButtonText}>What's new?</Text>
-              <SkinnyIcon
-                name="check"
-                size={24}
-                strokeWidth={1.5}
-                color="transparent"
-                style={styles.buttonIcon}
-              />
-            </TouchableOpacity>
-          </View>
-        }
-      />
-    </View>
+          }
+        />
+      </BottomSheet>
+    </SafeAreaView>
   );
 };
 

@@ -84,8 +84,18 @@ export default StyleSheet.create({
     overflow: "hidden",
     maxWidth: "100%",
   },
+  imageWrapperHome2: {
+    overflow: "hidden",
+    maxWidth: "100%",
+    objectFit: "cover",
+    borderRadius: 16,
+  },
   imageHome: {
     flex: 1,
+  },
+  homeBackground: {
+    width: "100%",
+    height: "49%",
   },
   image: {
     flex: 1,

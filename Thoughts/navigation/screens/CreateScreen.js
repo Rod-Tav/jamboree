@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   ScrollView,
+  SafeAreaView,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native"; // Import useRoute
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -110,8 +111,6 @@ const CreateScreen = () => {
   const handleAddThought = async () => {
     const formattedDate = formatDate();
 
-    setClearMoodToggle(!clearMoodToggle);
-
     const newImageSources = await storeImages(imageSources);
 
     const newThought = {
@@ -122,7 +121,7 @@ const CreateScreen = () => {
       moodBgColor,
       moodTextColor,
       imageSources: newImageSources,
-      date: "2023-08-10",
+      date: "2023-08-11",
       time: route.params?.editThought?.time || formattedDate.time, // Use the original time when editing
     };
     if (
@@ -165,6 +164,7 @@ const CreateScreen = () => {
       setMoodBgColor("");
       setMoodTextColor("");
       setImageSources([]);
+      setClearMoodToggle(!clearMoodToggle);
       navigation.navigate("TrueHome"); // Navigate back to home screen
     } catch (error) {
       console.error("Error saving thought:", error);
@@ -176,95 +176,97 @@ const CreateScreen = () => {
   };
 
   return (
-    <View style={[styles.container]}>
-      <KeyboardAvoidingView behavior={"padding"}>
-        <ScrollView
-          style={{ backgroundColor: "white", height: "100%" }}
-          showsVerticalScrollIndicator={false}
-        >
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={[styles.createContainer, { paddingBottom: 14 }]}>
-              {editThought ? (
-                <View style={styles.headerStyle}>
-                  <Text style={styles.headerText}>Edit your thought</Text>
-                </View>
-              ) : (
-                <View style={styles.headerStyle}>
-                  <Text style={styles.headerText}>What's on your mind?</Text>
-                </View>
-              )}
-
-              {/* Styled ImagePickerScreen */}
-              <View>
-                <ImagePickerScreen
-                  imageSources={imageSources}
-                  changeImageSources={changeImageSources}
-                />
-              </View>
-
-              {/* Title Input */}
-              <TextInput
-                style={styles.titleInput}
-                onChangeText={(text) => setTitle(text)}
-                value={title}
-                placeholder="Title"
-                maxLength={50}
-              />
-
-              {/* Content Input */}
-              <TextInput
-                style={styles.contentInput}
-                onChangeText={(text) => setContent(text)}
-                value={content}
-                placeholder="Write your thoughts here..."
-                multiline
-              />
-
-              {/* Mood Picker */}
-              <View>
-                <MoodPicker
-                  value={mood}
-                  setValue={(mood) => setMood(mood)}
-                  moodBgColorValue={moodBgColor}
-                  setMoodBgColorValue={(bgColor) => setMoodBgColor(bgColor)}
-                  moodTextColorValue={moodTextColor}
-                  setMoodTextColorValue={(textColor) =>
-                    setMoodTextColor(textColor)
-                  }
-                  clearMoodToggle={clearMoodToggle}
-                />
-              </View>
-
-              {/* Styled Add Thought Button */}
-              <TouchableOpacity
-                onPress={handleAddThought}
-                style={styles.addButton}
-              >
-                <SkinnyIcon
-                  name="check"
-                  size={16}
-                  strokeWidth={1.5}
-                  color="white"
-                  style={styles.buttonIcon}
-                />
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={[styles.container]}>
+        <KeyboardAvoidingView behavior={"padding"}>
+          <ScrollView
+            style={{ backgroundColor: "white", height: "100%" }}
+            showsVerticalScrollIndicator={false}
+          >
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <View style={[styles.createContainer, { paddingBottom: 14 }]}>
                 {editThought ? (
-                  <Text style={styles.addButtonText}>Save Edits</Text>
+                  <View style={styles.headerStyle}>
+                    <Text style={styles.headerText}>Edit your thought</Text>
+                  </View>
                 ) : (
-                  <Text style={styles.addButtonText}>Log Your Thought</Text>
+                  <View style={styles.headerStyle}>
+                    <Text style={styles.headerText}>What's on your mind?</Text>
+                  </View>
                 )}
-                <SkinnyIcon
-                  name="check"
-                  size={24}
-                  strokeWidth={1.5}
-                  color="transparent"
-                  style={styles.buttonIcon}
+
+                {/* Styled ImagePickerScreen */}
+                <View>
+                  <ImagePickerScreen
+                    imageSources={imageSources}
+                    changeImageSources={changeImageSources}
+                  />
+                </View>
+
+                {/* Title Input */}
+                <TextInput
+                  style={styles.titleInput}
+                  onChangeText={(text) => setTitle(text)}
+                  value={title}
+                  placeholder="Title"
+                  maxLength={50}
                 />
-              </TouchableOpacity>
-            </View>
-          </TouchableWithoutFeedback>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </View>
+
+                {/* Content Input */}
+                <TextInput
+                  style={styles.contentInput}
+                  onChangeText={(text) => setContent(text)}
+                  value={content}
+                  placeholder="Write your thoughts here..."
+                  multiline
+                />
+
+                {/* Mood Picker */}
+                <View>
+                  <MoodPicker
+                    value={mood}
+                    setValue={(mood) => setMood(mood)}
+                    moodBgColorValue={moodBgColor}
+                    setMoodBgColorValue={(bgColor) => setMoodBgColor(bgColor)}
+                    moodTextColorValue={moodTextColor}
+                    setMoodTextColorValue={(textColor) =>
+                      setMoodTextColor(textColor)
+                    }
+                    clearMoodToggle={clearMoodToggle}
+                  />
+                </View>
+
+                {/* Styled Add Thought Button */}
+                <TouchableOpacity
+                  onPress={handleAddThought}
+                  style={styles.addButton}
+                >
+                  <SkinnyIcon
+                    name="check"
+                    size={16}
+                    strokeWidth={1.5}
+                    color="white"
+                    style={styles.buttonIcon}
+                  />
+                  {editThought ? (
+                    <Text style={styles.addButtonText}>Save Edits</Text>
+                  ) : (
+                    <Text style={styles.addButtonText}>Log Your Thought</Text>
+                  )}
+                  <SkinnyIcon
+                    name="check"
+                    size={24}
+                    strokeWidth={1.5}
+                    color="transparent"
+                    style={styles.buttonIcon}
+                  />
+                </TouchableOpacity>
+              </View>
+            </TouchableWithoutFeedback>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </View>
+    </SafeAreaView>
   );
 };
 

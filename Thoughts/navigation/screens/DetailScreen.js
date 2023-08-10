@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import styles from "../../styles/styles";
 import Icon from "react-native-vector-icons/AntDesign";
 import ImageViewing from "react-native-image-viewing";
@@ -8,6 +15,7 @@ import Modal from "react-native-modal";
 import SkinnyIcon from "react-native-snappy";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import * as FileSystem from "expo-file-system";
 
 const DetailScreen = ({ route }) => {
   const { thought } = route.params;
@@ -15,6 +23,7 @@ const DetailScreen = ({ route }) => {
   const [isImageViewVisible, setIsImageViewVisible] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [bottomSheetIndex, setBottomSheetIndex] = useState(-1);
+
   const [showCustomActionSheet, setShowCustomActionSheet] = useState(false);
   const handleImagePress = (imageIndex) => {
     setSelectedImageIndex(imageIndex);
@@ -33,7 +42,7 @@ const DetailScreen = ({ route }) => {
     setShowCustomActionSheet(false);
   }, [navigation, thought]);
 
-  const handleDelete = async () => {
+  const deleteThought = async () => {
     const thoughtsNotParsed = await AsyncStorage.getItem("THOUGHTS");
     const thoughts = JSON.parse(thoughtsNotParsed);
     const thoughtId = thought.id;
@@ -47,6 +56,10 @@ const DetailScreen = ({ route }) => {
         // If thoughtDate is not found, the thoughtId doesn't exist
         console.warn("Thought not found.");
         return;
+      }
+
+      for (const image of thought.imageSources) {
+        await FileSystem.deleteAsync(image.uri);
       }
 
       // Filter out the thought to be deleted from the thoughts array for the specific date
@@ -78,15 +91,20 @@ const DetailScreen = ({ route }) => {
     return month + "/" + day + "/" + year;
   };
 
-  const handleSelectOption = async (option) => {
+  const handleDeleteModal = () => {
     setShowCustomActionSheet(false);
+    return Alert.alert("Delete your thought?", "This cannot be undone.", [
+      { text: "Delete", onPress: handleDelete, style: "destructive" },
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+    ]);
+  };
 
-    if (option === "Edit") {
-      handleEdit();
-    } else if (option === "Delete") {
-      await handleDelete();
-      navigation.goBack();
-    }
+  const handleDelete = async () => {
+    await deleteThought();
+    navigation.goBack();
   };
 
   // Set up the options for the header
@@ -251,8 +269,8 @@ const DetailScreen = ({ route }) => {
         <CustomActionSheet
           isVisible={showCustomActionSheet}
           onCancel={handleCancelCustomActionSheet}
-          onSelectOption={handleSelectOption}
-          onEdit={handleEdit} // Pass the handleEdit function to CustomActionSheet
+          handleEdit={handleEdit}
+          handleDeleteModal={handleDeleteModal}
         />
       </View>
     </ScrollView>
@@ -261,11 +279,12 @@ const DetailScreen = ({ route }) => {
 
 export default DetailScreen;
 
-const CustomActionSheet = ({ isVisible, onCancel, onSelectOption, onEdit }) => {
-  const handleOptionPress = (option) => {
-    onSelectOption(option);
-  };
-
+const CustomActionSheet = ({
+  isVisible,
+  onCancel,
+  handleEdit,
+  handleDeleteModal,
+}) => {
   return (
     <Modal
       isVisible={isVisible}
@@ -275,7 +294,7 @@ const CustomActionSheet = ({ isVisible, onCancel, onSelectOption, onEdit }) => {
       style={styles.modalContentContainer}
     >
       <View style={styles.modalContent}>
-        <TouchableOpacity onPress={onEdit} style={styles.optionButton}>
+        <TouchableOpacity onPress={handleEdit} style={styles.optionButton}>
           <View style={styles.buttonIcon}>
             <SkinnyIcon
               name="edit"
@@ -296,7 +315,7 @@ const CustomActionSheet = ({ isVisible, onCancel, onSelectOption, onEdit }) => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => handleOptionPress("Delete")}
+          onPress={handleDeleteModal}
           style={styles.optionButton}
         >
           <View style={styles.buttonIcon}>
