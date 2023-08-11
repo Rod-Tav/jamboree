@@ -62,7 +62,7 @@ const ImagePickerScreen = ({
 
       const result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: multiple,
+        allowsEditing: false,
         quality: 1,
       });
 
@@ -87,7 +87,7 @@ const ImagePickerScreen = ({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: false,
         quality: 1,
-        allowsMultipleSelection: false,
+        allowsMultipleSelection: multiple,
         selectionLimit: 5,
       });
 
