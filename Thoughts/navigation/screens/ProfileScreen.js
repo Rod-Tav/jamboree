@@ -13,8 +13,25 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import ImagePickerScreen from "../ImagePickerScreen";
 import * as FileSystem from "expo-file-system";
 import styles from "../../styles/styles";
+import { createStackNavigator } from "@react-navigation/stack";
+import SearchScreen from "./SearchScreen";
+
+const Stack = createStackNavigator();
 
 const ProfileScreen = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="TrueProfile"
+        component={ProfileScreenContainer}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name="Search" component={SearchScreen} />
+    </Stack.Navigator>
+  );
+};
+
+const ProfileScreenContainer = () => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
 
@@ -128,6 +145,9 @@ const ProfileScreen = () => {
           />
           <TouchableOpacity onPress={saveProfile} style={styles.saveButton}>
             <Text style={styles.saveButtonText}>Save</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("Search")}>
+            <Text>Search your thoughts...</Text>
           </TouchableOpacity>
         </ScrollView>
       </View>
