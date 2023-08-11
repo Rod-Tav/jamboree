@@ -14,7 +14,12 @@ import ImageViewing from "react-native-image-viewing";
 import styles from "../styles/styles";
 import Modal from "react-native-modal";
 
-const ImagePickerScreen = ({ imageSources, changeImageSources }) => {
+const ImagePickerScreen = ({
+  imageSources,
+  changeImageSources,
+  multiple,
+  showPicker,
+}) => {
   const [isImageViewVisible, setIsImageViewVisible] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [imageHeights, setImageHeights] = useState({});
@@ -57,7 +62,7 @@ const ImagePickerScreen = ({ imageSources, changeImageSources }) => {
 
       const result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: false,
+        allowsEditing: multiple,
         quality: 1,
       });
 
@@ -82,7 +87,7 @@ const ImagePickerScreen = ({ imageSources, changeImageSources }) => {
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: false,
         quality: 1,
-        allowsMultipleSelection: true,
+        allowsMultipleSelection: false,
         selectionLimit: 5,
       });
 
@@ -118,6 +123,10 @@ const ImagePickerScreen = ({ imageSources, changeImageSources }) => {
         [imageUri]: aspectRatio,
       }));
     };
+
+  if (!showPicker) {
+    return;
+  }
 
   return (
     <View>

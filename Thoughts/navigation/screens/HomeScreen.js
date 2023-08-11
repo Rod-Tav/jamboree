@@ -53,7 +53,6 @@ const HomeScreenContainer = () => {
     const updateRandomImage = async () => {
       const lastUpdate = await AsyncStorage.getItem("LAST_IMAGE_UPDATE");
       const today = new Date().toLocaleDateString();
-
       if (lastUpdate !== today) {
         // Update the random image
         const allImageInfo = allImages(groupedThoughts);

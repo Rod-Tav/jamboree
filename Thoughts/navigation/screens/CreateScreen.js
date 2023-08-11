@@ -88,6 +88,7 @@ const CreateScreen = () => {
       await FileSystem.makeDirectoryAsync(imgDir, { intermediates: true });
     }
   };
+
   // Save image to file system
   const saveImage = async (uri) => {
     await ensureDirExists();
@@ -177,7 +178,7 @@ const CreateScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={[styles.container]}>
+      <View style={styles.container}>
         <KeyboardAvoidingView behavior={"padding"}>
           <ScrollView
             style={{ backgroundColor: "white", height: "100%" }}
@@ -200,6 +201,8 @@ const CreateScreen = () => {
                   <ImagePickerScreen
                     imageSources={imageSources}
                     changeImageSources={changeImageSources}
+                    multiple={true}
+                    showPicker={true}
                   />
                 </View>
 
