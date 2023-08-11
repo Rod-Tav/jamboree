@@ -92,7 +92,6 @@ const ProfileScreen = () => {
           style={{ backgroundColor: "white", height: "100%" }}
           showsVerticalScrollIndicator={false}
         >
-          {console.log(userImage)}
           {userImage != "" && (
             <View>
               <Image
