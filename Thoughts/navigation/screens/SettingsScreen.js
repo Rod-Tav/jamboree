@@ -68,8 +68,17 @@ const SettingsScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <ProfileImagePicker settings={true} changeImage={changeImage} />
+      <View style={styles.settingsContainer}>
+        <View style={styles.headerStyle}>
+          <Text style={styles.headerText}>Settings</Text>
+        </View>
+        <View style={styles.settingsContent}>
+          <Text style={styles.dayText}>Aesthetics</Text>
+
+          <View style={styles}>
+            <ProfileImagePicker settings={true} changeImage={changeImage} />
+          </View>
+        </View>
       </View>
     </SafeAreaView>
   );

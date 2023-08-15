@@ -10,19 +10,21 @@ import {
 import styles from "../../styles/styles";
 import proStyles from "../../styles/profileStyles";
 import SkinnyIcon from "react-native-snappy";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import DetailScreen from "./DetailScreen";
-import { useIsFocused } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { TextInput } from "react-native-gesture-handler";
 
 const Stack = createStackNavigator();
 
-const SearchScreen = () => {
+const SearchScreen = ({ route }) => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="TrueSearch" component={SearchScreenContainer} />
+      <Stack.Screen
+        name="TrueSearch"
+        component={SearchScreenContainer}
+        initialParams={{ groupedThoughts: route.params }}
+      />
       <Stack.Screen
         name="Detail"
         component={DetailScreen}
@@ -32,27 +34,13 @@ const SearchScreen = () => {
   );
 };
 
-const SearchScreenContainer = () => {
+const SearchScreenContainer = ({ route }) => {
+  const { groupedThoughts } = route.params;
+  console.log(groupedThoughts);
   const navigation = useNavigation();
   const [query, setQuery] = useState("");
   const [thoughts, setThoughts] = useState({});
   const [isInputFocused, setInputFocused] = useState(false); // To track input focus
-
-  const isFocused = useIsFocused();
-
-  useEffect(() => {
-    if (isFocused) {
-      const loadThoughts = async () => {
-        try {
-          const storedThoughts = await AsyncStorage.getItem("THOUGHTS");
-          setThoughts(storedThoughts ? JSON.parse(storedThoughts) : {});
-        } catch (error) {
-          console.error("Error loading thoughts:", error);
-        }
-      };
-      loadThoughts();
-    }
-  }, [isFocused]);
 
   // Set up the options for the header
   React.useLayoutEffect(() => {
@@ -84,13 +72,6 @@ const SearchScreenContainer = () => {
       ),
     });
   }, [navigation]);
-
-  const groupedThoughts = Object.entries(thoughts).map(
-    ([date, thoughtsArray]) => ({
-      date,
-      thoughts: thoughtsArray,
-    })
-  );
 
   const renderItem = ({ item }) => {
     return (

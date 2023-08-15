@@ -3,22 +3,19 @@ import {
   View,
   Text,
   TouchableOpacity,
-  TextInput,
   SafeAreaView,
-  ScrollView,
   Image,
 } from "react-native";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as FileSystem from "expo-file-system";
-import styles from "../../styles/styles";
 import proStyles from "../../styles/profileStyles";
 import SkinnyIcon from "react-native-snappy";
 import EditScreen from "./EditScreen";
 import SettingsScreen from "./SettingsScreen";
 import { createStackNavigator } from "@react-navigation/stack";
 import SearchScreen from "./SearchScreen";
-import placeholder from "../../assets/icon.png";
+import { Calendar } from "react-native-calendars";
+import SelectedDateThoughtsScreen from "./SelectedDateThoughtsScreen";
 
 const Stack = createStackNavigator();
 
@@ -31,14 +28,15 @@ const ProfileScreen = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen name="Edit" component={EditScreen} />
-      <Stack.Screen
-        name="Settings"
-        component={SettingsScreen}
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name="Settings" component={SettingsScreen} />
       <Stack.Screen
         name="Search"
         component={SearchScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="SelectedDateThoughts"
+        component={SelectedDateThoughtsScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
@@ -52,12 +50,30 @@ const ProfileScreenContainer = () => {
   const [userImage, setUserImage] = useState("");
   const [userName, setUserName] = useState("");
   const [userBio, setUserBio] = useState("");
-  const [imageSources, setImageSources] = useState([]);
+  const [thoughts, setThoughts] = useState({});
 
   // Load user data from AsyncStorage on component mount
   useEffect(() => {
     loadUserData();
+    if (isFocused) {
+      const loadThoughts = async () => {
+        try {
+          const storedThoughts = await AsyncStorage.getItem("THOUGHTS");
+          setThoughts(storedThoughts ? JSON.parse(storedThoughts) : {});
+        } catch (error) {
+          console.error("Error loading thoughts:", error);
+        }
+      };
+      loadThoughts();
+    }
   }, [isFocused]);
+
+  const groupedThoughts = Object.entries(thoughts).map(
+    ([date, thoughtsArray]) => ({
+      date,
+      thoughts: thoughtsArray,
+    })
+  );
 
   const loadUserData = async () => {
     try {
@@ -103,6 +119,20 @@ const ProfileScreenContainer = () => {
       ),
     });
   }, [navigation]);
+
+  const handleDayPress = (day) => {
+    const selectedDate = day.dateString;
+    const selectedThoughts = groupedThoughts.find(
+      (group) => group.date === selectedDate
+    );
+
+    if (selectedThoughts) {
+      navigation.navigate("SelectedDateThoughts", {
+        date: selectedDate,
+        thoughts: selectedThoughts.thoughts,
+      });
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -157,13 +187,13 @@ const ProfileScreenContainer = () => {
           </View>
 
           <View style={proStyles.calendar}>
-            <Text>Calendar</Text>
+            <Calendar current={"2023-08-01"} onDayPress={handleDayPress} />
           </View>
         </View>
         <View>
           <TouchableOpacity
             style={proStyles.search}
-            onPress={() => navigation.navigate("Search")}
+            onPress={() => navigation.navigate("Search", groupedThoughts)}
           >
             <View style={proStyles.searchIcon}>
               <SkinnyIcon

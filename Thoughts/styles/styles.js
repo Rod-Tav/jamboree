@@ -13,7 +13,8 @@ export default StyleSheet.create({
     paddingLeft: "7%",
     paddingRight: "7%",
     paddingTop: "7%",
-    borderRadius: 16,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
   },
   createContainer: {
     flex: 1,
@@ -23,7 +24,6 @@ export default StyleSheet.create({
     backgroundColor: "white",
     // paddingTop: 24,
     paddingBottom: 16,
-    borderRadius: 16,
   },
   topOfHome: {
     display: "flex",
@@ -319,5 +319,38 @@ export default StyleSheet.create({
 
   leftarrow: {
     paddingHorizontal: 10000,
+  },
+  settingsContainer: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    backgroundColor: "white",
+    paddingBottom: 16,
+    paddingLeft: "7%",
+    paddingRight: "7%",
+
+    gap: 20,
+  },
+  settingsContent: {
+    paddingTop: 20,
+    display: "flex",
+    flexDirection: "column",
+    gap: 15,
+    borderTopColor: "#F2F4F5",
+    borderTopWidth: 1,
+  },
+  settingsOptionContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center", // Align items vertically
+    width: "100%",
+    gap: 25,
+  },
+  settingsOptionIcon: { paddingRight: 100 },
+
+  settingsOptionText: {
+    color: "#828282",
+    fontWeight: "400",
+    fontSize: 16,
   },
 });

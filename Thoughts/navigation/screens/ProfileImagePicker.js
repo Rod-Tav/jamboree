@@ -3,6 +3,7 @@ import { View, TouchableOpacity, Text } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import styles from "../../styles/styles";
 import CustomActionSheet from "../CustomActionSheet";
+import SkinnyIcon from "react-native-snappy";
 
 const ProfileImagePicker = ({ settings, changeImage }) => {
   const handleAddImagesPress = () => {
@@ -50,7 +51,7 @@ const ProfileImagePicker = ({ settings, changeImage }) => {
 
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
+        allowsEditing: settings ? false : true,
         quality: 1,
         allowsMultipleSelection: false,
       });
@@ -70,9 +71,22 @@ const ProfileImagePicker = ({ settings, changeImage }) => {
       <View>
         <TouchableOpacity
           onPress={handleAddImagesPress}
-          style={styles.buttonContainer2}
+          style={settings ? styles.settingsOption : styles.buttonContainer2}
         >
-          <Text style={styles.buttonText2}>Change Image</Text>
+          {settings ? (
+            <View style={styles.settingsOptionContainer}>
+              <SkinnyIcon
+                name="image"
+                size={25}
+                strokeWidth={1.5}
+                color="#828282"
+                style={styles.settingsOptionIcon}
+              />
+              <Text style={styles.settingsOptionText}>Change Banner Image</Text>
+            </View>
+          ) : (
+            <Text style={styles.buttonText2}>Change Image</Text>
+          )}
         </TouchableOpacity>
       </View>
       <CustomActionSheet

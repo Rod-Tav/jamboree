@@ -10,7 +10,8 @@ export default StyleSheet.create({
     paddingLeft: "7%",
     paddingRight: "7%",
     paddingTop: "7%",
-    borderRadius: 16,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
   },
   container2: {
     height: "100%",
