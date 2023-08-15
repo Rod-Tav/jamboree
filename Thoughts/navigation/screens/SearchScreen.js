@@ -8,6 +8,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import styles from "../../styles/styles";
+import proStyles from "../../styles/profileStyles";
 import SkinnyIcon from "react-native-snappy";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
@@ -35,6 +36,7 @@ const SearchScreenContainer = () => {
   const navigation = useNavigation();
   const [query, setQuery] = useState("");
   const [thoughts, setThoughts] = useState({});
+  const [isInputFocused, setInputFocused] = useState(false); // To track input focus
 
   const isFocused = useIsFocused();
 
@@ -203,7 +205,6 @@ const SearchScreenContainer = () => {
   };
 
   const filterData = () => {
-    console.log("hi");
     // Filter the thoughts based on the query
     const filteredThoughts = groupedThoughts
       .map(({ date, thoughts }) => ({
@@ -222,14 +223,36 @@ const SearchScreenContainer = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <TextInput
-          style={styles.input}
-          placeholder="Search your thoughts..."
-          value={query}
-          onChangeText={setQuery}
-          multiline={true}
-        />
+      <View style={proStyles.container2}>
+        <View style={proStyles.searchContainer}>
+          <View style={proStyles.searchIcon}>
+            <SkinnyIcon
+              name="magnifier"
+              size={16}
+              strokeWidth={1.5}
+              color="#979C9E"
+            />
+          </View>
+          <TextInput
+            style={proStyles.searchText2}
+            placeholder={"Search your thoughts..."}
+            value={query}
+            onChangeText={setQuery}
+            multiline={false}
+            maxLength={33}
+            onFocus={() => setInputFocused(true)} // Set input focus
+            onBlur={() => setInputFocused(false)} // Clear input focus
+          />
+          {/* Wrap the "X" icon with TouchableOpacity */}
+          <TouchableOpacity
+            style={proStyles.xIcon}
+            onPress={() => {
+              setQuery(""); // Clear the query
+            }}
+          >
+            <SkinnyIcon name="x" size={20} strokeWidth={1.5} color="#979C9E" />
+          </TouchableOpacity>
+        </View>
 
         <FlatList
           data={filterData().slice().reverse()}

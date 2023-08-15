@@ -10,12 +10,13 @@ import {
 } from "react-native";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import ImagePickerScreen from "../ImagePickerScreen";
+import ProfileImagePicker from "./ProfileImagePicker";
 import * as FileSystem from "expo-file-system";
 import styles from "../../styles/styles";
 import proStyles from "../../styles/profileStyles";
 import SkinnyIcon from "react-native-snappy";
-
+import EditScreen from "./EditScreen";
+import SettingsScreen from "./SettingsScreen";
 import { createStackNavigator } from "@react-navigation/stack";
 import SearchScreen from "./SearchScreen";
 
@@ -29,6 +30,8 @@ const ProfileScreen = () => {
         component={ProfileScreenContainer}
         options={{ headerShown: false }}
       />
+      <Stack.Screen name="Edit" component={EditScreen} />
+      <Stack.Screen name="Settings" component={SettingsScreen} />
       <Stack.Screen
         name="Search"
         component={SearchScreen}
@@ -46,12 +49,25 @@ const ProfileScreenContainer = () => {
   const [userName, setUserName] = useState("");
   const [userBio, setUserBio] = useState("");
   const [imageSources, setImageSources] = useState([]);
-  const [showImagePicker, setShowImagePicker] = useState(true);
 
   // Load user data from AsyncStorage on component mount
   useEffect(() => {
     loadUserData();
   }, [isFocused]);
+
+  const loadUserData = async () => {
+    try {
+      const imageUri = await AsyncStorage.getItem("userImage");
+      const name = await AsyncStorage.getItem("userName");
+      const bio = await AsyncStorage.getItem("userBio");
+
+      setUserImage(imageUri || "");
+      setUserName(name || "");
+      setUserBio(bio || "");
+    } catch (error) {
+      console.log("Error loading user data:", error);
+    }
+  };
 
   // Set up the options for the header
   React.useLayoutEffect(() => {
@@ -84,20 +100,6 @@ const ProfileScreenContainer = () => {
     });
   }, [navigation]);
 
-  const loadUserData = async () => {
-    try {
-      const imageUri = await AsyncStorage.getItem("userImage");
-      const name = await AsyncStorage.getItem("userName");
-      const bio = await AsyncStorage.getItem("userBio");
-
-      setUserImage(imageUri || "");
-      setUserName(name || "");
-      setUserBio(bio || "");
-    } catch (error) {
-      console.log("Error loading user data:", error);
-    }
-  };
-
   const imgDir = FileSystem.documentDirectory + "images/";
 
   const ensureDirExists = async () => {
@@ -107,38 +109,18 @@ const ProfileScreenContainer = () => {
     }
   };
 
-  // Save image to file system
-  const saveImage = async () => {
-    if (userImage != "") {
-      await ensureDirExists();
-      const filename = new Date().getTime() + ".jpeg";
-      const dest = imgDir + filename;
-      await FileSystem.copyAsync({ from: userImage, to: dest });
-      return dest;
-    }
-    return "";
-  };
-
-  const saveProfile = async () => {
-    try {
-      // Save user name and bio to AsyncStorage
-      await AsyncStorage.setItem("userName", userName);
-      await AsyncStorage.setItem("userBio", userBio);
-      await AsyncStorage.setItem("userImage", await saveImage());
-    } catch (error) {
-      console.log("Error saving profile:", error);
-    }
-  };
-
   const changeImageSources = (newImageSources) => {
     setImageSources(newImageSources);
-    setShowImagePicker(false);
     setUserImage(newImageSources[0]);
   };
 
   const handleChangeImage = () => {
     alert("no");
   };
+
+  const handleEdit = () => {};
+
+  const handleSettings = () => {};
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -151,39 +133,31 @@ const ProfileScreenContainer = () => {
                 style={styles.homeBackground}
                 resizeMode="cover"
               />
-              <TouchableOpacity onPress={handleChangeImage}>
-                <Text>Change Image</Text>
-              </TouchableOpacity>
             </View>
           )}
 
           <View style={styles.editProfileView}>
-            <View style={proStyles.image}>
-              <ImagePickerScreen
-                imageSources={imageSources}
-                changeImageSources={changeImageSources}
-                multiple={false}
-                showPicker={showImagePicker}
-              />
-            </View>
-
-            <View style={styles.profileTextInput}>
-              <TextInput
-                style={styles.nameInput}
-                placeholder="Name"
-                value={userName}
-                onChangeText={setUserName}
-              />
-              <TextInput
-                style={styles.bioInput}
-                placeholder="Bio"
-                value={userBio}
-                onChangeText={setUserBio}
-                multiline={true}
-              />
-            </View>
-            <TouchableOpacity onPress={saveProfile} style={styles.saveButton}>
-              <Text style={styles.saveButtonText}>Save</Text>
+            <Text>{userName}</Text>
+            <Text>{userBio}</Text>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("Edit", { userImage, userName, userBio })
+              }
+            >
+              <SkinnyIcon
+                name="edit"
+                size={20}
+                strokeWidth={1.5}
+                color="#979C9E"
+              ></SkinnyIcon>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate("Settings")}>
+              <SkinnyIcon
+                name="settings"
+                size={20}
+                strokeWidth={1.5}
+                color="#979C9E"
+              ></SkinnyIcon>
             </TouchableOpacity>
           </View>
           <View style={proStyles.calendar}>

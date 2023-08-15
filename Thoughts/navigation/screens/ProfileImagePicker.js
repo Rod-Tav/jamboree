@@ -11,7 +11,7 @@ import * as ImagePicker from "expo-image-picker";
 import Icon from "react-native-vector-icons/Feather";
 import SkinnyIcon from "react-native-snappy";
 import ImageViewing from "react-native-image-viewing";
-import styles from "../styles/styles";
+import styles from "../../styles/styles";
 import Modal from "react-native-modal";
 
 const ImagePickerScreen = ({ imageSources, changeImageSources }) => {

@@ -201,8 +201,6 @@ const CreateScreen = () => {
                   <ImagePickerScreen
                     imageSources={imageSources}
                     changeImageSources={changeImageSources}
-                    multiple={true}
-                    showPicker={true}
                   />
                 </View>
 
