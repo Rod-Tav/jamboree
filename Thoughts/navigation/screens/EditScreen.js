@@ -6,8 +6,8 @@ import {
   Image,
   TouchableOpacity,
   SafeAreaView,
+  ScrollView,
 } from "react-native";
-import styles from "../../styles/styles";
 import proStyles from "../../styles/profileStyles";
 
 import SkinnyIcon from "react-native-snappy";
@@ -61,7 +61,6 @@ const EditScreen = ({ route }) => {
       if (name != userName) await AsyncStorage.setItem("userName", name);
       if (bio != userBio) await AsyncStorage.setItem("userBio", bio);
       if (image != userImage) {
-        console.log("saving image");
         await AsyncStorage.setItem("userImage", await saveImage());
       }
       navigation.goBack();
@@ -96,46 +95,70 @@ const EditScreen = ({ route }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={proStyles.container}>
-        {image != "" && (
-          <View>
-            <Image
-              source={{ uri: image }}
-              style={proStyles.profilePic}
-              resizeMode="cover"
-            />
+      <ScrollView style={proStyles.containerEdit}>
+        <View style={proStyles.editProfileView2}>
+          {image != "" ? (
+            <View>
+              <Image
+                source={{ uri: image }}
+                style={proStyles.profilePic}
+                resizeMode="cover"
+              />
+            </View>
+          ) : (
+            <View>
+              <Image
+                source={require("../../images/profile.png")}
+                style={proStyles.profilePic}
+                resizeMode="cover"
+              />
+            </View>
+          )}
+          <View style={proStyles.imageOptions}>
+            <ProfileImagePicker settings={false} changeImage={changeImage} />
+            <TouchableOpacity
+              onPress={() => {
+                setImage("");
+              }}
+              style={proStyles.removeButton}
+            >
+              <Text style={proStyles.removeButtonText}>Remove</Text>
+            </TouchableOpacity>
           </View>
-        )}
-        <ProfileImagePicker image={image} changeImage={changeImage} />
-        <TouchableOpacity
-          onPress={() => {
-            setImage("");
-          }}
-          style={styles.saveButton}
-        >
-          <Text style={styles.saveButtonText}>Remove Image</Text>
-        </TouchableOpacity>
-        <View style={styles.profileTextInput}>
-          <Text>Name:</Text>
-          <TextInput
-            style={styles.nameInput}
-            placeholder="Name"
-            value={name}
-            onChangeText={setName}
-          />
-          <Text>Bio:</Text>
-          <TextInput
-            style={styles.bioInput}
-            placeholder="Bio"
-            value={bio}
-            onChangeText={setBio}
-            multiline={true}
-          />
+
+          <View style={proStyles.profileTextInput}>
+            <View style={proStyles.nameInputContainer}>
+              <Text style={proStyles.text}>Name</Text>
+              <TextInput
+                style={proStyles.nameInput}
+                placeholder="Name"
+                value={name}
+                onChangeText={setName}
+              />
+            </View>
+            <View style={proStyles.bioInputContainer}>
+              <Text style={proStyles.text}>Bio</Text>
+              <TextInput
+                style={proStyles.bioInput}
+                placeholder="Bio"
+                value={bio}
+                onChangeText={setBio}
+                multiline={true}
+              />
+            </View>
+          </View>
+          <TouchableOpacity onPress={saveProfile} style={proStyles.saveButton}>
+            <SkinnyIcon name="save" size={25} strokeWidth={1.5} color="white" />
+            <Text style={proStyles.saveButtonText}>Save</Text>
+            <SkinnyIcon
+              name="save"
+              size={25}
+              strokeWidth={1.5}
+              color="transparent"
+            />
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={saveProfile} style={styles.saveButton}>
-          <Text style={styles.saveButtonText}>Save</Text>
-        </TouchableOpacity>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

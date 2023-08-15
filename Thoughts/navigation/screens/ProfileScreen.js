@@ -31,7 +31,11 @@ const ProfileScreen = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen name="Edit" component={EditScreen} />
-      <Stack.Screen name="Settings" component={SettingsScreen} />
+      <Stack.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="Search"
         component={SearchScreen}
@@ -100,37 +104,23 @@ const ProfileScreenContainer = () => {
     });
   }, [navigation]);
 
-  const imgDir = FileSystem.documentDirectory + "images/";
-
-  const ensureDirExists = async () => {
-    const dirInfo = await FileSystem.getInfoAsync(imgDir);
-    if (!dirInfo.exists) {
-      await FileSystem.makeDirectoryAsync(imgDir, { intermediates: true });
-    }
-  };
-
-  const changeImageSources = (newImageSources) => {
-    setImageSources(newImageSources);
-    setUserImage(newImageSources[0]);
-  };
-
-  const handleChangeImage = () => {
-    alert("no");
-  };
-
-  const handleEdit = () => {};
-
-  const handleSettings = () => {};
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={proStyles.container}>
         <View style={proStyles.scrollContainer}>
           <View style={proStyles.editProfileView}>
-            {userImage != "" && (
+            {userImage != "" ? (
               <View>
                 <Image
                   source={{ uri: userImage }}
+                  style={proStyles.profilePic}
+                  resizeMode="cover"
+                />
+              </View>
+            ) : (
+              <View>
+                <Image
+                  source={require("../../images/profile.png")}
                   style={proStyles.profilePic}
                   resizeMode="cover"
                 />

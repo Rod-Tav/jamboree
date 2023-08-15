@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  SafeAreaView,
-} from "react-native";
+import { View, Text, TouchableOpacity, SafeAreaView } from "react-native";
 import styles from "../../styles/styles";
 import SkinnyIcon from "react-native-snappy";
 import { useNavigation } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as FileSystem from "expo-file-system";
+import ProfileImagePicker from "./ProfileImagePicker";
+
+const Stack = createStackNavigator();
 
 const SettingsScreen = () => {
   const navigation = useNavigation();
@@ -44,10 +44,32 @@ const SettingsScreen = () => {
     });
   }, [navigation]);
 
+  const imgDir = FileSystem.documentDirectory + "images/";
+
+  const ensureDirExists = async () => {
+    const dirInfo = await FileSystem.getInfoAsync(imgDir);
+    if (!dirInfo.exists) {
+      await FileSystem.makeDirectoryAsync(imgDir, { intermediates: true });
+    }
+  };
+
+  const saveImage = async (newImage) => {
+    await ensureDirExists();
+    const filename = new Date().getTime() + ".jpeg";
+    const dest = imgDir + filename;
+    await FileSystem.copyAsync({ from: newImage, to: dest });
+    return dest;
+  };
+
+  const changeImage = async (newImage) => {
+    await AsyncStorage.setItem("HOME_IMAGE", await saveImage(newImage.uri));
+    navigation.navigate("Home");
+  };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
-        <Text>Settings Screen</Text>
+        <ProfileImagePicker settings={true} changeImage={changeImage} />
       </View>
     </SafeAreaView>
   );

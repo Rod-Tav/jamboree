@@ -36,14 +36,17 @@ const HomeScreen = () => {
 const HomeScreenContainer = () => {
   const [thoughts, setThoughts] = useState({});
   const [coverImage, setCoverImage] = useState("");
+  const [name, setName] = useState("");
   const isFocused = useIsFocused();
 
   useEffect(() => {
     if (isFocused) {
       const loadThoughts = async () => {
         try {
+          // get thoughts
           const storedThoughts = await AsyncStorage.getItem("THOUGHTS");
           setThoughts(storedThoughts ? JSON.parse(storedThoughts) : {});
+          // get images
           const coverImage = await AsyncStorage.getItem("HOME_IMAGE");
           setCoverImage(
             !coverImage
@@ -52,7 +55,18 @@ const HomeScreenContainer = () => {
                   uri: "",
                   width: 1500,
                 }
-              : coverImage
+              : {
+                  height: 2000,
+                  uri: coverImage,
+                  width: 1500,
+                }
+          );
+          // get name
+          const userName = await AsyncStorage.getItem("userName");
+          setName(
+            userName == null || userName == ""
+              ? ""
+              : ", " + userName.split(" ")[0]
           );
         } catch (error) {
           console.error("Error loading thoughts:", error);
@@ -253,7 +267,7 @@ const HomeScreenContainer = () => {
           ListHeaderComponent={
             <View style={styles.topOfHome}>
               <View style={styles.headerStyle}>
-                <Text style={styles.headerText}>Welcome back!</Text>
+                <Text style={styles.headerText}>Welcome back{name}!</Text>
               </View>
               <TouchableOpacity onPress={handleWrite} style={styles.addButton}>
                 <Ionicons

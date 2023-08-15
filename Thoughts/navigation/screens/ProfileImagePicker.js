@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { View, TouchableOpacity, Text } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import Icon from "react-native-vector-icons/Feather";
-import SkinnyIcon from "react-native-snappy";
 import styles from "../../styles/styles";
 import CustomActionSheet from "../CustomActionSheet";
 
-const ProfileImagePicker = ({ image, changeImage }) => {
-  const [isImageViewVisible, setIsImageViewVisible] = useState(false);
-
+const ProfileImagePicker = ({ settings, changeImage }) => {
   const handleAddImagesPress = () => {
     setShowCustomActionSheet(true);
   };
@@ -74,26 +70,9 @@ const ProfileImagePicker = ({ image, changeImage }) => {
       <View>
         <TouchableOpacity
           onPress={handleAddImagesPress}
-          style={styles.buttonContainer}
+          style={styles.buttonContainer2}
         >
-          <View style={styles.buttonIcon}>
-            <SkinnyIcon
-              name="image"
-              size={24}
-              strokeWidth={1.25}
-              color="#979C9E"
-              style={styles.icon}
-            />
-          </View>
-          <Text style={styles.buttonText}>Change Image</Text>
-          <View style={styles.buttonIcon2}>
-            <Icon
-              name="image"
-              size={24}
-              color="transparent"
-              style={styles.icon}
-            />
-          </View>
+          <Text style={styles.buttonText2}>Change Image</Text>
         </TouchableOpacity>
       </View>
       <CustomActionSheet
