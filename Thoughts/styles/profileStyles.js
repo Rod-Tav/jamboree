@@ -31,6 +31,18 @@ export default StyleSheet.create({
     gap: 20,
     alignContent: "space-between",
   },
+  icons: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  profilePic: {
+    width: 100,
+    height: 100,
+    borderRadius: "50%",
+  },
+  name: { fontWeight: "700", fontSize: 20 },
+  bio: {},
+  icons: {},
   image: {
     width: "70%",
   },

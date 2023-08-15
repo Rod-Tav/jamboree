@@ -11,6 +11,8 @@ import styles from "../../styles/styles";
 import SkinnyIcon from "react-native-snappy";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as FileSystem from "expo-file-system";
+import ProfileImagePicker from "./ProfileImagePicker";
 
 const EditScreen = ({ route }) => {
   const userImage = route.params.userImage;
@@ -66,15 +68,28 @@ const EditScreen = ({ route }) => {
     }
   };
 
+  const imgDir = FileSystem.documentDirectory + "images/";
+
+  const ensureDirExists = async () => {
+    const dirInfo = await FileSystem.getInfoAsync(imgDir);
+    if (!dirInfo.exists) {
+      await FileSystem.makeDirectoryAsync(imgDir, { intermediates: true });
+    }
+  };
+
   const saveImage = async () => {
-    if (userImage != "") {
+    if (image != "") {
       await ensureDirExists();
       const filename = new Date().getTime() + ".jpeg";
       const dest = imgDir + filename;
-      await FileSystem.copyAsync({ from: userImage, to: dest });
+      await FileSystem.copyAsync({ from: image, to: dest });
       return dest;
     }
     return "";
+  };
+
+  const changeImage = (newImage) => {
+    setImage(newImage.uri);
   };
 
   return (
@@ -83,19 +98,22 @@ const EditScreen = ({ route }) => {
         {userImage != "" && (
           <View>
             <Image
-              source={{ uri: userImage }}
+              source={{ uri: image }}
               style={styles.homeBackground}
               resizeMode="cover"
             />
           </View>
         )}
+        <ProfileImagePicker image={image} changeImage={changeImage} />
         <View style={styles.profileTextInput}>
+          <Text>Name:</Text>
           <TextInput
             style={styles.nameInput}
             placeholder="Name"
             value={name}
             onChangeText={setName}
           />
+          <Text>Bio:</Text>
           <TextInput
             style={styles.bioInput}
             placeholder="Bio"

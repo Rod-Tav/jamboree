@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import ProfileImagePicker from "./ProfileImagePicker";
 import * as FileSystem from "expo-file-system";
 import styles from "../../styles/styles";
 import proStyles from "../../styles/profileStyles";
@@ -19,6 +18,7 @@ import EditScreen from "./EditScreen";
 import SettingsScreen from "./SettingsScreen";
 import { createStackNavigator } from "@react-navigation/stack";
 import SearchScreen from "./SearchScreen";
+import placeholder from "../../assets/icon.png";
 
 const Stack = createStackNavigator();
 
@@ -126,39 +126,42 @@ const ProfileScreenContainer = () => {
     <SafeAreaView style={{ flex: 1 }}>
       <View style={proStyles.container}>
         <View style={proStyles.scrollContainer}>
-          {userImage != "" && (
-            <View>
-              <Image
-                source={{ uri: userImage }}
-                style={styles.homeBackground}
-                resizeMode="cover"
-              />
-            </View>
-          )}
-
           <View style={styles.editProfileView}>
-            <Text>{userName}</Text>
-            <Text>{userBio}</Text>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("Edit", { userImage, userName, userBio })
-              }
-            >
-              <SkinnyIcon
-                name="edit"
-                size={20}
-                strokeWidth={1.5}
-                color="#979C9E"
-              ></SkinnyIcon>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate("Settings")}>
-              <SkinnyIcon
-                name="settings"
-                size={20}
-                strokeWidth={1.5}
-                color="#979C9E"
-              ></SkinnyIcon>
-            </TouchableOpacity>
+            <View>
+              {userImage != "" && (
+                <View>
+                  <Image
+                    source={{ uri: userImage }}
+                    style={proStyles.profilePic}
+                    resizeMode="cover"
+                  />
+                </View>
+              )}
+            </View>
+            <Text style={proStyles.name}>{userName}</Text>
+            <Text style={proStyles.bio}>{userBio}</Text>
+            <View style={proStyles.icons}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("Edit", { userImage, userName, userBio })
+                }
+              >
+                <SkinnyIcon
+                  name="edit"
+                  size={30}
+                  strokeWidth={2}
+                  color="#979C9E"
+                ></SkinnyIcon>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate("Settings")}>
+                <SkinnyIcon
+                  name="settings"
+                  size={30}
+                  strokeWidth={2}
+                  color="#979C9E"
+                ></SkinnyIcon>
+              </TouchableOpacity>
+            </View>
           </View>
           <View style={proStyles.calendar}>
             <Text>Calendar</Text>
