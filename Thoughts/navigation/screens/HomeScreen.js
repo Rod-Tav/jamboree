@@ -35,7 +35,7 @@ const HomeScreen = () => {
 
 const HomeScreenContainer = () => {
   const [thoughts, setThoughts] = useState({});
-  const [randomImage, setRandomImage] = useState(null);
+  const [coverImage, setCoverImage] = useState("");
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -44,37 +44,22 @@ const HomeScreenContainer = () => {
         try {
           const storedThoughts = await AsyncStorage.getItem("THOUGHTS");
           setThoughts(storedThoughts ? JSON.parse(storedThoughts) : {});
+          const coverImage = await AsyncStorage.getItem("HOME_IMAGE");
+          setCoverImage(
+            !coverImage
+              ? {
+                  height: 2000,
+                  uri: "",
+                  width: 1500,
+                }
+              : coverImage
+          );
         } catch (error) {
           console.error("Error loading thoughts:", error);
         }
       };
       loadThoughts();
     }
-    const updateRandomImage = async () => {
-      const lastUpdate = await AsyncStorage.getItem("LAST_IMAGE_UPDATE");
-      const today = new Date().toLocaleDateString();
-      if (lastUpdate !== today) {
-        // Update the random image
-        const allImageInfo = allImages(groupedThoughts);
-        const newRandomImage =
-          allImageInfo[Math.floor(Math.random() * allImageInfo.length)];
-
-        setRandomImage(newRandomImage);
-
-        // Update the LAST_IMAGE_UPDATE date to today
-        await AsyncStorage.setItem("LAST_IMAGE_UPDATE", today);
-        await AsyncStorage.setItem(
-          "COVER_IMAGE",
-          JSON.stringify(newRandomImage)
-        );
-      } else {
-        const existingRandomImg = await AsyncStorage.getItem("COVER_IMAGE");
-        const randomImg = JSON.parse(existingRandomImg);
-        setRandomImage(randomImg);
-      }
-    };
-
-    updateRandomImage();
   }, [isFocused]);
 
   const bottomSheetRef = useRef(null);
@@ -224,16 +209,6 @@ const HomeScreenContainer = () => {
     );
   };
 
-  if (!randomImage) {
-    const placeholder = {
-      height: 2000,
-      uri: "",
-      width: 1500,
-    };
-    setRandomImage(placeholder);
-    return;
-  }
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
       {allImageInfo.length > 0 && ( // Check if there are any images
@@ -245,7 +220,7 @@ const HomeScreenContainer = () => {
             },
           ]}
         >
-          {randomImage.uri == "" ? (
+          {coverImage.uri == "" ? (
             <Image
               source={require("../../images/placeholder.png")}
               style={styles.homeBackground}
@@ -253,7 +228,7 @@ const HomeScreenContainer = () => {
             />
           ) : (
             <Image
-              source={{ uri: randomImage.uri }}
+              source={{ uri: coverImage.uri }}
               style={styles.homeBackground}
               resizeMode="cover"
             />

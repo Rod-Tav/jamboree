@@ -122,7 +122,7 @@ const CreateScreen = () => {
       moodBgColor,
       moodTextColor,
       imageSources: newImageSources,
-      date: "2023-08-11",
+      date: route.params?.editThought?.date || formattedDate.date, // Use the original date when editing
       time: route.params?.editThought?.time || formattedDate.time, // Use the original time when editing
     };
     if (

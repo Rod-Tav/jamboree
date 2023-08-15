@@ -126,43 +126,46 @@ const ProfileScreenContainer = () => {
     <SafeAreaView style={{ flex: 1 }}>
       <View style={proStyles.container}>
         <View style={proStyles.scrollContainer}>
-          <View style={styles.editProfileView}>
-            <View>
-              {userImage != "" && (
-                <View>
-                  <Image
-                    source={{ uri: userImage }}
-                    style={proStyles.profilePic}
-                    resizeMode="cover"
-                  />
-                </View>
-              )}
+          <View style={proStyles.editProfileView}>
+            {userImage != "" && (
+              <View>
+                <Image
+                  source={{ uri: userImage }}
+                  style={proStyles.profilePic}
+                  resizeMode="cover"
+                />
+              </View>
+            )}
+            <View style={proStyles.textInfo}>
+              <Text style={proStyles.name}>{userName}</Text>
+              <Text style={proStyles.bio}>{userBio}</Text>
             </View>
-            <Text style={proStyles.name}>{userName}</Text>
-            <Text style={proStyles.bio}>{userBio}</Text>
+
             <View style={proStyles.icons}>
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate("Edit", { userImage, userName, userBio })
                 }
+                style={proStyles.icon}
               >
                 <SkinnyIcon
                   name="edit"
-                  size={30}
-                  strokeWidth={2}
+                  size={25}
+                  strokeWidth={1.5}
                   color="#979C9E"
                 ></SkinnyIcon>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => navigation.navigate("Settings")}>
                 <SkinnyIcon
                   name="settings"
-                  size={30}
-                  strokeWidth={2}
+                  size={25}
+                  strokeWidth={1.5}
                   color="#979C9E"
                 ></SkinnyIcon>
               </TouchableOpacity>
             </View>
           </View>
+
           <View style={proStyles.calendar}>
             <Text>Calendar</Text>
           </View>

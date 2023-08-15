@@ -300,14 +300,7 @@ export default StyleSheet.create({
   leftarrow: {
     paddingHorizontal: 10000,
   },
-  editProfileView: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    textAlign: "center",
-    justifyContent: "center",
-    width: "100%",
-  },
+
   profileTextInput: { width: "70%" },
   nameInput: {
     width: "100%",

@@ -8,6 +8,8 @@ import {
   SafeAreaView,
 } from "react-native";
 import styles from "../../styles/styles";
+import proStyles from "../../styles/profileStyles";
+
 import SkinnyIcon from "react-native-snappy";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -94,17 +96,25 @@ const EditScreen = ({ route }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.container}>
-        {userImage != "" && (
+      <View style={proStyles.container}>
+        {image != "" && (
           <View>
             <Image
               source={{ uri: image }}
-              style={styles.homeBackground}
+              style={proStyles.profilePic}
               resizeMode="cover"
             />
           </View>
         )}
         <ProfileImagePicker image={image} changeImage={changeImage} />
+        <TouchableOpacity
+          onPress={() => {
+            setImage("");
+          }}
+          style={styles.saveButton}
+        >
+          <Text style={styles.saveButtonText}>Remove Image</Text>
+        </TouchableOpacity>
         <View style={styles.profileTextInput}>
           <Text>Name:</Text>
           <TextInput
