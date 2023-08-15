@@ -164,7 +164,7 @@ const ProfileScreenContainer = () => {
             <Text>Calendar</Text>
           </View>
         </View>
-        <View style={proStyles.searchContainer}>
+        <View>
           <TouchableOpacity
             style={proStyles.search}
             onPress={() => navigation.navigate("Search")}
