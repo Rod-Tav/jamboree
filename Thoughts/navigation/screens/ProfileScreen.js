@@ -13,6 +13,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import ImagePickerScreen from "../ImagePickerScreen";
 import * as FileSystem from "expo-file-system";
 import styles from "../../styles/styles";
+import proStyles from "../../styles/profileStyles";
+import SkinnyIcon from "react-native-snappy";
+
 import { createStackNavigator } from "@react-navigation/stack";
 import SearchScreen from "./SearchScreen";
 
@@ -26,7 +29,11 @@ const ProfileScreen = () => {
         component={ProfileScreenContainer}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="Search" component={SearchScreen} />
+      <Stack.Screen
+        name="Search"
+        component={SearchScreen}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };
@@ -45,6 +52,37 @@ const ProfileScreenContainer = () => {
   useEffect(() => {
     loadUserData();
   }, [isFocused]);
+
+  // Set up the options for the header
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      title: "", // Set the title of the header
+      headerStyle: {
+        backgroundColor: "white",
+        elevation: 0,
+        shadowOpacity: 0,
+        borderBottomWidth: 0,
+      },
+      headerShadowVisible: false,
+      headerTitleStyle: {
+        display: "none",
+      },
+
+      headerLeft: () => (
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={{ marginHorizontal: "14%" }}
+        >
+          <SkinnyIcon
+            name="arrow-left"
+            size={25}
+            strokeWidth={1.5}
+            color="#090A0A"
+          />
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
 
   const loadUserData = async () => {
     try {
@@ -104,11 +142,8 @@ const ProfileScreenContainer = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <ScrollView
-          style={{ backgroundColor: "white", height: "100%" }}
-          showsVerticalScrollIndicator={false}
-        >
+      <View style={proStyles.container}>
+        <View style={proStyles.scrollContainer}>
           {userImage != "" && (
             <View>
               <Image
@@ -122,34 +157,56 @@ const ProfileScreenContainer = () => {
             </View>
           )}
 
-          <View>
-            <ImagePickerScreen
-              imageSources={imageSources}
-              changeImageSources={changeImageSources}
-              multiple={false}
-              showPicker={showImagePicker}
-            />
+          <View style={styles.editProfileView}>
+            <View style={proStyles.image}>
+              <ImagePickerScreen
+                imageSources={imageSources}
+                changeImageSources={changeImageSources}
+                multiple={false}
+                showPicker={showImagePicker}
+              />
+            </View>
+
+            <View style={styles.profileTextInput}>
+              <TextInput
+                style={styles.nameInput}
+                placeholder="Name"
+                value={userName}
+                onChangeText={setUserName}
+              />
+              <TextInput
+                style={styles.bioInput}
+                placeholder="Bio"
+                value={userBio}
+                onChangeText={setUserBio}
+                multiline={true}
+              />
+            </View>
+            <TouchableOpacity onPress={saveProfile} style={styles.saveButton}>
+              <Text style={styles.saveButtonText}>Save</Text>
+            </TouchableOpacity>
           </View>
-          <TextInput
-            style={styles.input}
-            placeholder="Name"
-            value={userName}
-            onChangeText={setUserName}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Bio"
-            value={userBio}
-            onChangeText={setUserBio}
-            multiline={true}
-          />
-          <TouchableOpacity onPress={saveProfile} style={styles.saveButton}>
-            <Text style={styles.saveButtonText}>Save</Text>
+          <View style={proStyles.calendar}>
+            <Text>Calendar</Text>
+          </View>
+        </View>
+        <View style={proStyles.searchContainer}>
+          <TouchableOpacity
+            style={proStyles.search}
+            onPress={() => navigation.navigate("Search")}
+          >
+            <View style={proStyles.searchIcon}>
+              <SkinnyIcon
+                name="magnifier"
+                size={16}
+                strokeWidth={1.5}
+                color="#979C9E"
+              />
+            </View>
+
+            <Text style={proStyles.searchText}>Search your thoughts...</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("Search")}>
-            <Text>Search your thoughts...</Text>
-          </TouchableOpacity>
-        </ScrollView>
+        </View>
       </View>
     </SafeAreaView>
   );
