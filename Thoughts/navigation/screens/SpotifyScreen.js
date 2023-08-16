@@ -47,7 +47,7 @@ const SpotifyScreen = ({ setModalVisible }) => {
       // In order to follow the "Authorization Code Flow" to fetch token after authorizationEndpoint
       // this must be set to false
       usePKCE: false,
-      redirectUri: "exp://10.1.29.202:8081",
+      redirectUri: "exp://10.1.29.201:8081",
     },
     discovery
   );
@@ -92,7 +92,6 @@ const SpotifyScreen = ({ setModalVisible }) => {
         },
       })
         .then((response) => {
-          console.log(response.data.tracks.items);
           setSearchResults(response.data.tracks.items);
         })
         .catch((error) => {
@@ -136,13 +135,13 @@ const SpotifyScreen = ({ setModalVisible }) => {
             value={searchQuery}
             onChangeText={handleSearchQueryChange}
           />
-          {searchQuery && (
+          {searchQuery == "" && (
             <Text style={moodstyles.modalTitle}>Recently Played</Text>
           )}
 
           <View style={moodstyles.modalButtonContainer}>
             <FlatList
-              data={searchQuery ? searchResults : recentlyPlayed}
+              data={searchQuery != "" ? searchResults : recentlyPlayed}
               keyExtractor={(item) => item.played_at}
               renderItem={({ item }) => {
                 const path = searchQuery ? item : item.track;
