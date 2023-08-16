@@ -128,4 +128,23 @@ export default StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
   },
+  songImage: {
+    width: 50,
+    height: 50,
+    marginRight: 10,
+  },
+
+  songContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 10,
+  },
+  songList: {
+    maxHeight: 350,
+  },
+  searchBar: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
 });

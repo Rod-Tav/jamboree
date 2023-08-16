@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, PureComponent } from "react";
 import { View, Text, FlatList, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -260,6 +260,7 @@ const HomeScreenContainer = () => {
       >
         <BottomSheetFlatList
           data={groupedThoughts.slice().reverse()}
+          initialNumToRender={5}
           renderItem={renderItem}
           keyExtractor={(item) => item.date} // Use the date as the key for each rendered date group
           contentContainerStyle={styles.list}

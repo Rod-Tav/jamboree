@@ -78,7 +78,7 @@ const SelectedDateThoughtsScreenContainer = ({ route }) => {
       <View style={styles.headerStyle}>
         <TouchableOpacity
           key={thought.id}
-          style={styles.thoughtContainer}
+          style={styles.thoughtContainer2}
           onPress={() => navigation.navigate("Detail", { thought })}
         >
           {thought.imageSources && thought.imageSources.length > 0 && (
@@ -185,7 +185,7 @@ const SelectedDateThoughtsScreenContainer = ({ route }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={proStyles.container2}>
-        <Text style={styles.dayText}>{formatDate(date)}</Text>
+        <Text style={styles.dayText2}>{formatDate(date)}</Text>
         <FlatList
           data={thoughtsList.slice().reverse()}
           renderItem={renderItem}

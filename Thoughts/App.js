@@ -9,6 +9,20 @@ import {
 } from "@expo-google-fonts/inter";
 import MainContainer from "./navigation/MainContainer";
 
+import { LogBox } from "react-native";
+LogBox.ignoreLogs(["Sending"]);
+import { Provider } from "react-redux";
+import tokenReducer from "./store/reducers/token";
+import songReducer from "./store/reducers/topSongs";
+import { createStore, combineReducers } from "redux";
+
+const rootReducer = combineReducers({
+  token: tokenReducer,
+  topSongs: songReducer,
+});
+
+const store = createStore(rootReducer);
+
 export default function App() {
   let [fontsLoaded] = useFonts({
     Inter_300Light,
@@ -23,5 +37,9 @@ export default function App() {
 
   StatusBar.setBarStyle("dark-content");
 
-  return <MainContainer />;
+  return (
+    <Provider store={store}>
+      <MainContainer />
+    </Provider>
+  );
 }

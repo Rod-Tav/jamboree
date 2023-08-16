@@ -23,13 +23,12 @@ export default StyleSheet.create({
     paddingLeft: "7%",
     paddingRight: "7%",
     paddingTop: "0%",
-    borderRadius: 16,
   },
   scrollContainer: {
     display: "flex",
     height: "90%",
     flexDirection: "column",
-    gap: 20,
+    gap: 15,
     alignContent: "space-between",
   },
   editProfileView: {
@@ -158,7 +157,7 @@ export default StyleSheet.create({
   image: {
     width: "70%",
   },
-  calendar: {},
+  calendar: { height: "100%", marginTop: 0 },
 
   search: {
     width: "100%",

@@ -15,6 +15,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "../../styles/styles";
 import ImagePickerScreen from "../ImagePickerScreen";
 import MoodPicker from "../MoodPicker";
+import SongPicker from "../SongPicker";
 import SkinnyIcon from "react-native-snappy";
 import * as FileSystem from "expo-file-system";
 
@@ -235,6 +236,10 @@ const CreateScreen = () => {
                     }
                     clearMoodToggle={clearMoodToggle}
                   />
+                </View>
+                {/* Spotify */}
+                <View>
+                  <SongPicker />
                 </View>
 
                 {/* Styled Add Thought Button */}

@@ -180,6 +180,16 @@ export default StyleSheet.create({
     letterSpacing: 3,
     textTransform: "uppercase",
   },
+  dayText2: {
+    fontSize: 15,
+    color: "#4F4F4F",
+    fontWeight: "700",
+    fontStyle: "normal",
+    lineHeight: 25,
+    letterSpacing: 3,
+    textTransform: "uppercase",
+    marginBottom: 10,
+  },
 
   thoughtContainer: {
     backgroundColor: "white",
@@ -189,6 +199,19 @@ export default StyleSheet.create({
     paddingTop: 16,
     paddingBottom: 16,
 
+    display: "flex",
+    flexDirection: "column",
+    // padding: viewPadding,
+    // marginBottom: viewPadding,
+  },
+  thoughtContainer2: {
+    backgroundColor: "white",
+    borderBottomWidth: 1,
+    borderBottomColor: "#F2F4F5",
+    gap: 14,
+    paddingTop: 3,
+
+    paddingBottom: 16,
     display: "flex",
     flexDirection: "column",
     // padding: viewPadding,

@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Image,
+  ScrollView,
 } from "react-native";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -200,13 +201,16 @@ const ProfileScreenContainer = () => {
             </View>
           </View>
 
-          <View style={proStyles.calendar}>
+          <ScrollView>
             <Calendar
+              style={proStyles.calendar}
               current={currentMonth}
               onDayPress={handleDayPress}
+              markingType={"period"}
               markedDates={markedDates}
+              enableSwipeMonths={true}
             />
-          </View>
+          </ScrollView>
         </View>
         <View>
           <TouchableOpacity
