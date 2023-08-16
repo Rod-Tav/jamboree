@@ -13,7 +13,6 @@ import SkinnyIcon from "react-native-snappy";
 import { useNavigation } from "@react-navigation/native";
 import DetailScreen from "./DetailScreen";
 import { createStackNavigator } from "@react-navigation/stack";
-import { TextInput } from "react-native-gesture-handler";
 
 const Stack = createStackNavigator();
 

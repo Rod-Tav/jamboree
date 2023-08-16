@@ -134,6 +134,20 @@ const ProfileScreenContainer = () => {
     }
   };
 
+  // Get the current month and year in the format "YYYY-MM"
+  const currentDate = new Date();
+  const currentMonth = `${currentDate.getFullYear()}-${(
+    currentDate.getMonth() + 1
+  )
+    .toString()
+    .padStart(2, "0")}`;
+
+  const markedDates = {};
+  // Iterate through groupedThoughts to mark dates with thoughts
+  groupedThoughts.forEach((group) => {
+    markedDates[group.date] = { marked: true };
+  });
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={proStyles.container}>
@@ -187,7 +201,11 @@ const ProfileScreenContainer = () => {
           </View>
 
           <View style={proStyles.calendar}>
-            <Calendar current={"2023-08-01"} onDayPress={handleDayPress} />
+            <Calendar
+              current={currentMonth}
+              onDayPress={handleDayPress}
+              markedDates={markedDates}
+            />
           </View>
         </View>
         <View>

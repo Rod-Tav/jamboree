@@ -66,14 +66,14 @@ const MoodPicker = ({
       textColor: "#196881",
     },
     {
-      label: "Hopeless",
-      value: "Hopeless",
+      label: "Angry",
+      value: "Angry",
       bgColor: "#FCE5E5",
       textColor: "#811919",
     },
     {
-      label: "Confused",
-      value: "Confused",
+      label: "Anxious",
+      value: "Anxious",
       bgColor: "#FCFBE5",
       textColor: "#7F8119",
     },
