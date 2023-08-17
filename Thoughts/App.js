@@ -13,12 +13,10 @@ import { LogBox } from "react-native";
 LogBox.ignoreLogs(["Sending"]);
 import { Provider } from "react-redux";
 import tokenReducer from "./store/reducers/token";
-import songReducer from "./store/reducers/topSongs";
 import { createStore, combineReducers } from "redux";
 
 const rootReducer = combineReducers({
   token: tokenReducer,
-  topSongs: songReducer,
 });
 
 const store = createStore(rootReducer);

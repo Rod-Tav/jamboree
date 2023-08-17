@@ -164,13 +164,56 @@ export default StyleSheet.create({
     fontSize: 16,
     fontWeight: "normal",
   },
+  spotifyModalText: {
+    fontSize: 14,
+    textAlign: "center",
+  },
+  spotifyButton: {
+    backgroundColor: "#090A0A",
+    paddingRight: 25,
+    paddingLeft: 23,
+
+    paddingVertical: 12,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    borderRadius: 32,
+  },
+  spotifyButtonText: {
+    color: "white",
+    flexDirection: "column",
+    alignItems: "center", // Vertically center the text
+    fontSize: 16,
+  },
+  spotifyButtonIcon: { height: 25, width: 25 },
   list: {
     display: "flex",
     flexDirection: "column",
     gap: 14,
     overflow: "visible",
   },
-
+  cancelButtonSpotify: {
+    width: "50%",
+    display: "flex",
+    justifyContent: "center",
+    flexDirection: "row",
+    textAlign: "center",
+    padding: 8,
+    backgroundColor: "white",
+  },
+  cancelButtonTextSpotify: {
+    color: "#2F80ED",
+    fontSize: 14,
+    textAlign: "center",
+  },
+  modalTitleSpotify: {
+    width: "100%",
+    fontSize: 24,
+    fontWeight: "bold",
+    lineHeight: 32,
+    textAlign: "left",
+  },
   dayText: {
     fontSize: 15,
     color: "#4F4F4F",

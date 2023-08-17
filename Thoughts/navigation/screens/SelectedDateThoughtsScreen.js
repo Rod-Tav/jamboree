@@ -13,6 +13,7 @@ import SkinnyIcon from "react-native-snappy";
 import { useNavigation } from "@react-navigation/native";
 import DetailScreen from "./DetailScreen";
 import { createStackNavigator } from "@react-navigation/stack";
+import moodstyles from "../../styles/moodstyles";
 
 const Stack = createStackNavigator();
 
@@ -126,6 +127,16 @@ const SelectedDateThoughtsScreenContainer = ({ route }) => {
                     {thought.content}
                   </Text>
                 )}
+              </View>
+            )}
+            {thought.songName && thought.songName != "" && (
+              <View>
+                <Image
+                  source={{ uri: thought.songImage }}
+                  style={moodstyles.songImage}
+                />
+                <Text>{thought.songName}</Text>
+                <Text>{thought.songArtist}</Text>
               </View>
             )}
           </View>

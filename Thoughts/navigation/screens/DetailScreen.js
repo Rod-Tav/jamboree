@@ -16,6 +16,7 @@ import SkinnyIcon from "react-native-snappy";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import * as FileSystem from "expo-file-system";
+import moodstyles from "../../styles/moodstyles";
 
 const DetailScreen = ({ route }) => {
   const { thought } = route.params;
@@ -245,6 +246,16 @@ const DetailScreen = ({ route }) => {
             </View>
             {thought.content == "" ? null : (
               <Text style={styles.detailThoughtContent}>{thought.content}</Text>
+            )}
+            {thought.songName && thought.songName != "" && (
+              <View>
+                <Image
+                  source={{ uri: thought.songImage }}
+                  style={moodstyles.songImage}
+                />
+                <Text>{thought.songName}</Text>
+                <Text>{thought.songArtist}</Text>
+              </View>
             )}
           </View>
         </View>

@@ -13,6 +13,7 @@ import BottomSheet, {
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet"; // Import BottomSheetScrollView
 import { SafeAreaView } from "react-native-safe-area-context"; // Import SafeAreaView
+import moodstyles from "../../styles/moodstyles";
 
 const Stack = createStackNavigator();
 
@@ -216,6 +217,16 @@ const HomeScreenContainer = () => {
                   )}
                 </View>
               )}
+              {thought.songName && thought.songName != "" && (
+                <View>
+                  <Image
+                    source={{ uri: thought.songImage }}
+                    style={moodstyles.songImage}
+                  />
+                  <Text>{thought.songName}</Text>
+                  <Text>{thought.songArtist}</Text>
+                </View>
+              )}
             </View>
           </TouchableOpacity>
         ))}
@@ -225,30 +236,28 @@ const HomeScreenContainer = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      {allImageInfo.length > 0 && ( // Check if there are any images
-        <View
-          style={[
-            styles.imageWrapperHome2,
-            {
-              aspectRatio: 0.75,
-            },
-          ]}
-        >
-          {coverImage.uri == "" ? (
-            <Image
-              source={require("../../images/placeholder.png")}
-              style={styles.homeBackground}
-              resizeMode="cover"
-            />
-          ) : (
-            <Image
-              source={{ uri: coverImage.uri }}
-              style={styles.homeBackground}
-              resizeMode="cover"
-            />
-          )}
-        </View>
-      )}
+      <View
+        style={[
+          styles.imageWrapperHome2,
+          {
+            aspectRatio: 0.75,
+          },
+        ]}
+      >
+        {coverImage.uri == "" ? (
+          <Image
+            source={require("../../images/placeholder.png")}
+            style={styles.homeBackground}
+            resizeMode="cover"
+          />
+        ) : (
+          <Image
+            source={{ uri: coverImage.uri }}
+            style={styles.homeBackground}
+            resizeMode="cover"
+          />
+        )}
+      </View>
 
       <BottomSheet
         ref={bottomSheetRef}

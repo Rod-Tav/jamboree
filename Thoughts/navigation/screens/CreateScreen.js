@@ -25,9 +25,13 @@ const CreateScreen = () => {
   const [mood, setMood] = useState("");
   const [moodBgColor, setMoodBgColor] = useState("");
   const [moodTextColor, setMoodTextColor] = useState("");
+  const [songName, setSongName] = useState("");
+  const [songArtist, setSongArtist] = useState("");
+  const [songImage, setSongImage] = useState("");
   const [imageSources, setImageSources] = useState([]);
   const navigation = useNavigation();
   const [clearMoodToggle, setClearMoodToggle] = useState(false);
+  const [clearSongToggle, setClearSongToggle] = useState(false);
   const route = useRoute();
   const editThought = route.params?.editThought;
 
@@ -59,6 +63,9 @@ const CreateScreen = () => {
         setMood("");
         setMoodBgColor("");
         setMoodTextColor("");
+        setSongName("");
+        setSongArtist("");
+        setSongImage("");
         setImageSources([]);
       }
     });
@@ -72,6 +79,11 @@ const CreateScreen = () => {
         setMoodBgColor(editThought.moodBgColor);
         setMoodTextColor(editThought.moodTextColor);
         setImageSources(editThought.imageSources);
+        if (editThought.songName) {
+          setSongName(editThought.songName);
+          setSongArtist(editThought.songArtist);
+          setSongImage(editThought.songImage);
+        }
       }
     });
 
@@ -122,6 +134,9 @@ const CreateScreen = () => {
       mood,
       moodBgColor,
       moodTextColor,
+      songName,
+      songArtist,
+      songImage,
       imageSources: newImageSources,
       date: route.params?.editThought?.date || formattedDate.date, // Use the original date when editing
       time: route.params?.editThought?.time || formattedDate.time, // Use the original time when editing
@@ -130,6 +145,7 @@ const CreateScreen = () => {
       newThought.title == "" &&
       newThought.content == "" &&
       newThought.mood == "" &&
+      newThought.songName == "" &&
       newThought.imageSources.length == 0
     ) {
       return;
@@ -165,8 +181,12 @@ const CreateScreen = () => {
       setMood("");
       setMoodBgColor("");
       setMoodTextColor("");
+      setSongName("");
+      setSongArtist("");
+      setSongImage("");
       setImageSources([]);
       setClearMoodToggle(!clearMoodToggle);
+      setClearSongToggle(!clearSongToggle);
       navigation.navigate("TrueHome"); // Navigate back to home screen
     } catch (error) {
       console.error("Error saving thought:", error);
@@ -239,7 +259,15 @@ const CreateScreen = () => {
                 </View>
                 {/* Spotify */}
                 <View>
-                  <SongPicker />
+                  <SongPicker
+                    songName={songName}
+                    setSongName={(name) => setSongName(name)}
+                    songArtist={songArtist}
+                    setSongArtist={(artist) => setSongArtist(artist)}
+                    songImage={songImage}
+                    setSongImage={(image) => setSongImage(image)}
+                    clearSongToggle={clearSongToggle}
+                  />
                 </View>
 
                 {/* Styled Add Thought Button */}

@@ -31,6 +31,16 @@ export default StyleSheet.create({
     borderRadius: 16,
     width: "86%",
   },
+  modalContent2: {
+    backgroundColor: "white",
+    display: "flex",
+    alignItems: "center",
+    gap: 12,
+    padding: 24,
+    paddingTop: 32,
+    borderRadius: 16,
+    width: "86%",
+  },
   modalTitle: {
     fontSize: 24,
     fontWeight: "bold",
@@ -85,6 +95,10 @@ export default StyleSheet.create({
     width: "100%",
     alignItems: "center",
   },
+  modalButtonContainer2: {
+    height: 350,
+    marginBottom: 20,
+  },
   customColorContainer: {
     display: "flex",
     flexDirection: "row",
@@ -131,20 +145,38 @@ export default StyleSheet.create({
   songImage: {
     width: 50,
     height: 50,
-    marginRight: 10,
+    borderRadius: 8,
   },
 
   songContainer: {
+    display: "flex",
     flexDirection: "row",
+    marginVertical: 4,
     alignItems: "center",
-    marginVertical: 10,
+    textAlign: "left",
+    gap: 10,
   },
   songList: {
-    maxHeight: 350,
+    height: 350,
   },
   searchBar: {
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
+  },
+  songDetails: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  songName: {
+    fontSize: 14,
+    color: "#090A0A",
+    lineHeight: 16,
+    textAlign: "left",
+  },
+  artistName: { color: "#828282", textAlign: "left" },
+
+  selectedSongContainer: {
+    backgroundColor: "lightgrey",
   },
 });
