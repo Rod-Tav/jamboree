@@ -95,6 +95,7 @@ export default StyleSheet.create({
     width: "100%",
     alignItems: "center",
   },
+
   modalButtonContainer2: {
     height: 350,
     marginBottom: 20,
@@ -137,6 +138,16 @@ export default StyleSheet.create({
     marginTop: 12,
     backgroundColor: "white",
   },
+  cancelButton2: {
+    width: "100%",
+    display: "flex",
+    justifyContent: "center",
+    flexDirection: "row",
+    textAlign: "center",
+    padding: 16,
+    marginTop: 12,
+    backgroundColor: "white",
+  },
   cancelButtonText: {
     color: "#2F80ED",
     fontSize: 16,
@@ -158,6 +169,8 @@ export default StyleSheet.create({
   },
   songList: {
     height: 350,
+    display: "flex",
+    gap: 10,
   },
   searchBar: {
     padding: 10,
@@ -167,6 +180,7 @@ export default StyleSheet.create({
   songDetails: {
     display: "flex",
     flexDirection: "column",
+    flex: 1,
   },
   songName: {
     fontSize: 14,
@@ -177,6 +191,7 @@ export default StyleSheet.create({
   artistName: { color: "#828282", textAlign: "left" },
 
   selectedSongContainer: {
-    backgroundColor: "lightgrey",
+    backgroundColor: "#F0F0F0",
+    borderRadius: 8,
   },
 });

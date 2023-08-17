@@ -31,12 +31,15 @@ const SongPicker = ({
   setSongArtist,
   songImage,
   setSongImage,
+  songLink,
+  setSongLink,
   clearSongToggle,
 }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [name, setName] = useState("");
   const [artist, setArtist] = useState("");
   const [image, setImage] = useState("");
+  const [link, setLink] = useState("");
 
   const dispatch = useDispatch();
   const [token, setToken] = useState("");
@@ -46,11 +49,13 @@ const SongPicker = ({
   const [searchBar, setSearchBar] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [songPlaying, setSongPlaying] = useState("");
 
   useEffect(() => {
     setName("");
     setArtist("");
     setImage("");
+    setLink("");
   }, [clearSongToggle]);
 
   const [request, response, promptAsync] = useAuthRequest(
@@ -126,6 +131,7 @@ const SongPicker = ({
     setSongName(name);
     setSongArtist(artist);
     setSongImage(image);
+    setSongLink(link);
     setModalVisible(false);
     setSelectedItem(null);
   };
@@ -146,22 +152,31 @@ const SongPicker = ({
     setSongName("");
     setSongArtist("");
     setSongImage("");
+    setSongLink("");
     setSelectedItem(null);
     setSearchBar("");
   };
 
-  const playSong = async (uri) => {
-    console.log(uri);
+  const playPauseSong = async (uri) => {
+    let action = "";
+    if (!songPlaying) {
+      action = "play";
+    } else if (uri == songPlaying) {
+      action = "pause";
+    } else {
+      action = "play";
+    }
     try {
-      await axios("https://api.spotify.com/v1/me/player/play", {
+      await axios(`https://api.spotify.com/v1/me/player/${action}`, {
         method: "PUT",
         headers: {
-          Authorization: "Bearer " + token,
+          Authorization: `Bearer ${token}`,
         },
         data: {
           uris: [uri],
         },
       });
+      setSongPlaying(uri);
     } catch (error) {
       alert("No devices active. Please open Spotify and play/pause a song.");
     }
@@ -179,6 +194,7 @@ const SongPicker = ({
     setName(path.name);
     setArtist(path.artists[0].name);
     setImage(path.album.images[0].url);
+    setLink(path.external_urls.spotify);
   };
 
   return (
@@ -241,11 +257,26 @@ const SongPicker = ({
                   />
                 </View>
                 <TextInput
-                  placeholder="Search for songs..."
+                  placeholder="Search for songs...                                         "
+                  placeholderTextColor="#979C9E"
                   value={searchBar}
                   onChangeText={setSearchBar}
                   onSubmitEditing={handleSearchSubmit}
                 />
+                <TouchableOpacity
+                  style={proStyles.xIcon}
+                  onPress={() => {
+                    setSearchResults([]);
+                    setSearchBar(""); // Clear the query
+                  }}
+                >
+                  <SkinnyIcon
+                    name="x"
+                    size={20}
+                    strokeWidth={1.5}
+                    color="#979C9E"
+                  />
+                </TouchableOpacity>
               </View>
               {searchQuery == "" && (
                 <Text style={styles.modalTitleSpotify}>Recently Played</Text>
@@ -273,15 +304,24 @@ const SongPicker = ({
                           }}
                           style={moodstyles.songContainer}
                         >
-                          <TouchableOpacity onPress={() => playSong(path.uri)}>
+                          <TouchableOpacity
+                            onPress={() => {
+                              playPauseSong(path.uri);
+                            }}
+                          >
                             <Image
                               source={{ uri: path.album.images[0].url }}
                               style={moodstyles.songImage}
                             />
                           </TouchableOpacity>
                           <View style={moodstyles.songDetails}>
-                            <Text style={moodstyles.songName}>{path.name}</Text>
-                            <Text style={moodstyles.artistName}>
+                            <Text numberOfLines={1} style={moodstyles.songName}>
+                              {path.name}
+                            </Text>
+                            <Text
+                              numberOfLines={1}
+                              style={moodstyles.artistName}
+                            >
                               {path.artists[0].name}
                             </Text>
                           </View>
@@ -303,7 +343,7 @@ const SongPicker = ({
 
                 <TouchableOpacity
                   onPress={handleCancel}
-                  style={moodstyles.cancelButton}
+                  style={moodstyles.cancelButton2}
                 >
                   <Text style={moodstyles.cancelButtonText}>Cancel</Text>
                 </TouchableOpacity>

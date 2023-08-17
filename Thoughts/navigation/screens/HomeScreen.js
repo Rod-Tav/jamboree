@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useRef, PureComponent } from "react";
-import { View, Text, FlatList, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  Linking,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "../../styles/styles";
@@ -218,14 +225,24 @@ const HomeScreenContainer = () => {
                 </View>
               )}
               {thought.songName && thought.songName != "" && (
-                <View>
-                  <Image
-                    source={{ uri: thought.songImage }}
-                    style={moodstyles.songImage}
-                  />
-                  <Text>{thought.songName}</Text>
-                  <Text>{thought.songArtist}</Text>
-                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    Linking.openURL(thought.songLink);
+                  }}
+                >
+                  <View style={styles.songContainer}>
+                    <Image
+                      source={{ uri: thought.songImage }}
+                      style={styles.songImage}
+                    />
+                    <View style={styles.songTextContainer}>
+                      <Text style={styles.songName}>{thought.songName}</Text>
+                      <Text style={styles.songArtist}>
+                        {thought.songArtist}
+                      </Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
               )}
             </View>
           </TouchableOpacity>

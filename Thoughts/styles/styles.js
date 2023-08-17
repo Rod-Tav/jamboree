@@ -194,7 +194,7 @@ export default StyleSheet.create({
     overflow: "visible",
   },
   cancelButtonSpotify: {
-    width: "50%",
+    width: "100%",
     display: "flex",
     justifyContent: "center",
     flexDirection: "row",
@@ -419,4 +419,21 @@ export default StyleSheet.create({
     fontWeight: "400",
     fontSize: 16,
   },
+  songContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    backgroundColor: "#F2F2F2",
+    borderRadius: 16,
+    padding: 12,
+  },
+
+  songImage: { width: 50, height: 50, borderRadius: 8 },
+  songTextContainer: {
+    display: "flex",
+    gap: 2,
+  },
+  songName: { fontSize: 14, color: "#090A0A" },
+  songArtist: { fontSize: 14, color: "#828282" },
 });

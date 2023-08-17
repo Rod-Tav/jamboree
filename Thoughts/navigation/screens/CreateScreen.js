@@ -28,6 +28,7 @@ const CreateScreen = () => {
   const [songName, setSongName] = useState("");
   const [songArtist, setSongArtist] = useState("");
   const [songImage, setSongImage] = useState("");
+  const [songLink, setSongLink] = useState("");
   const [imageSources, setImageSources] = useState([]);
   const navigation = useNavigation();
   const [clearMoodToggle, setClearMoodToggle] = useState(false);
@@ -66,6 +67,7 @@ const CreateScreen = () => {
         setSongName("");
         setSongArtist("");
         setSongImage("");
+        setSongLink("");
         setImageSources([]);
       }
     });
@@ -83,6 +85,7 @@ const CreateScreen = () => {
           setSongName(editThought.songName);
           setSongArtist(editThought.songArtist);
           setSongImage(editThought.songImage);
+          setSongLink(editThought.songLink);
         }
       }
     });
@@ -137,6 +140,7 @@ const CreateScreen = () => {
       songName,
       songArtist,
       songImage,
+      songLink,
       imageSources: newImageSources,
       date: route.params?.editThought?.date || formattedDate.date, // Use the original date when editing
       time: route.params?.editThought?.time || formattedDate.time, // Use the original time when editing
@@ -184,6 +188,7 @@ const CreateScreen = () => {
       setSongName("");
       setSongArtist("");
       setSongImage("");
+      setSongLink("");
       setImageSources([]);
       setClearMoodToggle(!clearMoodToggle);
       setClearSongToggle(!clearSongToggle);
@@ -266,6 +271,8 @@ const CreateScreen = () => {
                     setSongArtist={(artist) => setSongArtist(artist)}
                     songImage={songImage}
                     setSongImage={(image) => setSongImage(image)}
+                    songLink={songLink}
+                    setSongLink={(link) => setSongLink(link)}
                     clearSongToggle={clearSongToggle}
                   />
                 </View>
