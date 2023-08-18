@@ -18,7 +18,7 @@ import * as FileSystem from "expo-file-system";
 import ProfileImagePicker from "./ProfileImagePicker";
 
 const EditScreen = ({ route }) => {
-  const dark = useColorScheme() === "dark";
+  const dark = global.dark;
   const userImage = route.params.userImage;
   const userName = route.params.userName;
   const userBio = route.params.userBio;
@@ -56,7 +56,7 @@ const EditScreen = ({ route }) => {
         </TouchableOpacity>
       ),
     });
-  }, [navigation]);
+  }, [navigation, dark]);
 
   const saveProfile = async () => {
     try {

@@ -27,7 +27,7 @@ const MoodPicker = ({
   const [textColor, setTextColor] = useState("");
   const [customMood, setCustomMood] = useState("");
   const [customColor, setCustomColor] = useState("");
-  const dark = useColorScheme() === "dark";
+  const dark = global.dark;
   const colorOrder = [6, 4, 7, 1, 5, 2, 3];
 
   useEffect(() => {
@@ -44,43 +44,43 @@ const MoodPicker = ({
     {
       label: "Happy",
       value: "Happy",
-      bgColor: dark ? "#C1FFA6" : "#ECFCE5",
+      bgColor: "#DCFFCD",
       textColor: "#198155",
     },
     {
       label: "Sad",
       value: "Sad",
-      bgColor: dark ? "#DAD7FF" : "#E7E5FC",
+      bgColor: "#DCD9FF",
       textColor: "#281981",
     },
     {
       label: "Excited",
       value: "Excited",
-      bgColor: dark ? "#FFABED" : "#FCE5F7",
+      bgColor: "#FFD4F6",
       textColor: "#81197D",
     },
     {
       label: "Stressed",
       value: "Stressed",
-      bgColor: dark ? "#FFD89A" : "#FCF3E5",
+      bgColor: "#FFE9C7",
       textColor: "#815E19",
     },
     {
       label: "Hopeful",
       value: "Hopeful",
-      bgColor: dark ? "#B6FFF5" : "#E5FCF9",
+      bgColor: "#C9FFF9",
       textColor: "#196881",
     },
     {
       label: "Angry",
       value: "Angry",
-      bgColor: dark ? "#FF8989" : "#FCE5E5",
+      bgColor: "#FFCECE",
       textColor: "#811919",
     },
     {
       label: "Anxious",
       value: "Anxious",
-      bgColor: dark ? "#FFFBA4" : "#FCFBE5",
+      bgColor: "#FFFDCB",
       textColor: "#7F8119",
     },
   ];

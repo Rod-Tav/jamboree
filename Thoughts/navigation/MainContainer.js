@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import {
   NavigationContainer,
   DefaultTheme,
@@ -21,7 +21,11 @@ const profileName = "Profile";
 const Tab = createBottomTabNavigator();
 
 function MainContainer() {
-  const scheme = useColorScheme();
+  const [scheme, setScheme] = useState(useColorScheme());
+
+  useEffect(() => {
+    setScheme(global.dark ? "dark" : "light");
+  }, [global.dark]);
 
   return (
     <NavigationContainer theme={scheme === "dark" ? DarkTheme : DefaultTheme}>

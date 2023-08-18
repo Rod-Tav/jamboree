@@ -21,7 +21,7 @@ import { useNavigation } from "@react-navigation/native";
 import * as FileSystem from "expo-file-system";
 
 const DetailScreen = ({ route }) => {
-  const dark = useColorScheme() === "dark";
+  const dark = global.dark;
   const { thought } = route.params;
   const navigation = useNavigation();
   const [isImageViewVisible, setIsImageViewVisible] = useState(false);
@@ -354,7 +354,7 @@ const CustomActionSheet = ({
   handleEdit,
   handleDeleteModal,
 }) => {
-  const dark = useColorScheme() === "dark";
+  const dark = global.dark;
   return (
     <Modal
       isVisible={isVisible}

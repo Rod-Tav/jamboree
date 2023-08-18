@@ -21,7 +21,7 @@ import SkinnyIcon from "react-native-snappy";
 import * as FileSystem from "expo-file-system";
 
 const CreateScreen = () => {
-  const dark = useColorScheme() === "dark";
+  const dark = global.dark;
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [mood, setMood] = useState("");

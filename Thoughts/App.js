@@ -22,7 +22,8 @@ const rootReducer = combineReducers({
 const store = createStore(rootReducer);
 
 export default function App() {
-  const dark = useColorScheme() === "dark";
+  const dark = global.dark;
+  global.dark = useColorScheme() === "dark";
   let [fontsLoaded] = useFonts({
     Inter_300Light,
     Inter_400Regular,

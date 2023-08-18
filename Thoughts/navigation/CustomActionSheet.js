@@ -5,7 +5,7 @@ import Modal from "react-native-modal";
 import styles from "../styles/styles";
 
 const CustomActionSheet = ({ isVisible, onCancel, onSelectOption }) => {
-  const dark = useColorScheme() === "dark";
+  const dark = global.dark;
   const handleOptionPress = (option) => {
     onSelectOption(option);
   };

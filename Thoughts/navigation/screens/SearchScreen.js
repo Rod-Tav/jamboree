@@ -39,7 +39,7 @@ const SearchScreen = ({ route }) => {
 };
 
 const SearchScreenContainer = ({ route }) => {
-  const dark = useColorScheme() === "dark";
+  const dark = global.dark;
   const { thoughts } = route.params;
   const navigation = useNavigation();
   const [query, setQuery] = useState("");

@@ -54,7 +54,7 @@ const SongPicker = ({
   const [selectedItem, setSelectedItem] = useState(null);
   const [songPlaying, setSongPlaying] = useState("");
   const [play, setPlay] = useState("");
-  const dark = useColorScheme() === "dark";
+  const dark = global.dark;
   useEffect(() => {
     setName("");
     setArtist("");

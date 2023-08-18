@@ -17,7 +17,7 @@ import ProfileImagePicker from "./ProfileImagePicker";
 const Stack = createStackNavigator();
 
 const SettingsScreen = () => {
-  const dark = useColorScheme() === "dark";
+  const [dark, setDark] = useState(global.dark);
   const navigation = useNavigation();
 
   // Set up the options for the header
@@ -49,7 +49,7 @@ const SettingsScreen = () => {
         </TouchableOpacity>
       ),
     });
-  }, [navigation]);
+  }, [navigation, dark]);
 
   const imgDir = FileSystem.documentDirectory + "images/";
 
@@ -98,7 +98,12 @@ const SettingsScreen = () => {
             <ProfileImagePicker settings={true} changeImage={changeImage} />
           </View>
           <View style={styles}>
-            <TouchableOpacity onPress={() => (global.dark = !global.dark)}>
+            <TouchableOpacity
+              onPress={() => {
+                global.dark = !global.dark;
+                setDark(global.dark);
+              }}
+            >
               <Text>Toggle Dark</Text>
             </TouchableOpacity>
           </View>

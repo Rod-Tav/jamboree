@@ -41,7 +41,7 @@ const SelectedDateThoughtsScreen = ({ route }) => {
 };
 
 const SelectedDateThoughtsScreenContainer = ({ route }) => {
-  const dark = useColorScheme() === "dark";
+  const dark = global.dark;
   const { thoughtsList, date } = route.params;
   const navigation = useNavigation();
   const [query, setQuery] = useState("");
@@ -75,7 +75,7 @@ const SelectedDateThoughtsScreenContainer = ({ route }) => {
         </TouchableOpacity>
       ),
     });
-  }, [navigation]);
+  }, [navigation, dark]);
 
   const renderItem = ({ item }) => {
     const thought = item;

@@ -42,7 +42,7 @@ const HomeScreen = () => {
 };
 
 const HomeScreenContainer = () => {
-  const dark = useColorScheme() === "dark";
+  const dark = global.dark;
   const [thoughts, setThoughts] = useState({});
   const [coverImage, setCoverImage] = useState("");
   const [name, setName] = useState("");

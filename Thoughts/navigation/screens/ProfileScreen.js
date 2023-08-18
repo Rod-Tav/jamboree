@@ -46,7 +46,7 @@ const ProfileScreen = ({ dark, setDark }) => {
 };
 
 const ProfileScreenContainer = () => {
-  const dark = useColorScheme() === "dark";
+  const dark = global.dark;
   const navigation = useNavigation();
   const isFocused = useIsFocused();
 
@@ -114,7 +114,7 @@ const ProfileScreenContainer = () => {
         </TouchableOpacity>
       ),
     });
-  }, [navigation]);
+  }, [navigation, dark]);
 
   const handleDayPress = (day) => {
     const selectedDate = day.dateString;

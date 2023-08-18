@@ -6,7 +6,7 @@ import CustomActionSheet from "../CustomActionSheet";
 import SkinnyIcon from "react-native-snappy";
 
 const ProfileImagePicker = ({ settings, changeImage }) => {
-  const dark = useColorScheme() === "dark";
+  const dark = global.dark;
   const handleAddImagesPress = () => {
     setShowCustomActionSheet(true);
   };

@@ -20,7 +20,7 @@ const ImagePickerScreen = ({ imageSources, changeImageSources }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [imageHeights, setImageHeights] = useState({});
 
-  const dark = useColorScheme() === "dark";
+  const dark = global.dark;
   useEffect(() => {
     // Calculate image heights when imageSources change
     const newImageHeights = imageSources.reduce((heights, image) => {
