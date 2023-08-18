@@ -213,7 +213,7 @@ const SelectedDateThoughtsScreenContainer = ({ route }) => {
       <View style={proStyles.container2}>
         <Text style={styles.dayText2}>{formatDate(date)}</Text>
         <FlatList
-          data={thoughtsList.slice().reverse()}
+          data={thoughtsList.slice()}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.list}
