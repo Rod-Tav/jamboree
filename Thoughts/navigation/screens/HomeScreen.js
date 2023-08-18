@@ -236,11 +236,19 @@ const HomeScreenContainer = () => {
                       style={styles.songImage}
                     />
                     <View style={styles.songTextContainer}>
-                      <Text style={styles.songName}>{thought.songName}</Text>
-                      <Text style={styles.songArtist}>
+                      <Text numberOfLines={2} style={styles.songName2}>
+                        {thought.songName}
+                      </Text>
+                      <Text numberOfLines={1} style={styles.songArtist2}>
                         {thought.songArtist}
                       </Text>
                     </View>
+                    <Ionicons
+                      name="play"
+                      size={24}
+                      height={26}
+                      color="#D9D9D9"
+                    />
                   </View>
                 </TouchableOpacity>
               )}

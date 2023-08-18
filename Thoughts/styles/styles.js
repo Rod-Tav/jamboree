@@ -66,6 +66,13 @@ export default StyleSheet.create({
   buttonIcon2: {
     justifyContent: "center",
   },
+  buttonIcon3: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   buttonText: {
     color: "#979C9E",
     fontWeight: "400",
@@ -286,12 +293,14 @@ export default StyleSheet.create({
   thoughtTextContainer: {
     display: "flex",
     flexDirection: "column",
-    gap: 10,
+    gap: 6,
+    marginBottom: 2,
   },
   thoughtTitle: {
     fontSize: 20,
     fontWeight: "700",
     color: "#090A0A",
+
     // marginBottom: 10,
   },
   thoughtContent: {
@@ -333,6 +342,9 @@ export default StyleSheet.create({
     flexDirection: "row",
     width: "100%",
     justifyContent: "space-between",
+    paddingBottom: 12,
+  },
+  detailBorder: {
     borderBottomWidth: 1,
     borderBottomColor: "#F2F4F5",
     paddingBottom: 12,
@@ -427,13 +439,29 @@ export default StyleSheet.create({
     backgroundColor: "#F2F2F2",
     borderRadius: 16,
     padding: 12,
+    paddingRight: 22,
+  },
+  songContainer2: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#F2F2F2",
+    borderRadius: 16,
   },
 
   songImage: { width: 50, height: 50, borderRadius: 8 },
   songTextContainer: {
     display: "flex",
     gap: 2,
+    width: "70%",
   },
   songName: { fontSize: 14, color: "#090A0A" },
   songArtist: { fontSize: 14, color: "#828282" },
+  songName2: { fontSize: 12, color: "#090A0A" },
+  songArtist2: { fontSize: 12, color: "#828282" },
+  xIcon: {
+    flex: 1,
+  },
 });

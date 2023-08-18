@@ -189,6 +189,7 @@ const CreateScreen = () => {
       setSongArtist("");
       setSongImage("");
       setSongLink("");
+
       setImageSources([]);
       setClearMoodToggle(!clearMoodToggle);
       setClearSongToggle(!clearSongToggle);

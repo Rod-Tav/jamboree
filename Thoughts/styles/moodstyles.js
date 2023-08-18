@@ -163,6 +163,7 @@ export default StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     marginVertical: 4,
+    paddingLeft: 2,
     alignItems: "center",
     textAlign: "left",
     gap: 10,

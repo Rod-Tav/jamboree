@@ -203,12 +203,8 @@ const SongPicker = ({
         onPress={handleSongPicker}
         style={styles.buttonContainer}
       >
-        <View style={styles.buttonIcon}>
-          {name !== "" ? (
-            <TouchableOpacity onPress={handleClear}>
-              <SkinnyIcon name="x" size={16} strokeWidth={1.5} />
-            </TouchableOpacity>
-          ) : (
+        {songName == "" ? (
+          <View style={styles.buttonIcon3}>
             <SkinnyIcon
               name="plus"
               size={16}
@@ -216,25 +212,43 @@ const SongPicker = ({
               color="#979C9E"
               padding={10}
             />
-          )}
-        </View>
-        {songName == "" ? (
-          <Text style={styles.buttonText}>Add a song</Text>
+            <Text style={styles.buttonText}>Add a song</Text>
+            <SkinnyIcon
+              name="image"
+              size={20}
+              strokeWidth={1.5}
+              color="transparent"
+            />
+          </View>
         ) : (
-          <View>
-            <Image source={{ uri: songImage }} style={moodstyles.songImage} />
-            <Text>{songName}</Text>
-            <Text>{songArtist}</Text>
+          <View style={styles.songContainer2}>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 15,
+              }}
+            >
+              <Image source={{ uri: songImage }} style={moodstyles.songImage} />
+              <View style={styles.songTextContainer}>
+                <Text numberOfLines={2} style={styles.songName}>
+                  {songName}
+                </Text>
+                <Text style={styles.songArtist}>{songArtist}</Text>
+              </View>
+            </View>
+
+            <TouchableOpacity onPress={handleClear} styles={styles.xIcon}>
+              <SkinnyIcon
+                name="x"
+                size={16}
+                strokeWidth={1.5}
+                color="#979C9E"
+              />
+            </TouchableOpacity>
           </View>
         )}
-        <View style={styles.buttonIcon}>
-          <SkinnyIcon
-            name="image"
-            size={20}
-            strokeWidth={1.5}
-            color="transparent"
-          />
-        </View>
       </TouchableOpacity>
       <Modal
         visible={isModalVisible}
@@ -314,6 +328,7 @@ const SongPicker = ({
                               style={moodstyles.songImage}
                             />
                           </TouchableOpacity>
+
                           <View style={moodstyles.songDetails}>
                             <Text numberOfLines={1} style={moodstyles.songName}>
                               {path.name}

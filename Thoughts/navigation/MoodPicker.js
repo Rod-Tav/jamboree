@@ -149,6 +149,42 @@ const MoodPicker = ({
       >
         <View style={styles.buttonIcon}>
           {moodTextColorValue !== "" ? (
+            <View style={styles.buttonIcon}>
+              <SkinnyIcon
+                name="image"
+                size={20}
+                strokeWidth={1.5}
+                color="transparent"
+              />
+            </View>
+          ) : (
+            <SkinnyIcon
+              name="plus"
+              size={16}
+              strokeWidth={1.5}
+              color="#979C9E"
+              padding={10}
+            />
+          )}
+        </View>
+        {value == "" ? (
+          <Text style={styles.buttonText}>How are you feeling?</Text>
+        ) : (
+          <View>
+            <Text
+              style={
+                moodTextColorValue !== "" && [
+                  moodstyles.moodTextMain,
+                  { color: moodTextColorValue },
+                ]
+              }
+            >
+              {value}
+            </Text>
+          </View>
+        )}
+        <View style={styles.buttonIcon}>
+          {moodTextColorValue !== "" ? (
             <TouchableOpacity onPress={handleClear}>
               <SkinnyIcon
                 name="x"
@@ -164,32 +200,10 @@ const MoodPicker = ({
               name="plus"
               size={16}
               strokeWidth={1.5}
-              color="#979C9E"
+              color="transparent"
               padding={10}
             />
           )}
-        </View>
-        {value == "" ? (
-          <Text style={styles.buttonText}>How are you feeling?</Text>
-        ) : (
-          <Text
-            style={
-              moodTextColorValue !== "" && [
-                moodstyles.moodTextMain,
-                { color: moodTextColorValue },
-              ]
-            }
-          >
-            {value}
-          </Text>
-        )}
-        <View style={styles.buttonIcon}>
-          <SkinnyIcon
-            name="image"
-            size={20}
-            strokeWidth={1.5}
-            color="transparent"
-          />
         </View>
       </TouchableOpacity>
 
@@ -229,6 +243,7 @@ const MoodPicker = ({
               value={customMood}
               onChangeText={handleCustomMoodSelection}
               placeholder="Or add your own..."
+              placeholderTextColor={"#72777A"}
             />
             {/* Color selection buttons */}
             <View style={moodstyles.customColorContainer}>

@@ -6,9 +6,11 @@ import {
   Image,
   TouchableOpacity,
   Alert,
+  Linking,
 } from "react-native";
 import styles from "../../styles/styles";
 import Icon from "react-native-vector-icons/AntDesign";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import ImageViewing from "react-native-image-viewing";
 import { useCallback } from "react";
 import Modal from "react-native-modal";
@@ -226,36 +228,57 @@ const DetailScreen = ({ route }) => {
             {thought.title == "" ? null : (
               <Text style={styles.thoughtTitle}>{thought.title}</Text>
             )}
-            <View style={styles.detailTimeAndMood}>
-              <Text style={styles.thoughtTime}>
-                {formatDate(thought.date)} - {thought.time}
-              </Text>
-              {thought.mood ? (
-                <Text
-                  style={[
-                    styles.thoughtMood,
-                    {
-                      backgroundColor: thought.moodBgColor,
-                      color: thought.moodTextColor,
-                    },
-                  ]}
-                >
-                  {thought.mood}
+            <View style={styles.detailBorder}>
+              <View style={styles.detailTimeAndMood}>
+                <Text style={styles.thoughtTime}>
+                  {formatDate(thought.date)} - {thought.time}
                 </Text>
-              ) : null}
+                {thought.mood ? (
+                  <Text
+                    style={[
+                      styles.thoughtMood,
+                      {
+                        backgroundColor: thought.moodBgColor,
+                        color: thought.moodTextColor,
+                      },
+                    ]}
+                  >
+                    {thought.mood}
+                  </Text>
+                ) : null}
+              </View>
+
+              {thought.songName && thought.songName != "" && (
+                <TouchableOpacity
+                  onPress={() => {
+                    Linking.openURL(thought.songLink);
+                  }}
+                >
+                  <View style={styles.songContainer}>
+                    <Image
+                      source={{ uri: thought.songImage }}
+                      style={styles.songImage}
+                    />
+                    <View style={styles.songTextContainer}>
+                      <Text numberOfLines={2} style={styles.songName2}>
+                        {thought.songName}
+                      </Text>
+                      <Text numberOfLines={1} style={styles.songArtist2}>
+                        {thought.songArtist}
+                      </Text>
+                    </View>
+                    <Ionicons
+                      name="play"
+                      size={24}
+                      height={26}
+                      color="#D9D9D9"
+                    />
+                  </View>
+                </TouchableOpacity>
+              )}
             </View>
             {thought.content == "" ? null : (
               <Text style={styles.detailThoughtContent}>{thought.content}</Text>
-            )}
-            {thought.songName && thought.songName != "" && (
-              <View>
-                <Image
-                  source={{ uri: thought.songImage }}
-                  style={moodstyles.songImage}
-                />
-                <Text>{thought.songName}</Text>
-                <Text>{thought.songArtist}</Text>
-              </View>
             )}
           </View>
         </View>
