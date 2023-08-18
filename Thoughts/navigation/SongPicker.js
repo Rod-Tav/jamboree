@@ -209,6 +209,67 @@ const SongPicker = ({
     setLink(path.external_urls.spotify);
   };
 
+  renderItem = ({ item }) => {
+    const path = searchQuery ? item : item.track;
+    const isSelected = selectedItem === path;
+
+    return (
+      <View style={moodstyles.songContainer}>
+        <TouchableOpacity
+          onPress={() => {
+            setSelectedItem(path);
+            handleSelection(path);
+          }}
+          style={[
+            moodstyles.songContainer,
+            isSelected && moodstyles.selectedSongContainer,
+          ]}
+        >
+          <TouchableOpacity
+            onPress={() => {
+              setSelectedItem(path);
+              handleSelection(path);
+              playPauseSong(path.uri);
+            }}
+          >
+            <ImageBackground
+              source={{ uri: path.album.images[0].url }}
+              style={moodstyles.songImage}
+              imageStyle={{ borderRadius: 6 }}
+            >
+              <View style={moodstyles.innerStyle}>
+                {play && songPlaying == path.uri ? (
+                  <Ionicons
+                    name="pause"
+                    size={22}
+                    strokeWidth={1.5}
+                    color="white"
+                  />
+                ) : (
+                  <Ionicons
+                    name="play"
+                    size={22}
+                    strokeWidth={1.5}
+                    color="white"
+                  />
+                )}
+              </View>
+            </ImageBackground>
+          </TouchableOpacity>
+
+          <View style={moodstyles.songDetails}>
+            <Text numberOfLines={1} style={moodstyles.songName}>
+              {path.name}
+            </Text>
+            <Text numberOfLines={1} style={moodstyles.artistName}>
+              {path.artists[0].name}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
     <View>
       <TouchableOpacity
@@ -312,69 +373,7 @@ const SongPicker = ({
                 <FlatList
                   data={searchQuery !== "" ? searchResults : recentlyPlayed}
                   keyExtractor={(item) => item.played_at || item.id}
-                  renderItem={({ item }) => {
-                    const path = searchQuery ? item : item.track;
-                    const isSelected = selectedItem === path;
-
-                    return (
-                      <View style={moodstyles.songContainer}>
-                        <TouchableOpacity
-                          onPress={() => {
-                            setSelectedItem(path);
-                            handleSelection(path);
-                          }}
-                          style={[
-                            moodstyles.songContainer,
-                            isSelected && moodstyles.selectedSongContainer,
-                          ]}
-                        >
-                          <TouchableOpacity
-                            onPress={() => {
-                              setSelectedItem(path);
-                              handleSelection(path);
-                              playPauseSong(path.uri);
-                            }}
-                          >
-                            <ImageBackground
-                              source={{ uri: path.album.images[0].url }}
-                              style={moodstyles.songImage}
-                              imageStyle={{ borderRadius: 6 }}
-                            >
-                              <View style={moodstyles.innerStyle}>
-                                {play && songPlaying == path.uri ? (
-                                  <Ionicons
-                                    name="pause"
-                                    size={22}
-                                    strokeWidth={1.5}
-                                    color="white"
-                                  />
-                                ) : (
-                                  <Ionicons
-                                    name="play"
-                                    size={22}
-                                    strokeWidth={1.5}
-                                    color="white"
-                                  />
-                                )}
-                              </View>
-                            </ImageBackground>
-                          </TouchableOpacity>
-
-                          <View style={moodstyles.songDetails}>
-                            <Text numberOfLines={1} style={moodstyles.songName}>
-                              {path.name}
-                            </Text>
-                            <Text
-                              numberOfLines={1}
-                              style={moodstyles.artistName}
-                            >
-                              {path.artists[0].name}
-                            </Text>
-                          </View>
-                        </TouchableOpacity>
-                      </View>
-                    );
-                  }}
+                  renderItem={renderItem}
                   showsVerticalScrollIndicator={false}
                   showsHorizontalScrollIndicator={false}
                   style={moodstyles.modalButtonContainer2}

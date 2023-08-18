@@ -172,8 +172,14 @@ const ProfileScreenContainer = () => {
               </View>
             )}
             <View style={proStyles.textInfo}>
-              <Text style={proStyles.name}>{userName}</Text>
-              <Text style={proStyles.bio}>{userBio}</Text>
+              <Text style={[proStyles.name, !userName && { color: "grey" }]}>
+                {userName || "Your name"}{" "}
+              </Text>
+              {userBio && (
+                <Text style={[proStyles.bio, !userBio && { color: "grey" }]}>
+                  {userBio}
+                </Text>
+              )}
             </View>
 
             <View style={proStyles.icons}>
