@@ -206,7 +206,7 @@ const CreateScreen = () => {
   };
 
   return (
-    <SafeAreaView style={[{ flex: 1 }, dark && { backgroundColor: "#2B2B2B" }]}>
+    <SafeAreaView style={[{ flex: 1 }, dark && { backgroundColor: "black" }]}>
       <View style={[styles.container, dark && { backgroundColor: "#2B2B2B" }]}>
         <KeyboardAvoidingView behavior={"padding"}>
           <ScrollView
@@ -255,6 +255,7 @@ const CreateScreen = () => {
                   style={[
                     styles.titleInput,
                     dark && {
+                      color: "white",
                       backgroundColor: "#535353",
                       borderColor: "#535353",
                     },
@@ -262,7 +263,7 @@ const CreateScreen = () => {
                   onChangeText={(text) => setTitle(text)}
                   value={title}
                   placeholder="Title"
-                  placeholderTextColor={dark ? "white" : "#E3E5E5"}
+                  placeholderTextColor={dark ? "#979C9E" : "#E3E5E5"}
                   maxLength={50}
                 />
 
@@ -271,6 +272,7 @@ const CreateScreen = () => {
                   style={[
                     styles.contentInput,
                     dark && {
+                      color: "white",
                       backgroundColor: "#535353",
                       borderColor: "#535353",
                     },
@@ -278,7 +280,7 @@ const CreateScreen = () => {
                   onChangeText={(text) => setContent(text)}
                   value={content}
                   placeholder="Write your thoughts here..."
-                  placeholderTextColor={dark ? "white" : "#E3E5E5"}
+                  placeholderTextColor={dark ? "#979C9E" : "#E3E5E5"}
                   multiline
                 />
 

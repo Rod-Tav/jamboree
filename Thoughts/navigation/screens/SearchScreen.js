@@ -40,7 +40,6 @@ const SearchScreen = ({ route }) => {
 
 const SearchScreenContainer = ({ route }) => {
   const dark = useColorScheme() === "dark";
-
   const { thoughts } = route.params;
   const navigation = useNavigation();
   const [query, setQuery] = useState("");
@@ -78,17 +77,17 @@ const SearchScreenContainer = ({ route }) => {
   }, [navigation, dark]);
 
   const renderItem = ({ item }) => {
-    const dateKey = item; // Date key from the thoughts object
-    const thoughtsArray = thoughts[dateKey]; // Array of thoughts for the current date
     return (
       <View style={styles.headerStyle}>
-        <Text style={styles.dayText}>{formatDate(dateKey)}</Text>
-        {thoughtsArray.map((thought) => (
+        <Text style={[styles.dayText, dark && { color: "lightgrey" }]}>
+          {formatDate(item.date)}
+        </Text>
+        {item.thoughts.map((thought) => (
           <TouchableOpacity
             key={thought.id}
             style={[
               styles.thoughtContainer,
-              dark && { backgroundColor: "#2B2B2B" },
+              dark && { backgroundColor: "#2B2B2B", borderBottomColor: "grey" },
             ]}
             onPress={() => navigation.navigate("Detail", { thought })}
           >
@@ -112,7 +111,9 @@ const SearchScreenContainer = ({ route }) => {
             )}
             <View style={styles.thoughtTimeAndMoodAndText}>
               <View style={styles.thoughtTimeAndMood}>
-                <Text style={[styles.thoughtTime, dark && { color: "white" }]}>
+                <Text
+                  style={[styles.thoughtTime, dark && { color: "lightgrey" }]}
+                >
                   {thought.time}
                 </Text>
                 {thought.mood && (
@@ -176,7 +177,10 @@ const SearchScreenContainer = ({ route }) => {
                       </Text>
                       <Text
                         numberOfLines={1}
-                        style={[styles.songArtist2, dark && { color: "white" }]}
+                        style={[
+                          styles.songArtist2,
+                          dark && { color: "lightgrey" },
+                        ]}
                       >
                         {thought.songArtist}
                       </Text>
@@ -258,7 +262,6 @@ const SearchScreenContainer = ({ route }) => {
         ),
       }))
       .filter((entry) => entry.thoughts.length > 0);
-
     return filteredThoughts;
   };
 
@@ -270,7 +273,7 @@ const SearchScreenContainer = ({ route }) => {
         <View
           style={[
             proStyles.searchContainer,
-            dark && { backgroundColor: "#2b2b2b" },
+            dark && { backgroundColor: "#535353" },
           ]}
         >
           <View style={proStyles.searchIcon}>
@@ -285,6 +288,7 @@ const SearchScreenContainer = ({ route }) => {
             style={[
               proStyles.searchText2,
               dark && {
+                color: "white",
                 backgroundColor: "#535353",
                 borderColor: "#535353",
               },
@@ -309,9 +313,9 @@ const SearchScreenContainer = ({ route }) => {
         </View>
 
         <FlatList
-          data={Object.keys(thoughts).reverse()}
+          data={filterData().slice().reverse()}
           renderItem={renderItem}
-          keyExtractor={(dateKey) => dateKey}
+          keyExtractor={(item) => item.date}
           contentContainerStyle={[
             styles.list,
             dark && { backgroundColor: "#2B2B2B" },

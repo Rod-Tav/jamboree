@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, SafeAreaView } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  SafeAreaView,
+  useColorScheme,
+} from "react-native";
 import styles from "../../styles/styles";
 import SkinnyIcon from "react-native-snappy";
 import { useNavigation } from "@react-navigation/native";
@@ -11,6 +17,7 @@ import ProfileImagePicker from "./ProfileImagePicker";
 const Stack = createStackNavigator();
 
 const SettingsScreen = () => {
+  const dark = useColorScheme() === "dark";
   const navigation = useNavigation();
 
   // Set up the options for the header
@@ -18,7 +25,7 @@ const SettingsScreen = () => {
     navigation.setOptions({
       title: "", // Set the title of the header
       headerStyle: {
-        backgroundColor: "white",
+        backgroundColor: dark ? "#2B2B2B" : "white",
         elevation: 0,
         shadowOpacity: 0,
         borderBottomWidth: 0,
@@ -37,7 +44,7 @@ const SettingsScreen = () => {
             name="arrow-left"
             size={25}
             strokeWidth={1.5}
-            color="#090A0A"
+            color={dark ? "white" : "#090A0A"}
           />
         </TouchableOpacity>
       ),
@@ -68,15 +75,32 @@ const SettingsScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.settingsContainer}>
+      <View
+        style={[
+          styles.settingsContainer,
+          dark && { backgroundColor: "#2b2b2b" },
+        ]}
+        key={global.dark}
+      >
         <View style={styles.headerStyle}>
-          <Text style={styles.headerText}>Settings</Text>
+          <Text style={[styles.headerText, dark && { color: "white" }]}>
+            Settings
+          </Text>
         </View>
-        <View style={styles.settingsContent}>
-          <Text style={styles.dayText}>Aesthetics</Text>
+        <View
+          style={[styles.settingsContent, dark && { borderTopColor: "grey" }]}
+        >
+          <Text style={[styles.dayText, dark && { color: "lightgrey" }]}>
+            Aesthetics
+          </Text>
 
           <View style={styles}>
             <ProfileImagePicker settings={true} changeImage={changeImage} />
+          </View>
+          <View style={styles}>
+            <TouchableOpacity onPress={() => (global.dark = !global.dark)}>
+              <Text>Toggle Dark</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>

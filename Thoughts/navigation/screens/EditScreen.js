@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   ScrollView,
+  useColorScheme,
 } from "react-native";
 import proStyles from "../../styles/profileStyles";
 
@@ -17,6 +18,7 @@ import * as FileSystem from "expo-file-system";
 import ProfileImagePicker from "./ProfileImagePicker";
 
 const EditScreen = ({ route }) => {
+  const dark = useColorScheme() === "dark";
   const userImage = route.params.userImage;
   const userName = route.params.userName;
   const userBio = route.params.userBio;
@@ -30,7 +32,7 @@ const EditScreen = ({ route }) => {
     navigation.setOptions({
       title: "", // Set the title of the header
       headerStyle: {
-        backgroundColor: "white",
+        backgroundColor: dark ? "#2B2B2B" : "white",
         elevation: 0,
         shadowOpacity: 0,
         borderBottomWidth: 0,
@@ -49,7 +51,7 @@ const EditScreen = ({ route }) => {
             name="arrow-left"
             size={25}
             strokeWidth={1.5}
-            color="#090A0A"
+            color={dark ? "white" : "#090A0A"}
           />
         </TouchableOpacity>
       ),
@@ -95,7 +97,12 @@ const EditScreen = ({ route }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView style={proStyles.containerEdit}>
+      <ScrollView
+        style={[
+          proStyles.containerEdit,
+          dark && { backgroundColor: "#2b2b2b" },
+        ]}
+      >
         <View style={proStyles.editProfileView2}>
           {image != "" ? (
             <View>
@@ -128,19 +135,39 @@ const EditScreen = ({ route }) => {
 
           <View style={proStyles.profileTextInput}>
             <View style={proStyles.nameInputContainer}>
-              <Text style={proStyles.text}>Name</Text>
+              <Text style={[proStyles.text, dark && { color: "lightgrey" }]}>
+                Name
+              </Text>
               <TextInput
-                style={proStyles.nameInput}
+                style={[
+                  proStyles.nameInput,
+                  dark && {
+                    backgroundColor: "#535353",
+                    borderColor: "#2b2b2b",
+                    color: "white",
+                  },
+                ]}
                 placeholder="Name"
+                placeholderTextColor={dark ? "#979C9E" : "#E3E5E5"}
                 value={name}
                 onChangeText={setName}
               />
             </View>
             <View style={proStyles.bioInputContainer}>
-              <Text style={proStyles.text}>Bio</Text>
+              <Text style={[proStyles.text, dark && { color: "lightgrey" }]}>
+                Bio
+              </Text>
               <TextInput
-                style={proStyles.bioInput}
+                style={[
+                  proStyles.bioInput,
+                  dark && {
+                    backgroundColor: "#535353",
+                    borderColor: "#2b2b2b",
+                    color: "white",
+                  },
+                ]}
                 placeholder="Bio"
+                placeholderTextColor={dark ? "#979C9E" : "#E3E5E5"}
                 value={bio}
                 onChangeText={setBio}
                 multiline={true}

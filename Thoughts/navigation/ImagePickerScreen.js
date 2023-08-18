@@ -21,7 +21,6 @@ const ImagePickerScreen = ({ imageSources, changeImageSources }) => {
   const [imageHeights, setImageHeights] = useState({});
 
   const dark = useColorScheme() === "dark";
-
   useEffect(() => {
     // Calculate image heights when imageSources change
     const newImageHeights = imageSources.reduce((heights, image) => {
@@ -125,7 +124,12 @@ const ImagePickerScreen = ({ imageSources, changeImageSources }) => {
   return (
     <View>
       {imageSources.length !== 0 && (
-        <View style={styles.imagesEntireContainer}>
+        <View
+          style={[
+            styles.imagesEntireContainer,
+            dark && { backgroundColor: "#2b2b2b" },
+          ]}
+        >
           {imageSources.length > 1 ? (
             <ScrollView
               horizontal={true}
@@ -196,7 +200,7 @@ const ImagePickerScreen = ({ imageSources, changeImageSources }) => {
               name="image"
               size={24}
               strokeWidth={1.25}
-              color={"#979C9E"}
+              color="#979C9E"
             />
           </View>
           <Text style={styles.buttonText}>Add Images...</Text>

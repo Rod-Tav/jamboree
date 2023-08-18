@@ -21,7 +21,7 @@ import SelectedDateThoughtsScreen from "./SelectedDateThoughtsScreen";
 
 const Stack = createStackNavigator();
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ dark, setDark }) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -47,7 +47,6 @@ const ProfileScreen = () => {
 
 const ProfileScreenContainer = () => {
   const dark = useColorScheme() === "dark";
-
   const navigation = useNavigation();
   const isFocused = useIsFocused();
 
@@ -182,7 +181,13 @@ const ProfileScreenContainer = () => {
                 {userName || "Your name"}
               </Text>
               {userBio && (
-                <Text style={[proStyles.bio, !userBio && { color: "grey" }]}>
+                <Text
+                  style={[
+                    proStyles.bio,
+                    dark && { color: "white" },
+                    !userBio && { color: "grey" },
+                  ]}
+                >
                   {userBio}
                 </Text>
               )}
@@ -199,7 +204,7 @@ const ProfileScreenContainer = () => {
                   name="edit"
                   size={25}
                   strokeWidth={1.5}
-                  color={dark ? "grey" : "#979C9E"}
+                  color={dark ? "lightgrey" : "#979C9E"}
                 ></SkinnyIcon>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => navigation.navigate("Settings")}>
@@ -207,7 +212,7 @@ const ProfileScreenContainer = () => {
                   name="settings"
                   size={25}
                   strokeWidth={1.5}
-                  color={dark ? "grey" : "#979C9E"}
+                  color={dark ? "lightgrey" : "#979C9E"}
                 ></SkinnyIcon>
               </TouchableOpacity>
             </View>
@@ -225,7 +230,11 @@ const ProfileScreenContainer = () => {
               markedDates={markedDates}
               enableSwipeMonths={true}
               theme={{
-                calendarBackground: dark ? "black" : "white",
+                calendarBackground: dark ? "#2b2b2b" : "white",
+                monthTextColor: dark ? "white" : "black",
+                arrowColor: dark ? "white" : "blue",
+                dayTextColor: dark ? "white" : "black",
+                textDisabledColor: dark ? "grey" : "lightgrey",
               }}
             />
           </ScrollView>

@@ -54,7 +54,7 @@ const SongPicker = ({
   const [selectedItem, setSelectedItem] = useState(null);
   const [songPlaying, setSongPlaying] = useState("");
   const [play, setPlay] = useState("");
-
+  const dark = useColorScheme() === "dark";
   useEffect(() => {
     setName("");
     setArtist("");
@@ -224,6 +224,7 @@ const SongPicker = ({
           style={[
             moodstyles.songContainer,
             isSelected && moodstyles.selectedSongContainer,
+            isSelected && dark && { backgroundColor: "#535353" },
           ]}
         >
           <TouchableOpacity
@@ -236,7 +237,7 @@ const SongPicker = ({
             <ImageBackground
               source={{ uri: path.album.images[0].url }}
               style={moodstyles.songImage}
-              imageStyle={{ borderRadius: 6 }}
+              imageStyle={{ borderRadius: 8 }}
             >
               <View style={moodstyles.innerStyle}>
                 {play && songPlaying == path.uri ? (
@@ -259,10 +260,16 @@ const SongPicker = ({
           </TouchableOpacity>
 
           <View style={moodstyles.songDetails}>
-            <Text numberOfLines={1} style={moodstyles.songName}>
+            <Text
+              numberOfLines={1}
+              style={[moodstyles.songName, dark && { color: "white" }]}
+            >
               {path.name}
             </Text>
-            <Text numberOfLines={1} style={moodstyles.artistName}>
+            <Text
+              numberOfLines={1}
+              style={[moodstyles.artistName, dark && { color: "grey" }]}
+            >
               {path.artists[0].name}
             </Text>
           </View>
@@ -275,7 +282,7 @@ const SongPicker = ({
     <View>
       <TouchableOpacity
         onPress={handleSongPicker}
-        style={styles.buttonContainer}
+        style={[styles.buttonContainer, dark && { backgroundColor: "#535353" }]}
       >
         {songName == "" ? (
           <View style={styles.buttonIcon3}>
@@ -295,7 +302,12 @@ const SongPicker = ({
             />
           </View>
         ) : (
-          <View style={styles.songContainer2}>
+          <View
+            style={[
+              styles.songContainer2,
+              dark && { backgroundColor: "#535353" },
+            ]}
+          >
             <View
               style={{
                 display: "flex",
@@ -306,10 +318,17 @@ const SongPicker = ({
             >
               <Image source={{ uri: songImage }} style={moodstyles.songImage} />
               <View style={styles.songTextContainer}>
-                <Text numberOfLines={2} style={styles.songName}>
+                <Text
+                  numberOfLines={2}
+                  style={[styles.songName, dark && { color: "white" }]}
+                >
                   {songName}
                 </Text>
-                <Text style={styles.songArtist}>{songArtist}</Text>
+                <Text
+                  style={[styles.songArtist, dark && { color: "lightgrey" }]}
+                >
+                  {songArtist}
+                </Text>
               </View>
             </View>
 
@@ -334,8 +353,20 @@ const SongPicker = ({
       >
         {authenticated ? (
           <View style={moodstyles.modalContainer}>
-            <View style={moodstyles.modalContent2}>
-              <View style={proStyles.search}>
+            <View
+              style={[
+                moodstyles.modalContent2,
+                dark && { backgroundColor: "#2B2B2B" },
+              ]}
+            >
+              <View
+                style={[
+                  proStyles.search,
+                  dark && {
+                    backgroundColor: "#535353",
+                  },
+                ]}
+              >
                 <View style={proStyles.searchIcon}>
                   <SkinnyIcon
                     name="magnifier"
@@ -345,6 +376,11 @@ const SongPicker = ({
                   />
                 </View>
                 <TextInput
+                  style={
+                    dark && {
+                      color: "white",
+                    }
+                  }
                   placeholder="Search for songs...                                         "
                   placeholderTextColor="#979C9E"
                   value={searchBar}
@@ -367,7 +403,16 @@ const SongPicker = ({
                 </TouchableOpacity>
               </View>
               {searchQuery == "" && (
-                <Text style={styles.modalTitleSpotify}>Recently Played</Text>
+                <Text
+                  style={[
+                    styles.modalTitleSpotify,
+                    dark && {
+                      color: "white",
+                    },
+                  ]}
+                >
+                  Recently Played
+                </Text>
               )}
 
               <View style={moodstyles.modalButtonContainer}>
@@ -389,7 +434,10 @@ const SongPicker = ({
 
                 <TouchableOpacity
                   onPress={handleCancel}
-                  style={moodstyles.cancelButton2}
+                  style={[
+                    moodstyles.cancelButton2,
+                    dark && { backgroundColor: "#2b2b2b" },
+                  ]}
                 >
                   <Text style={moodstyles.cancelButtonText}>Cancel</Text>
                 </TouchableOpacity>
@@ -398,8 +446,15 @@ const SongPicker = ({
           </View>
         ) : (
           <View style={moodstyles.modalContainer}>
-            <View style={moodstyles.modalContent}>
-              <Text style={styles.spotifyModalText}>
+            <View
+              style={[
+                moodstyles.modalContent,
+                dark && { backgroundColor: "#2B2B2B" },
+              ]}
+            >
+              <Text
+                style={[styles.spotifyModalText, dark && { color: "white" }]}
+              >
                 Every main character has their own soundtrack.
               </Text>
               <TouchableOpacity
@@ -416,7 +471,10 @@ const SongPicker = ({
               <View style={moodstyles.modalButtonContainer}>
                 <TouchableOpacity
                   onPress={handleCancel}
-                  style={styles.cancelButtonSpotify}
+                  style={[
+                    styles.cancelButtonSpotify,
+                    dark && { backgroundColor: "#2b2b2b" },
+                  ]}
                 >
                   <Text style={styles.cancelButtonTextSpotify}>Cancel</Text>
                 </TouchableOpacity>

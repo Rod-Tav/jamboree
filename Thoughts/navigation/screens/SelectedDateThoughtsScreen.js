@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Linking,
+  useColorScheme,
 } from "react-native";
 import styles from "../../styles/styles";
 import proStyles from "../../styles/profileStyles";
@@ -40,6 +41,7 @@ const SelectedDateThoughtsScreen = ({ route }) => {
 };
 
 const SelectedDateThoughtsScreenContainer = ({ route }) => {
+  const dark = useColorScheme() === "dark";
   const { thoughtsList, date } = route.params;
   const navigation = useNavigation();
   const [query, setQuery] = useState("");
@@ -49,7 +51,7 @@ const SelectedDateThoughtsScreenContainer = ({ route }) => {
     navigation.setOptions({
       title: "", // Set the title of the header
       headerStyle: {
-        backgroundColor: "white",
+        backgroundColor: dark ? "#2B2B2B" : "white",
         elevation: 0,
         shadowOpacity: 0,
         borderBottomWidth: 0,
@@ -68,7 +70,7 @@ const SelectedDateThoughtsScreenContainer = ({ route }) => {
             name="arrow-left"
             size={25}
             strokeWidth={1.5}
-            color="#090A0A"
+            color={dark ? "white" : "#090A0A"}
           />
         </TouchableOpacity>
       ),
@@ -81,7 +83,10 @@ const SelectedDateThoughtsScreenContainer = ({ route }) => {
       <View style={styles.headerStyle}>
         <TouchableOpacity
           key={thought.id}
-          style={styles.thoughtContainer2}
+          style={[
+            styles.thoughtContainer2,
+            dark && { backgroundColor: "#2b2b2b", borderBottomColor: "grey" },
+          ]}
           onPress={() => navigation.navigate("Detail", { thought })}
         >
           {thought.imageSources && thought.imageSources.length > 0 && (
@@ -104,7 +109,11 @@ const SelectedDateThoughtsScreenContainer = ({ route }) => {
           )}
           <View style={styles.thoughtTimeAndMoodAndText}>
             <View style={styles.thoughtTimeAndMood}>
-              <Text style={styles.thoughtTime}>{thought.time}</Text>
+              <Text
+                style={[styles.thoughtTime, dark && { color: "lightgrey" }]}
+              >
+                {thought.time}
+              </Text>
               {thought.mood ? (
                 <Text
                   style={[
@@ -137,16 +146,30 @@ const SelectedDateThoughtsScreenContainer = ({ route }) => {
                   Linking.openURL(thought.songLink);
                 }}
               >
-                <View style={styles.songContainer}>
+                <View
+                  style={[
+                    styles.songContainer,
+                    dark && { backgroundColor: "#535353" },
+                  ]}
+                >
                   <Image
                     source={{ uri: thought.songImage }}
                     style={styles.songImage}
                   />
                   <View style={styles.songTextContainer}>
-                    <Text numberOfLines={2} style={styles.songName2}>
+                    <Text
+                      numberOfLines={2}
+                      style={[styles.songName2, dark && { color: "white" }]}
+                    >
                       {thought.songName}
                     </Text>
-                    <Text numberOfLines={1} style={styles.songArtist2}>
+                    <Text
+                      numberOfLines={1}
+                      style={[
+                        styles.songArtist2,
+                        dark && { color: "lightgrey" },
+                      ]}
+                    >
                       {thought.songArtist}
                     </Text>
                   </View>
@@ -210,8 +233,12 @@ const SelectedDateThoughtsScreenContainer = ({ route }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={proStyles.container2}>
-        <Text style={styles.dayText2}>{formatDate(date)}</Text>
+      <View
+        style={[proStyles.container2, dark && { backgroundColor: "#2b2b2b" }]}
+      >
+        <Text style={[styles.dayText2, dark && { color: "lightgrey" }]}>
+          {formatDate(date)}
+        </Text>
         <FlatList
           data={thoughtsList.slice()}
           renderItem={renderItem}

@@ -5,7 +5,7 @@ import {
   Image,
   TouchableOpacity,
   Linking,
-  Appearance,
+  useColorScheme,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -20,7 +20,7 @@ import BottomSheet, {
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet"; // Import BottomSheetScrollView
 import { SafeAreaView } from "react-native-safe-area-context"; // Import SafeAreaView
-import { useColorScheme } from "react-native";
+import {} from "react-native";
 
 const Stack = createStackNavigator();
 
@@ -147,7 +147,7 @@ const HomeScreenContainer = () => {
 
     return (
       <View style={styles.headerStyle}>
-        <Text style={[styles.dayText, dark && { color: "white" }]}>
+        <Text style={[styles.dayText, dark && { color: "lightgrey" }]}>
           {formatDate(dateKey)}
         </Text>
         {thoughtsArray.map((thought) => (
@@ -155,7 +155,10 @@ const HomeScreenContainer = () => {
             key={thought.id}
             style={[
               styles.thoughtContainer,
-              dark && { backgroundColor: "#2B2B2B" },
+              dark && {
+                backgroundColor: "#2B2B2B",
+                borderBottomColor: "grey",
+              },
             ]}
             onPress={() => navigation.navigate("Detail", { thought })}
           >
@@ -179,7 +182,9 @@ const HomeScreenContainer = () => {
             )}
             <View style={styles.thoughtTimeAndMoodAndText}>
               <View style={styles.thoughtTimeAndMood}>
-                <Text style={[styles.thoughtTime, dark && { color: "white" }]}>
+                <Text
+                  style={[styles.thoughtTime, dark && { color: "lightgrey" }]}
+                >
                   {thought.time}
                 </Text>
                 {thought.mood && (
@@ -243,7 +248,10 @@ const HomeScreenContainer = () => {
                       </Text>
                       <Text
                         numberOfLines={1}
-                        style={[styles.songArtist2, dark && { color: "white" }]}
+                        style={[
+                          styles.songArtist2,
+                          dark && { color: "lightgrey" },
+                        ]}
                       >
                         {thought.songArtist}
                       </Text>

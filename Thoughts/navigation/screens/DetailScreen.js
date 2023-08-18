@@ -169,7 +169,12 @@ const DetailScreen = ({ route }) => {
         style={[styles.detailContainer, dark && { backgroundColor: "#2B2B2B" }]}
       >
         {thought.imageSources.length !== 0 && (
-          <View style={styles.imagesEntireContainer}>
+          <View
+            style={[
+              styles.imagesEntireContainer,
+              dark && { backgroundColor: "#2B2B2B" },
+            ]}
+          >
             {thought.imageSources.length > 1 ? (
               <ScrollView
                 horizontal={true}
@@ -241,7 +246,9 @@ const DetailScreen = ({ route }) => {
               ]}
             >
               <View style={styles.detailTimeAndMood}>
-                <Text style={[styles.thoughtTime, dark && { color: "white" }]}>
+                <Text
+                  style={[styles.thoughtTime, dark && { color: "lightgrey" }]}
+                >
                   {formatDate(thought.date)} - {thought.time}
                 </Text>
                 {thought.mood ? (
@@ -284,7 +291,10 @@ const DetailScreen = ({ route }) => {
                       </Text>
                       <Text
                         numberOfLines={1}
-                        style={[styles.Artist2, dark && { color: "white" }]}
+                        style={[
+                          styles.songArtist2,
+                          dark && { color: "lightgrey" },
+                        ]}
                       >
                         {thought.songArtist}
                       </Text>
@@ -345,7 +355,6 @@ const CustomActionSheet = ({
   handleDeleteModal,
 }) => {
   const dark = useColorScheme() === "dark";
-
   return (
     <Modal
       isVisible={isVisible}

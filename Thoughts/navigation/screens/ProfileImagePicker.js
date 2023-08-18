@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, TouchableOpacity, Text } from "react-native";
+import { View, TouchableOpacity, Text, useColorScheme } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import styles from "../../styles/styles";
 import CustomActionSheet from "../CustomActionSheet";
 import SkinnyIcon from "react-native-snappy";
 
 const ProfileImagePicker = ({ settings, changeImage }) => {
+  const dark = useColorScheme() === "dark";
   const handleAddImagesPress = () => {
     setShowCustomActionSheet(true);
   };
@@ -71,7 +72,11 @@ const ProfileImagePicker = ({ settings, changeImage }) => {
       <View>
         <TouchableOpacity
           onPress={handleAddImagesPress}
-          style={settings ? styles.settingsOption : styles.buttonContainer2}
+          style={[
+            settings ? styles.settingsOption : styles.buttonContainer2,
+            dark && { backgroundColor: "#535353" },
+            settings && dark && { backgroundColor: "transparent" },
+          ]}
         >
           {settings ? (
             <View style={styles.settingsOptionContainer}>
@@ -79,13 +84,22 @@ const ProfileImagePicker = ({ settings, changeImage }) => {
                 name="image"
                 size={25}
                 strokeWidth={1.5}
-                color="#828282"
+                color={dark ? "lightgrey" : "#828282"}
                 style={styles.settingsOptionIcon}
               />
-              <Text style={styles.settingsOptionText}>Change Banner Image</Text>
+              <Text
+                style={[
+                  styles.settingsOptionText,
+                  dark && { color: "lightgrey" },
+                ]}
+              >
+                Change Banner Image
+              </Text>
             </View>
           ) : (
-            <Text style={styles.buttonText2}>Change Image</Text>
+            <Text style={[styles.buttonText2, dark && { color: "lightgrey" }]}>
+              Change Image
+            </Text>
           )}
         </TouchableOpacity>
       </View>

@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { useColorScheme } from "react-native";
+import {} from "react-native";
 
 const viewPadding = 10;
 

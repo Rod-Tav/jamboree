@@ -256,6 +256,7 @@ const MoodPicker = ({
               style={[
                 moodstyles.customMoodInput,
                 dark && {
+                  color: "white",
                   backgroundColor: "#535353",
                   borderColor: "#535353",
                 },
@@ -263,7 +264,7 @@ const MoodPicker = ({
               value={customMood}
               onChangeText={handleCustomMoodSelection}
               placeholder="Or add your own..."
-              placeholderTextColor={dark ? "white" : "#E3E5E5"}
+              placeholderTextColor={dark ? "#979C9E" : "#E3E5E5"}
             />
             {/* Color selection buttons */}
             <View style={moodstyles.customColorContainer}>

@@ -26,7 +26,7 @@ export default StyleSheet.create({
   },
   scrollContainer: {
     display: "flex",
-    height: "90%",
+    height: "93%",
     flexDirection: "column",
     gap: 15,
     alignContent: "space-between",
@@ -103,7 +103,7 @@ export default StyleSheet.create({
     borderRadius: 8,
     padding: 16,
     paddingTop: 16,
-    minHeight: 100,
+    minHeight: 50,
     fontStyle: "normal",
     lineHeight: 16,
     fontFamily: "Inter_400Regular",
@@ -152,8 +152,8 @@ export default StyleSheet.create({
     width: "100%",
     gap: 10,
   },
-  name: { fontWeight: "700", fontSize: 20 },
-  bio: { fontWeight: "300", fontSize: 14 },
+  name: { fontWeight: "700", fontSize: 20, textAlign: "center" },
+  bio: { fontWeight: "300", fontSize: 14, textAlign: "center" },
   image: {
     width: "70%",
   },
