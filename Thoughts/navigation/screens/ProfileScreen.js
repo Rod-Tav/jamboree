@@ -69,13 +69,6 @@ const ProfileScreenContainer = () => {
     }
   }, [isFocused]);
 
-  const groupedThoughts = Object.entries(thoughts).map(
-    ([date, thoughtsArray]) => ({
-      date,
-      thoughts: thoughtsArray,
-    })
-  );
-
   const loadUserData = async () => {
     try {
       const imageUri = await AsyncStorage.getItem("userImage");
@@ -123,14 +116,12 @@ const ProfileScreenContainer = () => {
 
   const handleDayPress = (day) => {
     const selectedDate = day.dateString;
-    const selectedThoughts = groupedThoughts.find(
-      (group) => group.date === selectedDate
-    );
+    const selectedThoughts = thoughts[selectedDate];
 
-    if (selectedThoughts) {
+    if (selectedThoughts && selectedThoughts.length > 0) {
       navigation.navigate("SelectedDateThoughts", {
         date: selectedDate,
-        thoughts: selectedThoughts.thoughts,
+        thoughts: selectedThoughts,
       });
     }
   };
@@ -144,9 +135,8 @@ const ProfileScreenContainer = () => {
     .padStart(2, "0")}`;
 
   const markedDates = {};
-  // Iterate through groupedThoughts to mark dates with thoughts
-  groupedThoughts.forEach((group) => {
-    markedDates[group.date] = { marked: true };
+  Object.keys(thoughts).forEach((date) => {
+    markedDates[date] = { marked: true };
   });
 
   return (
@@ -221,7 +211,7 @@ const ProfileScreenContainer = () => {
         <View>
           <TouchableOpacity
             style={proStyles.search}
-            onPress={() => navigation.navigate("Search", groupedThoughts)}
+            onPress={() => navigation.navigate("Search", thoughts)}
           >
             <View style={proStyles.searchIcon}>
               <SkinnyIcon

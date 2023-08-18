@@ -86,13 +86,6 @@ const HomeScreenContainer = () => {
 
   const bottomSheetRef = useRef(null);
 
-  const groupedThoughts = Object.entries(thoughts).map(
-    ([date, thoughtsArray]) => ({
-      date,
-      thoughts: thoughtsArray,
-    })
-  );
-
   const navigation = useNavigation();
 
   const handleWrite = () => {
@@ -148,10 +141,13 @@ const HomeScreenContainer = () => {
   };
 
   const renderItem = ({ item }) => {
+    const dateKey = item; // Date key from the thoughts object
+    const thoughtsArray = thoughts[dateKey]; // Array of thoughts for the current date
+
     return (
       <View style={styles.headerStyle}>
-        <Text style={styles.dayText}>{formatDate(item.date)}</Text>
-        {item.thoughts.map((thought) => (
+        <Text style={styles.dayText}>{formatDate(dateKey)}</Text>
+        {thoughtsArray.map((thought) => (
           <TouchableOpacity
             key={thought.id}
             style={styles.thoughtContainer}
@@ -273,10 +269,10 @@ const HomeScreenContainer = () => {
         handleIndicatorStyle={{ display: "none" }}
       >
         <BottomSheetFlatList
-          data={groupedThoughts.slice().reverse()}
+          data={Object.keys(thoughts).reverse()}
           initialNumToRender={5}
           renderItem={renderItem}
-          keyExtractor={(item) => item.date} // Use the date as the key for each rendered date group
+          keyExtractor={(dateKey) => dateKey}
           contentContainerStyle={styles.list}
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={

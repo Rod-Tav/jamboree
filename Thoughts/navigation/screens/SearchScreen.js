@@ -26,7 +26,7 @@ const SearchScreen = ({ route }) => {
       <Stack.Screen
         name="TrueSearch"
         component={SearchScreenContainer}
-        initialParams={{ groupedThoughts: route.params }}
+        initialParams={{ thoughts: route.params }}
       />
       <Stack.Screen
         name="Detail"
@@ -38,11 +38,9 @@ const SearchScreen = ({ route }) => {
 };
 
 const SearchScreenContainer = ({ route }) => {
-  const { groupedThoughts } = route.params;
-  console.log(groupedThoughts);
+  const { thoughts } = route.params;
   const navigation = useNavigation();
   const [query, setQuery] = useState("");
-  const [thoughts, setThoughts] = useState({});
   const [isInputFocused, setInputFocused] = useState(false); // To track input focus
 
   // Set up the options for the header
@@ -77,10 +75,12 @@ const SearchScreenContainer = ({ route }) => {
   }, [navigation]);
 
   const renderItem = ({ item }) => {
+    const dateKey = item; // Date key from the thoughts object
+    const thoughtsArray = thoughts[dateKey]; // Array of thoughts for the current date
     return (
       <View style={styles.headerStyle}>
-        <Text style={styles.dayText}>{formatDate(item.date)}</Text>
-        {item.thoughts.map((thought) => (
+        <Text style={styles.dayText}>{formatDate(dateKey)}</Text>
+        {thoughtsArray.map((thought) => (
           <TouchableOpacity
             key={thought.id}
             style={styles.thoughtContainer}
@@ -218,10 +218,10 @@ const SearchScreenContainer = ({ route }) => {
 
   const filterData = () => {
     // Filter the thoughts based on the query
-    const filteredThoughts = groupedThoughts
-      .map(({ date, thoughts }) => ({
+    const filteredThoughts = Object.entries(thoughts)
+      .map(([date, thoughtsArray]) => ({
         date,
-        thoughts: thoughts.filter(
+        thoughts: thoughtsArray.filter(
           (thought) =>
             thought.title.toLowerCase().includes(query.toLowerCase()) ||
             thought.content.toLowerCase().includes(query.toLowerCase()) ||
@@ -267,9 +267,9 @@ const SearchScreenContainer = ({ route }) => {
         </View>
 
         <FlatList
-          data={filterData().slice().reverse()}
+          data={Object.keys(thoughts).reverse()}
           renderItem={renderItem}
-          keyExtractor={(item) => item.date} // Use the date as the key for each rendered date group
+          keyExtractor={(dateKey) => dateKey}
           contentContainerStyle={styles.list}
           showsVerticalScrollIndicator={false}
         />
