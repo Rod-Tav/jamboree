@@ -317,35 +317,30 @@ const SongPicker = ({
                     const isSelected = selectedItem === path;
 
                     return (
-                      <View
-                        style={[
-                          moodstyles.songContainer,
-                          isSelected && moodstyles.selectedSongContainer,
-                        ]}
-                      >
+                      <View style={moodstyles.songContainer}>
                         <TouchableOpacity
                           onPress={() => {
                             setSelectedItem(path);
                             handleSelection(path);
                           }}
-                          style={moodstyles.songContainer}
+                          style={[
+                            moodstyles.songContainer,
+                            isSelected && moodstyles.selectedSongContainer,
+                          ]}
                         >
                           <TouchableOpacity
                             onPress={() => {
+                              setSelectedItem(path);
+                              handleSelection(path);
                               playPauseSong(path.uri);
                             }}
                           >
                             <ImageBackground
                               source={{ uri: path.album.images[0].url }}
                               style={moodstyles.songImage}
+                              imageStyle={{ borderRadius: 6 }}
                             >
-                              <View
-                                style={{
-                                  flex: 1,
-                                  justifyContent: "center",
-                                  alignItems: "center",
-                                }}
-                              >
+                              <View style={moodstyles.innerStyle}>
                                 {play && songPlaying == path.uri ? (
                                   <Ionicons
                                     name="pause"

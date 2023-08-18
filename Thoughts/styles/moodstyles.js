@@ -154,16 +154,22 @@ export default StyleSheet.create({
     textAlign: "center",
   },
   songImage: {
-    width: 50,
-    height: 50,
     borderRadius: 8,
+    width: 52,
+    height: 52,
+  },
+  innerStyle: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 8,
+    backgroundColor: "rgba(0,0,0, 0.30)",
   },
 
   songContainer: {
     display: "flex",
     flexDirection: "row",
     marginVertical: 4,
-    paddingLeft: 2,
     alignItems: "center",
     textAlign: "left",
     gap: 10,
@@ -194,5 +200,11 @@ export default StyleSheet.create({
   selectedSongContainer: {
     backgroundColor: "#F0F0F0",
     borderRadius: 8,
+    display: "flex",
+    flexDirection: "row",
+    marginVertical: 4,
+    alignItems: "center",
+    textAlign: "left",
+    gap: 10,
   },
 });
