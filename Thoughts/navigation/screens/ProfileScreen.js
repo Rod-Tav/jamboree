@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   Image,
   ScrollView,
+  useColorScheme,
 } from "react-native";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -45,6 +46,8 @@ const ProfileScreen = () => {
 };
 
 const ProfileScreenContainer = () => {
+  const dark = useColorScheme() === "dark";
+
   const navigation = useNavigation();
   const isFocused = useIsFocused();
 
@@ -88,7 +91,7 @@ const ProfileScreenContainer = () => {
     navigation.setOptions({
       title: "", // Set the title of the header
       headerStyle: {
-        backgroundColor: "white",
+        backgroundColor: dark ? "#2B2B2B" : "white",
         elevation: 0,
         shadowOpacity: 0,
         borderBottomWidth: 0,
@@ -107,7 +110,7 @@ const ProfileScreenContainer = () => {
             name="arrow-left"
             size={25}
             strokeWidth={1.5}
-            color="#090A0A"
+            color={dark ? "white" : "#090A0A"}
           />
         </TouchableOpacity>
       ),
@@ -141,9 +144,16 @@ const ProfileScreenContainer = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={proStyles.container}>
+      <View
+        style={[proStyles.container, dark && { backgroundColor: "#2b2b2b" }]}
+      >
         <View style={proStyles.scrollContainer}>
-          <View style={proStyles.editProfileView}>
+          <View
+            style={[
+              proStyles.editProfileView,
+              dark && { borderBottomColor: "grey" },
+            ]}
+          >
             {userImage != "" ? (
               <View>
                 <Image
@@ -162,8 +172,14 @@ const ProfileScreenContainer = () => {
               </View>
             )}
             <View style={proStyles.textInfo}>
-              <Text style={[proStyles.name, !userName && { color: "grey" }]}>
-                {userName || "Your name"}{" "}
+              <Text
+                style={[
+                  proStyles.name,
+                  dark && { color: "white" },
+                  !userName && { color: "grey" },
+                ]}
+              >
+                {userName || "Your name"}
               </Text>
               {userBio && (
                 <Text style={[proStyles.bio, !userBio && { color: "grey" }]}>
@@ -183,7 +199,7 @@ const ProfileScreenContainer = () => {
                   name="edit"
                   size={25}
                   strokeWidth={1.5}
-                  color="#979C9E"
+                  color={dark ? "grey" : "#979C9E"}
                 ></SkinnyIcon>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => navigation.navigate("Settings")}>
@@ -191,26 +207,37 @@ const ProfileScreenContainer = () => {
                   name="settings"
                   size={25}
                   strokeWidth={1.5}
-                  color="#979C9E"
+                  color={dark ? "grey" : "#979C9E"}
                 ></SkinnyIcon>
               </TouchableOpacity>
             </View>
           </View>
 
-          <ScrollView>
+          <ScrollView key={dark}>
             <Calendar
-              style={proStyles.calendar}
+              style={[
+                proStyles.calendar,
+                dark && { backgroundColor: "#2b2b2b" },
+              ]}
               current={currentMonth}
               onDayPress={handleDayPress}
               markingType={"period"}
               markedDates={markedDates}
               enableSwipeMonths={true}
+              theme={{
+                calendarBackground: dark ? "black" : "white",
+              }}
             />
           </ScrollView>
         </View>
         <View>
           <TouchableOpacity
-            style={proStyles.search}
+            style={[
+              proStyles.search,
+              dark && {
+                backgroundColor: "#535353",
+              },
+            ]}
             onPress={() => navigation.navigate("Search", thoughts)}
           >
             <View style={proStyles.searchIcon}>

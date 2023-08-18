@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   Keyboard,
+  useColorScheme,
 } from "react-native";
 import moodstyles from "../styles/moodstyles";
 import styles from "../styles/styles";
@@ -26,7 +27,7 @@ const MoodPicker = ({
   const [textColor, setTextColor] = useState("");
   const [customMood, setCustomMood] = useState("");
   const [customColor, setCustomColor] = useState("");
-
+  const dark = useColorScheme() === "dark";
   const colorOrder = [6, 4, 7, 1, 5, 2, 3];
 
   useEffect(() => {
@@ -43,38 +44,43 @@ const MoodPicker = ({
     {
       label: "Happy",
       value: "Happy",
-      bgColor: "#ECFCE5",
+      bgColor: dark ? "#C1FFA6" : "#ECFCE5",
       textColor: "#198155",
     },
-    { label: "Sad", value: "Sad", bgColor: "#E7E5FC", textColor: "#281981" },
+    {
+      label: "Sad",
+      value: "Sad",
+      bgColor: dark ? "#DAD7FF" : "#E7E5FC",
+      textColor: "#281981",
+    },
     {
       label: "Excited",
       value: "Excited",
-      bgColor: "#FCE5F7",
+      bgColor: dark ? "#FFABED" : "#FCE5F7",
       textColor: "#81197D",
     },
     {
       label: "Stressed",
       value: "Stressed",
-      bgColor: "#FCF3E5",
+      bgColor: dark ? "#FFD89A" : "#FCF3E5",
       textColor: "#815E19",
     },
     {
       label: "Hopeful",
       value: "Hopeful",
-      bgColor: "#E5FCF9",
+      bgColor: dark ? "#B6FFF5" : "#E5FCF9",
       textColor: "#196881",
     },
     {
       label: "Angry",
       value: "Angry",
-      bgColor: "#FCE5E5",
+      bgColor: dark ? "#FF8989" : "#FCE5E5",
       textColor: "#811919",
     },
     {
       label: "Anxious",
       value: "Anxious",
-      bgColor: "#FCFBE5",
+      bgColor: dark ? "#FFFBA4" : "#FCFBE5",
       textColor: "#7F8119",
     },
   ];
@@ -144,6 +150,7 @@ const MoodPicker = ({
         onPress={handleMoodPicker}
         style={[
           styles.buttonContainer,
+          dark && moodBgColorValue === "" && { backgroundColor: "#535353" },
           moodBgColorValue !== "" && { backgroundColor: moodBgColorValue },
         ]}
       >
@@ -216,8 +223,15 @@ const MoodPicker = ({
         style={styles.modalContentContainer}
       >
         <View style={moodstyles.modalContainer}>
-          <View style={moodstyles.modalContent}>
-            <Text style={moodstyles.modalTitle}>How are you feeling?</Text>
+          <View
+            style={[
+              moodstyles.modalContent,
+              dark && { backgroundColor: "#2B2B2B" },
+            ]}
+          >
+            <Text style={[moodstyles.modalTitle, dark && { color: "white" }]}>
+              How are you feeling?
+            </Text>
             <View style={moodstyles.modalMoodSelection}>
               {moodOptions.map((option) => (
                 <TouchableOpacity
@@ -239,11 +253,17 @@ const MoodPicker = ({
               ))}
             </View>
             <TextInput
-              style={moodstyles.customMoodInput}
+              style={[
+                moodstyles.customMoodInput,
+                dark && {
+                  backgroundColor: "#535353",
+                  borderColor: "#535353",
+                },
+              ]}
               value={customMood}
               onChangeText={handleCustomMoodSelection}
               placeholder="Or add your own..."
-              placeholderTextColor={"#72777A"}
+              placeholderTextColor={dark ? "white" : "#E3E5E5"}
             />
             {/* Color selection buttons */}
             <View style={moodstyles.customColorContainer}>
@@ -275,7 +295,10 @@ const MoodPicker = ({
 
               <TouchableOpacity
                 onPress={handleCancel}
-                style={moodstyles.cancelButton}
+                style={[
+                  moodstyles.cancelButton,
+                  dark && { backgroundColor: "#2b2b2b" },
+                ]}
               >
                 <Text style={moodstyles.cancelButtonText}>Cancel</Text>
               </TouchableOpacity>

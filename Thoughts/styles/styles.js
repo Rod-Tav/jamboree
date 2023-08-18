@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { useColorScheme } from "react-native";
 
 const viewPadding = 10;
 
@@ -167,7 +168,7 @@ export default StyleSheet.create({
     flexDirection: "row",
   },
   addButtonText: {
-    color: "#fff",
+    color: "white",
     fontSize: 16,
     fontWeight: "normal",
   },

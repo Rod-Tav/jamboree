@@ -6,6 +6,7 @@ import {
   ScrollView,
   Text,
   Dimensions,
+  useColorScheme,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import Icon from "react-native-vector-icons/Feather";
@@ -18,6 +19,8 @@ const ImagePickerScreen = ({ imageSources, changeImageSources }) => {
   const [isImageViewVisible, setIsImageViewVisible] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [imageHeights, setImageHeights] = useState({});
+
+  const dark = useColorScheme() === "dark";
 
   useEffect(() => {
     // Calculate image heights when imageSources change
@@ -183,15 +186,17 @@ const ImagePickerScreen = ({ imageSources, changeImageSources }) => {
       <View>
         <TouchableOpacity
           onPress={handleAddImagesPress}
-          style={styles.buttonContainer}
+          style={[
+            styles.buttonContainer,
+            dark && { backgroundColor: "#535353" },
+          ]}
         >
           <View style={styles.buttonIcon}>
             <SkinnyIcon
               name="image"
               size={24}
               strokeWidth={1.25}
-              color="#979C9E"
-              style={styles.icon}
+              color={"#979C9E"}
             />
           </View>
           <Text style={styles.buttonText}>Add Images...</Text>

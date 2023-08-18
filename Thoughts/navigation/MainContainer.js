@@ -1,7 +1,12 @@
 import * as React from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  DefaultTheme,
+  DarkTheme,
+} from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { useColorScheme } from "react-native";
 
 // Screens
 import HomeScreen from "./screens/HomeScreen";
@@ -16,8 +21,10 @@ const profileName = "Profile";
 const Tab = createBottomTabNavigator();
 
 function MainContainer() {
+  const scheme = useColorScheme();
+
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={scheme === "dark" ? DarkTheme : DefaultTheme}>
       <Tab.Navigator
         initialRouteName={homeName}
         screenOptions={({ route }) => ({
@@ -36,8 +43,8 @@ function MainContainer() {
             // You can return any component that you like here!
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-          tabBarActiveTintColor: "#828282",
-          tabBarInactiveTintColor: "#828282",
+          tabBarActiveTintColor: scheme === "dark" ? "white" : "#828282",
+          tabBarInactiveTintColor: scheme === "dark" ? "white" : "#828282",
           tabBarLabelStyle: {
             paddingBottom: 10,
             fontSize: 10,

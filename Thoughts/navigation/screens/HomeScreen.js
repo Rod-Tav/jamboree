@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef, PureComponent } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
-  FlatList,
   Image,
   TouchableOpacity,
   Linking,
+  Appearance,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -20,7 +20,7 @@ import BottomSheet, {
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet"; // Import BottomSheetScrollView
 import { SafeAreaView } from "react-native-safe-area-context"; // Import SafeAreaView
-import moodstyles from "../../styles/moodstyles";
+import { useColorScheme } from "react-native";
 
 const Stack = createStackNavigator();
 
@@ -42,6 +42,7 @@ const HomeScreen = () => {
 };
 
 const HomeScreenContainer = () => {
+  const dark = useColorScheme() === "dark";
   const [thoughts, setThoughts] = useState({});
   const [coverImage, setCoverImage] = useState("");
   const [name, setName] = useState("");
@@ -146,11 +147,16 @@ const HomeScreenContainer = () => {
 
     return (
       <View style={styles.headerStyle}>
-        <Text style={styles.dayText}>{formatDate(dateKey)}</Text>
+        <Text style={[styles.dayText, dark && { color: "white" }]}>
+          {formatDate(dateKey)}
+        </Text>
         {thoughtsArray.map((thought) => (
           <TouchableOpacity
             key={thought.id}
-            style={styles.thoughtContainer}
+            style={[
+              styles.thoughtContainer,
+              dark && { backgroundColor: "#2B2B2B" },
+            ]}
             onPress={() => navigation.navigate("Detail", { thought })}
           >
             {thought.imageSources && thought.imageSources.length > 0 && (
@@ -173,8 +179,10 @@ const HomeScreenContainer = () => {
             )}
             <View style={styles.thoughtTimeAndMoodAndText}>
               <View style={styles.thoughtTimeAndMood}>
-                <Text style={styles.thoughtTime}>{thought.time}</Text>
-                {thought.mood ? (
+                <Text style={[styles.thoughtTime, dark && { color: "white" }]}>
+                  {thought.time}
+                </Text>
+                {thought.mood && (
                   <Text
                     style={[
                       styles.thoughtMood,
@@ -186,15 +194,25 @@ const HomeScreenContainer = () => {
                   >
                     {thought.mood}
                   </Text>
-                ) : null}
+                )}
               </View>
               {thought.title == "" && thought.content == "" ? null : (
                 <View style={styles.thoughtTextContainer}>
                   {thought.title == "" ? null : (
-                    <Text style={styles.thoughtTitle}>{thought.title}</Text>
+                    <Text
+                      style={[styles.thoughtTitle, dark && { color: "white" }]}
+                    >
+                      {thought.title}
+                    </Text>
                   )}
                   {thought.content == "" ? null : (
-                    <Text numberOfLines={1} style={styles.thoughtContent}>
+                    <Text
+                      numberOfLines={1}
+                      style={[
+                        styles.thoughtContent,
+                        dark && { color: "white" },
+                      ]}
+                    >
                       {thought.content}
                     </Text>
                   )}
@@ -206,16 +224,27 @@ const HomeScreenContainer = () => {
                     Linking.openURL(thought.songLink);
                   }}
                 >
-                  <View style={styles.songContainer}>
+                  <View
+                    style={[
+                      styles.songContainer,
+                      dark && { backgroundColor: "#535353" },
+                    ]}
+                  >
                     <Image
                       source={{ uri: thought.songImage }}
                       style={styles.songImage}
                     />
                     <View style={styles.songTextContainer}>
-                      <Text numberOfLines={2} style={styles.songName2}>
+                      <Text
+                        numberOfLines={2}
+                        style={[styles.songName2, dark && { color: "white" }]}
+                      >
                         {thought.songName}
                       </Text>
-                      <Text numberOfLines={1} style={styles.songArtist2}>
+                      <Text
+                        numberOfLines={1}
+                        style={[styles.songArtist2, dark && { color: "white" }]}
+                      >
                         {thought.songArtist}
                       </Text>
                     </View>
@@ -237,14 +266,7 @@ const HomeScreenContainer = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View
-        style={[
-          styles.imageWrapperHome2,
-          {
-            aspectRatio: 0.75,
-          },
-        ]}
-      >
+      <View style={[styles.imageWrapperHome2, { aspectRatio: 0.75 }]}>
         {coverImage.uri == "" ? (
           <Image
             source={require("../../images/placeholder.png")}
@@ -264,21 +286,27 @@ const HomeScreenContainer = () => {
         ref={bottomSheetRef}
         snapPoints={["64%", "94%"]}
         initialSnapIndex={0}
-        style={{ ...styles.container, paddingTop: 0 }}
         handleHeight={0}
         handleIndicatorStyle={{ display: "none" }}
+        backgroundStyle={[dark && { backgroundColor: "#2B2B2B" }]}
+        style={{ ...styles.container, paddingTop: 0 }}
       >
         <BottomSheetFlatList
           data={Object.keys(thoughts).reverse()}
           initialNumToRender={5}
           renderItem={renderItem}
           keyExtractor={(dateKey) => dateKey}
-          contentContainerStyle={styles.list}
+          contentContainerStyle={[
+            styles.list,
+            dark && { backgroundColor: "#2B2B2B" },
+          ]}
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={
             <View style={styles.topOfHome}>
               <View style={styles.headerStyle}>
-                <Text style={styles.headerText}>Welcome back{name}!</Text>
+                <Text style={[styles.headerText, dark && { color: "white" }]}>
+                  Welcome back{name}!
+                </Text>
               </View>
               <TouchableOpacity onPress={handleWrite} style={styles.addButton}>
                 <Ionicons

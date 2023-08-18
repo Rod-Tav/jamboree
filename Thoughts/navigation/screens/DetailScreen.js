@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Alert,
   Linking,
+  useColorScheme,
 } from "react-native";
 import styles from "../../styles/styles";
 import Icon from "react-native-vector-icons/AntDesign";
@@ -18,9 +19,9 @@ import SkinnyIcon from "react-native-snappy";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import * as FileSystem from "expo-file-system";
-import moodstyles from "../../styles/moodstyles";
 
 const DetailScreen = ({ route }) => {
+  const dark = useColorScheme() === "dark";
   const { thought } = route.params;
   const navigation = useNavigation();
   const [isImageViewVisible, setIsImageViewVisible] = useState(false);
@@ -115,7 +116,7 @@ const DetailScreen = ({ route }) => {
     navigation.setOptions({
       title: "", // Set the title of the header
       headerStyle: {
-        backgroundColor: "white",
+        backgroundColor: dark ? "#2B2B2B" : "white",
         elevation: 0,
         shadowOpacity: 0,
         borderBottomWidth: 0,
@@ -129,7 +130,7 @@ const DetailScreen = ({ route }) => {
           onPress={handleMore}
           style={{ paddingHorizontal: "14%" }}
         >
-          <Icon name="ellipsis1" size={24} color="#090A0A" />
+          <Icon name="ellipsis1" size={24} color={dark ? "white" : "#090A0A"} />
         </TouchableOpacity>
       ),
       headerLeft: () => (
@@ -141,12 +142,12 @@ const DetailScreen = ({ route }) => {
             name="arrow-left"
             size={25}
             strokeWidth={1.5}
-            color="#090A0A"
+            color={dark ? "white" : "#090A0A"}
           />
         </TouchableOpacity>
       ),
     });
-  }, [navigation]);
+  }, [navigation, dark]);
 
   let currentPos = 0;
   const snapOffsets = thought.imageSources.map((image, index) => {
@@ -161,8 +162,12 @@ const DetailScreen = ({ route }) => {
   };
 
   return (
-    <ScrollView style={{ backgroundColor: "white", height: "100%" }}>
-      <View style={[styles.detailContainer]}>
+    <ScrollView
+      style={{ backgroundColor: dark ? "#2B2B2B" : "white", height: "100%" }}
+    >
+      <View
+        style={[styles.detailContainer, dark && { backgroundColor: "#2B2B2B" }]}
+      >
         {thought.imageSources.length !== 0 && (
           <View style={styles.imagesEntireContainer}>
             {thought.imageSources.length > 1 ? (
@@ -223,14 +228,20 @@ const DetailScreen = ({ route }) => {
           </View>
         )}
         <View style={styles.thoughtTimeAndMoodAndText}>
-          {/* {thought.title == "" && thought.content == "" ? null : ( */}
           <View style={styles.thoughtTextContainer}>
             {thought.title == "" ? null : (
-              <Text style={styles.thoughtTitle}>{thought.title}</Text>
+              <Text style={[styles.thoughtTitle, dark && { color: "white" }]}>
+                {thought.title}
+              </Text>
             )}
-            <View style={styles.detailBorder}>
+            <View
+              style={[
+                styles.detailBorder,
+                dark && { borderBottomColor: "gray" },
+              ]}
+            >
               <View style={styles.detailTimeAndMood}>
-                <Text style={styles.thoughtTime}>
+                <Text style={[styles.thoughtTime, dark && { color: "white" }]}>
                   {formatDate(thought.date)} - {thought.time}
                 </Text>
                 {thought.mood ? (
@@ -254,16 +265,27 @@ const DetailScreen = ({ route }) => {
                     Linking.openURL(thought.songLink);
                   }}
                 >
-                  <View style={styles.songContainer}>
+                  <View
+                    style={[
+                      styles.songContainer,
+                      dark && { backgroundColor: "#535353" },
+                    ]}
+                  >
                     <Image
                       source={{ uri: thought.songImage }}
                       style={styles.songImage}
                     />
                     <View style={styles.songTextContainer}>
-                      <Text numberOfLines={2} style={styles.songName2}>
+                      <Text
+                        numberOfLines={2}
+                        style={[styles.songName2, dark && { color: "white" }]}
+                      >
                         {thought.songName}
                       </Text>
-                      <Text numberOfLines={1} style={styles.songArtist2}>
+                      <Text
+                        numberOfLines={1}
+                        style={[styles.Artist2, dark && { color: "white" }]}
+                      >
                         {thought.songArtist}
                       </Text>
                     </View>
@@ -271,14 +293,16 @@ const DetailScreen = ({ route }) => {
                       name="play"
                       size={24}
                       height={26}
-                      color="#D9D9D9"
+                      color={dark ? "white" : "#D9D9D9"}
                     />
                   </View>
                 </TouchableOpacity>
               )}
             </View>
             {thought.content == "" ? null : (
-              <Text style={styles.detailThoughtContent}>{thought.content}</Text>
+              <Text style={[styles.thoughtContent, dark && { color: "white" }]}>
+                {thought.content}
+              </Text>
             )}
           </View>
         </View>
@@ -305,6 +329,7 @@ const DetailScreen = ({ route }) => {
           onCancel={handleCancelCustomActionSheet}
           handleEdit={handleEdit}
           handleDeleteModal={handleDeleteModal}
+          dark={dark}
         />
       </View>
     </ScrollView>
@@ -319,6 +344,8 @@ const CustomActionSheet = ({
   handleEdit,
   handleDeleteModal,
 }) => {
+  const dark = useColorScheme() === "dark";
+
   return (
     <Modal
       isVisible={isVisible}
@@ -327,17 +354,21 @@ const CustomActionSheet = ({
       backdropTransitionOutTiming={0}
       style={styles.modalContentContainer}
     >
-      <View style={styles.modalContent}>
+      <View
+        style={[styles.modalContent, dark && { backgroundColor: "#2B2B2B" }]}
+      >
         <TouchableOpacity onPress={handleEdit} style={styles.optionButton}>
           <View style={styles.buttonIcon}>
             <SkinnyIcon
               name="edit"
               size={24}
               strokeWidth={1.5}
-              color="#828282"
+              color={dark ? "white" : "#828282"}
             />
           </View>
-          <Text style={styles.optionButtonText}>Edit</Text>
+          <Text style={[styles.optionButtonText, dark && { color: "white" }]}>
+            Edit
+          </Text>
           <View style={styles.buttonIcon}>
             <SkinnyIcon
               name="edit"
@@ -357,10 +388,12 @@ const CustomActionSheet = ({
               name="trash"
               size={24}
               strokeWidth={1.5}
-              color="#828282"
+              color={dark ? "white" : "#828282"}
             />
           </View>
-          <Text style={styles.optionButtonText}>Delete</Text>
+          <Text style={[styles.optionButtonText, dark && { color: "white" }]}>
+            Delete
+          </Text>
           <View style={styles.buttonIcon}>
             <SkinnyIcon
               name="trash"

@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
   SafeAreaView,
+  useColorScheme,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native"; // Import useRoute
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -20,6 +21,7 @@ import SkinnyIcon from "react-native-snappy";
 import * as FileSystem from "expo-file-system";
 
 const CreateScreen = () => {
+  const dark = useColorScheme() === "dark";
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [mood, setMood] = useState("");
@@ -204,22 +206,39 @@ const CreateScreen = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.container}>
+    <SafeAreaView style={[{ flex: 1 }, dark && { backgroundColor: "#2B2B2B" }]}>
+      <View style={[styles.container, dark && { backgroundColor: "#2B2B2B" }]}>
         <KeyboardAvoidingView behavior={"padding"}>
           <ScrollView
-            style={{ backgroundColor: "white", height: "100%" }}
+            style={{
+              backgroundColor: dark ? "#2B2B2B" : "white",
+              height: "100%",
+            }}
             showsVerticalScrollIndicator={false}
           >
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-              <View style={[styles.createContainer, { paddingBottom: 14 }]}>
+              <View
+                style={[
+                  styles.createContainer,
+                  { paddingBottom: 14 },
+                  dark && { backgroundColor: "#2B2B2B" },
+                ]}
+              >
                 {editThought ? (
                   <View style={styles.headerStyle}>
-                    <Text style={styles.headerText}>Edit your thought</Text>
+                    <Text
+                      style={[styles.headerText, dark && { color: "white" }]}
+                    >
+                      Edit your thought
+                    </Text>
                   </View>
                 ) : (
                   <View style={styles.headerStyle}>
-                    <Text style={styles.headerText}>What's on your mind?</Text>
+                    <Text
+                      style={[styles.headerText, dark && { color: "white" }]}
+                    >
+                      What's on your mind?
+                    </Text>
                   </View>
                 )}
 
@@ -233,19 +252,33 @@ const CreateScreen = () => {
 
                 {/* Title Input */}
                 <TextInput
-                  style={styles.titleInput}
+                  style={[
+                    styles.titleInput,
+                    dark && {
+                      backgroundColor: "#535353",
+                      borderColor: "#535353",
+                    },
+                  ]}
                   onChangeText={(text) => setTitle(text)}
                   value={title}
                   placeholder="Title"
+                  placeholderTextColor={dark ? "white" : "#E3E5E5"}
                   maxLength={50}
                 />
 
                 {/* Content Input */}
                 <TextInput
-                  style={styles.contentInput}
+                  style={[
+                    styles.contentInput,
+                    dark && {
+                      backgroundColor: "#535353",
+                      borderColor: "#535353",
+                    },
+                  ]}
                   onChangeText={(text) => setContent(text)}
                   value={content}
                   placeholder="Write your thoughts here..."
+                  placeholderTextColor={dark ? "white" : "#E3E5E5"}
                   multiline
                 />
 

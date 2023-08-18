@@ -1,5 +1,5 @@
 import React from "react";
-import { StatusBar } from "react-native";
+import { StatusBar, useColorScheme } from "react-native";
 import {
   useFonts,
   Inter_300Light,
@@ -22,6 +22,8 @@ const rootReducer = combineReducers({
 const store = createStore(rootReducer);
 
 export default function App() {
+  const dark = useColorScheme() === "dark";
+
   let [fontsLoaded] = useFonts({
     Inter_300Light,
     Inter_400Regular,
@@ -32,8 +34,11 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
-
-  StatusBar.setBarStyle("dark-content");
+  if (dark) {
+    StatusBar.setBarStyle("light-content");
+  } else {
+    StatusBar.setBarStyle("dark-content");
+  }
 
   return (
     <Provider store={store}>

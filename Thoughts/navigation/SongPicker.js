@@ -8,6 +8,7 @@ import {
   ImageBackground,
   TextInput,
   Modal,
+  useColorScheme,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { ResponseType, useAuthRequest } from "expo-auth-session";

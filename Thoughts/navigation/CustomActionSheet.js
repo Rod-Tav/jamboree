@@ -1,10 +1,12 @@
 import React from "react";
-import { View, TouchableOpacity, Text } from "react-native";
+import { View, TouchableOpacity, Text, useColorScheme } from "react-native";
 import SkinnyIcon from "react-native-snappy";
 import Modal from "react-native-modal";
 import styles from "../styles/styles";
 
 const CustomActionSheet = ({ isVisible, onCancel, onSelectOption }) => {
+  const dark = useColorScheme() === "dark";
+
   const handleOptionPress = (option) => {
     onSelectOption(option);
   };
@@ -17,7 +19,9 @@ const CustomActionSheet = ({ isVisible, onCancel, onSelectOption }) => {
       backdropTransitionOutTiming={0}
       style={styles.modalContentContainer}
     >
-      <View style={styles.modalContent}>
+      <View
+        style={[styles.modalContent, dark && { backgroundColor: "#2b2b2b" }]}
+      >
         <TouchableOpacity
           onPress={() => handleOptionPress("Take a Photo")}
           style={styles.optionButton}
@@ -26,10 +30,12 @@ const CustomActionSheet = ({ isVisible, onCancel, onSelectOption }) => {
             name="camera"
             size={24}
             strokeWidth={1.25}
-            color="#979C9E"
+            color={dark ? "white" : "#979C9E"}
             style={styles.icon}
           />
-          <Text style={styles.optionButtonText}>Take a Photo</Text>
+          <Text style={[styles.optionButtonText, dark && { color: "white" }]}>
+            Take a Photo
+          </Text>
           <SkinnyIcon
             name="camera"
             size={24}
@@ -46,10 +52,12 @@ const CustomActionSheet = ({ isVisible, onCancel, onSelectOption }) => {
             name="image"
             size={24}
             strokeWidth={1.25}
-            color="#979C9E"
+            color={dark ? "white" : "#979C9E"}
             style={styles.icon}
           />
-          <Text style={styles.optionButtonText}>Choose from Library</Text>
+          <Text style={[styles.optionButtonText, dark && { color: "white" }]}>
+            Choose from Library
+          </Text>
           <SkinnyIcon
             name="image"
             size={24}
@@ -63,10 +71,12 @@ const CustomActionSheet = ({ isVisible, onCancel, onSelectOption }) => {
             name="x"
             size={24}
             strokeWidth={1.25}
-            color="#979C9E"
+            color={dark ? "white" : "#979C9E"}
             style={styles.icon}
           />
-          <Text style={styles.optionButtonText}>Cancel</Text>
+          <Text style={[styles.optionButtonText, dark && { color: "white" }]}>
+            Cancel
+          </Text>
           <SkinnyIcon
             name="x"
             size={24}

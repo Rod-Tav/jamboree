@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Linking,
+  useColorScheme,
 } from "react-native";
 import styles from "../../styles/styles";
 import proStyles from "../../styles/profileStyles";
@@ -38,6 +39,8 @@ const SearchScreen = ({ route }) => {
 };
 
 const SearchScreenContainer = ({ route }) => {
+  const dark = useColorScheme() === "dark";
+
   const { thoughts } = route.params;
   const navigation = useNavigation();
   const [query, setQuery] = useState("");
@@ -48,7 +51,7 @@ const SearchScreenContainer = ({ route }) => {
     navigation.setOptions({
       title: "", // Set the title of the header
       headerStyle: {
-        backgroundColor: "white",
+        backgroundColor: dark ? "#2B2B2B" : "white",
         elevation: 0,
         shadowOpacity: 0,
         borderBottomWidth: 0,
@@ -67,12 +70,12 @@ const SearchScreenContainer = ({ route }) => {
             name="arrow-left"
             size={25}
             strokeWidth={1.5}
-            color="#090A0A"
+            color={dark ? "white" : "#090A0A"}
           />
         </TouchableOpacity>
       ),
     });
-  }, [navigation]);
+  }, [navigation, dark]);
 
   const renderItem = ({ item }) => {
     const dateKey = item; // Date key from the thoughts object
@@ -83,7 +86,10 @@ const SearchScreenContainer = ({ route }) => {
         {thoughtsArray.map((thought) => (
           <TouchableOpacity
             key={thought.id}
-            style={styles.thoughtContainer}
+            style={[
+              styles.thoughtContainer,
+              dark && { backgroundColor: "#2B2B2B" },
+            ]}
             onPress={() => navigation.navigate("Detail", { thought })}
           >
             {thought.imageSources && thought.imageSources.length > 0 && (
@@ -106,8 +112,10 @@ const SearchScreenContainer = ({ route }) => {
             )}
             <View style={styles.thoughtTimeAndMoodAndText}>
               <View style={styles.thoughtTimeAndMood}>
-                <Text style={styles.thoughtTime}>{thought.time}</Text>
-                {thought.mood ? (
+                <Text style={[styles.thoughtTime, dark && { color: "white" }]}>
+                  {thought.time}
+                </Text>
+                {thought.mood && (
                   <Text
                     style={[
                       styles.thoughtMood,
@@ -119,15 +127,25 @@ const SearchScreenContainer = ({ route }) => {
                   >
                     {thought.mood}
                   </Text>
-                ) : null}
+                )}
               </View>
               {thought.title == "" && thought.content == "" ? null : (
                 <View style={styles.thoughtTextContainer}>
                   {thought.title == "" ? null : (
-                    <Text style={styles.thoughtTitle}>{thought.title}</Text>
+                    <Text
+                      style={[styles.thoughtTitle, dark && { color: "white" }]}
+                    >
+                      {thought.title}
+                    </Text>
                   )}
                   {thought.content == "" ? null : (
-                    <Text numberOfLines={1} style={styles.thoughtContent}>
+                    <Text
+                      numberOfLines={1}
+                      style={[
+                        styles.thoughtContent,
+                        dark && { color: "white" },
+                      ]}
+                    >
                       {thought.content}
                     </Text>
                   )}
@@ -139,16 +157,27 @@ const SearchScreenContainer = ({ route }) => {
                     Linking.openURL(thought.songLink);
                   }}
                 >
-                  <View style={styles.songContainer}>
+                  <View
+                    style={[
+                      styles.songContainer,
+                      dark && { backgroundColor: "#535353" },
+                    ]}
+                  >
                     <Image
                       source={{ uri: thought.songImage }}
                       style={styles.songImage}
                     />
                     <View style={styles.songTextContainer}>
-                      <Text numberOfLines={2} style={styles.songName2}>
+                      <Text
+                        numberOfLines={2}
+                        style={[styles.songName2, dark && { color: "white" }]}
+                      >
                         {thought.songName}
                       </Text>
-                      <Text numberOfLines={1} style={styles.songArtist2}>
+                      <Text
+                        numberOfLines={1}
+                        style={[styles.songArtist2, dark && { color: "white" }]}
+                      >
                         {thought.songArtist}
                       </Text>
                     </View>
@@ -235,8 +264,15 @@ const SearchScreenContainer = ({ route }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={proStyles.container2}>
-        <View style={proStyles.searchContainer}>
+      <View
+        style={[proStyles.container2, dark && { backgroundColor: "#2b2b2b" }]}
+      >
+        <View
+          style={[
+            proStyles.searchContainer,
+            dark && { backgroundColor: "#2b2b2b" },
+          ]}
+        >
           <View style={proStyles.searchIcon}>
             <SkinnyIcon
               name="magnifier"
@@ -246,7 +282,13 @@ const SearchScreenContainer = ({ route }) => {
             />
           </View>
           <TextInput
-            style={proStyles.searchText2}
+            style={[
+              proStyles.searchText2,
+              dark && {
+                backgroundColor: "#535353",
+                borderColor: "#535353",
+              },
+            ]}
             placeholder={"Search your thoughts...                            "}
             value={query}
             onChangeText={setQuery}
@@ -270,7 +312,10 @@ const SearchScreenContainer = ({ route }) => {
           data={Object.keys(thoughts).reverse()}
           renderItem={renderItem}
           keyExtractor={(dateKey) => dateKey}
-          contentContainerStyle={styles.list}
+          contentContainerStyle={[
+            styles.list,
+            dark && { backgroundColor: "#2B2B2B" },
+          ]}
           showsVerticalScrollIndicator={false}
         />
       </View>
