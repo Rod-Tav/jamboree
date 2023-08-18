@@ -93,26 +93,6 @@ const HomeScreenContainer = () => {
     })
   );
 
-  const allImages = (data) => {
-    const imageInfo = [];
-
-    for (const entry of data) {
-      for (const thought of entry.thoughts) {
-        for (const imageSource of thought.imageSources) {
-          imageInfo.push({
-            uri: imageSource.uri,
-            width: imageSource.width,
-            height: imageSource.height,
-          });
-        }
-      }
-    }
-
-    return imageInfo;
-  };
-
-  const allImageInfo = allImages(groupedThoughts);
-
   const navigation = useNavigation();
 
   const handleWrite = () => {
