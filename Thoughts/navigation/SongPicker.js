@@ -5,6 +5,7 @@ import {
   Text,
   FlatList,
   Image,
+  ImageBackground,
   TextInput,
   Modal,
 } from "react-native";
@@ -15,6 +16,7 @@ import * as tokenAction from "../store/actions/token";
 import axios from "axios";
 import moodstyles from "../styles/moodstyles";
 import SkinnyIcon from "react-native-snappy";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import styles from "../styles/styles";
 import proStyles from "../styles/profileStyles";
 import spotify from "../images/spotify.png";
@@ -50,6 +52,7 @@ const SongPicker = ({
   const [searchResults, setSearchResults] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [songPlaying, setSongPlaying] = useState("");
+  const [play, setPlay] = useState("");
 
   useEffect(() => {
     setName("");
@@ -134,6 +137,8 @@ const SongPicker = ({
     setSongLink(link);
     setModalVisible(false);
     setSelectedItem(null);
+    setSearchBar("");
+    setSongPlaying("");
   };
 
   const handleCancel = () => {
@@ -154,6 +159,7 @@ const SongPicker = ({
     setSongImage("");
     setSongLink("");
     setSelectedItem(null);
+    setSongPlaying("");
     setSearchBar("");
   };
 
@@ -161,10 +167,16 @@ const SongPicker = ({
     let action = "";
     if (!songPlaying) {
       action = "play";
-    } else if (uri == songPlaying) {
+      setPlay(true);
+    } else if (uri == songPlaying && play) {
       action = "pause";
+      setPlay(false);
+    } else if (uri == songPlaying && play) {
+      action = "play";
+      setPlay(true);
     } else {
       action = "play";
+      setPlay(true);
     }
     try {
       await axios(`https://api.spotify.com/v1/me/player/${action}`, {
@@ -173,7 +185,7 @@ const SongPicker = ({
           Authorization: `Bearer ${token}`,
         },
         data: {
-          uris: [uri],
+          uris: uri != songPlaying ? [uri] : null,
         },
       });
       setSongPlaying(uri);
@@ -323,10 +335,34 @@ const SongPicker = ({
                               playPauseSong(path.uri);
                             }}
                           >
-                            <Image
+                            <ImageBackground
                               source={{ uri: path.album.images[0].url }}
                               style={moodstyles.songImage}
-                            />
+                            >
+                              <View
+                                style={{
+                                  flex: 1,
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                }}
+                              >
+                                {play && songPlaying == path.uri ? (
+                                  <Ionicons
+                                    name="pause"
+                                    size={22}
+                                    strokeWidth={1.5}
+                                    color="white"
+                                  />
+                                ) : (
+                                  <Ionicons
+                                    name="play"
+                                    size={22}
+                                    strokeWidth={1.5}
+                                    color="white"
+                                  />
+                                )}
+                              </View>
+                            </ImageBackground>
                           </TouchableOpacity>
 
                           <View style={moodstyles.songDetails}>
