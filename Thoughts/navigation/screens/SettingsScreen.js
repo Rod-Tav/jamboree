@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   useColorScheme,
+  Appearance,
 } from "react-native";
 import styles from "../../styles/styles";
 import SkinnyIcon from "react-native-snappy";
@@ -73,6 +74,13 @@ const SettingsScreen = () => {
     navigation.navigate("Home");
   };
 
+  const handleThemeChange = async () => {
+    await AsyncStorage.setItem(
+      "theme",
+      Appearance.getColorScheme() == "dark" ? "light" : "dark"
+    );
+  };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View
@@ -80,7 +88,6 @@ const SettingsScreen = () => {
           styles.settingsContainer,
           dark && { backgroundColor: "#2b2b2b" },
         ]}
-        key={global.dark}
       >
         <View style={styles.headerStyle}>
           <Text style={[styles.headerText, dark && { color: "white" }]}>
@@ -100,8 +107,13 @@ const SettingsScreen = () => {
           <View style={styles}>
             <TouchableOpacity
               onPress={() => {
+                Appearance.setColorScheme(
+                  Appearance.getColorScheme() == "dark" ? "light" : "dark"
+                );
+                setDark(!dark);
+                setDark(!dark);
                 global.dark = !global.dark;
-                setDark(global.dark);
+                handleThemeChange();
               }}
             >
               <Text>Toggle Dark</Text>

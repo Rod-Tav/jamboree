@@ -6,7 +6,7 @@ import {
 } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { useColorScheme } from "react-native";
+import { Appearance } from "react-native";
 
 // Screens
 import HomeScreen from "./screens/HomeScreen";
@@ -21,11 +21,7 @@ const profileName = "Profile";
 const Tab = createBottomTabNavigator();
 
 function MainContainer() {
-  const [scheme, setScheme] = useState(useColorScheme());
-
-  useEffect(() => {
-    setScheme(global.dark ? "dark" : "light");
-  }, [global.dark]);
+  const scheme = Appearance.getColorScheme();
 
   return (
     <NavigationContainer theme={scheme === "dark" ? DarkTheme : DefaultTheme}>

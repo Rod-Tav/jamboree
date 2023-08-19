@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   ScrollView,
-  useColorScheme,
+  Appearance,
 } from "react-native";
 import proStyles from "../../styles/profileStyles";
 
@@ -18,7 +18,7 @@ import * as FileSystem from "expo-file-system";
 import ProfileImagePicker from "./ProfileImagePicker";
 
 const EditScreen = ({ route }) => {
-  const dark = global.dark;
+  const dark = Appearance.getColorScheme() === "dark";
   const userImage = route.params.userImage;
   const userName = route.params.userName;
   const userBio = route.params.userBio;

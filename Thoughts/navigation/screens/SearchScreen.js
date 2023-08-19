@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Linking,
-  useColorScheme,
+  Appearance,
 } from "react-native";
 import styles from "../../styles/styles";
 import proStyles from "../../styles/profileStyles";
@@ -39,7 +39,7 @@ const SearchScreen = ({ route }) => {
 };
 
 const SearchScreenContainer = ({ route }) => {
-  const dark = global.dark;
+  const dark = Appearance.getColorScheme() === "dark";
   const { thoughts } = route.params;
   const navigation = useNavigation();
   const [query, setQuery] = useState("");

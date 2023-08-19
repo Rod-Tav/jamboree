@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Alert,
   Linking,
-  useColorScheme,
+  Appearance,
 } from "react-native";
 import styles from "../../styles/styles";
 import Icon from "react-native-vector-icons/AntDesign";
@@ -21,7 +21,7 @@ import { useNavigation } from "@react-navigation/native";
 import * as FileSystem from "expo-file-system";
 
 const DetailScreen = ({ route }) => {
-  const dark = global.dark;
+  const dark = Appearance.getColorScheme() === "dark";
   const { thought } = route.params;
   const navigation = useNavigation();
   const [isImageViewVisible, setIsImageViewVisible] = useState(false);
@@ -354,7 +354,7 @@ const CustomActionSheet = ({
   handleEdit,
   handleDeleteModal,
 }) => {
-  const dark = global.dark;
+  const dark = Appearance.getColorScheme() === "dark";
   return (
     <Modal
       isVisible={isVisible}

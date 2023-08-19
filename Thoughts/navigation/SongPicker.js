@@ -8,7 +8,7 @@ import {
   ImageBackground,
   TextInput,
   Modal,
-  useColorScheme,
+  Appearance,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { ResponseType, useAuthRequest } from "expo-auth-session";
@@ -54,7 +54,7 @@ const SongPicker = ({
   const [selectedItem, setSelectedItem] = useState(null);
   const [songPlaying, setSongPlaying] = useState("");
   const [play, setPlay] = useState("");
-  const dark = global.dark;
+  const dark = Appearance.getColorScheme() === "dark";
   useEffect(() => {
     setName("");
     setArtist("");

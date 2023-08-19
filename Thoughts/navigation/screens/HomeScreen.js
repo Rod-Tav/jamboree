@@ -5,7 +5,7 @@ import {
   Image,
   TouchableOpacity,
   Linking,
-  useColorScheme,
+  Appearance,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -42,7 +42,7 @@ const HomeScreen = () => {
 };
 
 const HomeScreenContainer = () => {
-  const dark = global.dark;
+  const dark = Appearance.getColorScheme() === "dark";
   const [thoughts, setThoughts] = useState({});
   const [coverImage, setCoverImage] = useState("");
   const [name, setName] = useState("");

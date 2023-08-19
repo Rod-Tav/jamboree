@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   Keyboard,
-  useColorScheme,
+  Appearance,
 } from "react-native";
 import moodstyles from "../styles/moodstyles";
 import styles from "../styles/styles";
@@ -27,7 +27,7 @@ const MoodPicker = ({
   const [textColor, setTextColor] = useState("");
   const [customMood, setCustomMood] = useState("");
   const [customColor, setCustomColor] = useState("");
-  const dark = global.dark;
+  const dark = Appearance.getColorScheme() === "dark";
   const colorOrder = [6, 4, 7, 1, 5, 2, 3];
 
   useEffect(() => {

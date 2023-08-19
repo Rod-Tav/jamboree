@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   Image,
   ScrollView,
-  useColorScheme,
+  Appearance,
 } from "react-native";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -46,7 +46,7 @@ const ProfileScreen = ({ dark, setDark }) => {
 };
 
 const ProfileScreenContainer = () => {
-  const dark = global.dark;
+  const dark = Appearance.getColorScheme() === "dark";
   const navigation = useNavigation();
   const isFocused = useIsFocused();
 

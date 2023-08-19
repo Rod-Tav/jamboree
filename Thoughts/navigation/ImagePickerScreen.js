@@ -6,7 +6,7 @@ import {
   ScrollView,
   Text,
   Dimensions,
-  useColorScheme,
+  Appearance,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import Icon from "react-native-vector-icons/Feather";
@@ -20,7 +20,7 @@ const ImagePickerScreen = ({ imageSources, changeImageSources }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [imageHeights, setImageHeights] = useState({});
 
-  const dark = global.dark;
+  const dark = Appearance.getColorScheme() === "dark";
   useEffect(() => {
     // Calculate image heights when imageSources change
     const newImageHeights = imageSources.reduce((heights, image) => {

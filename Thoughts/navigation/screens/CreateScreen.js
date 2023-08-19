@@ -9,7 +9,7 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
   SafeAreaView,
-  useColorScheme,
+  Appearance,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native"; // Import useRoute
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -21,7 +21,7 @@ import SkinnyIcon from "react-native-snappy";
 import * as FileSystem from "expo-file-system";
 
 const CreateScreen = () => {
-  const dark = global.dark;
+  const dark = Appearance.getColorScheme() === "dark";
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [mood, setMood] = useState("");
