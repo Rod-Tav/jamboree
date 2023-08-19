@@ -131,10 +131,17 @@ const SelectedDateThoughtsScreenContainer = ({ route }) => {
             {thought.title == "" && thought.content == "" ? null : (
               <View style={styles.thoughtTextContainer}>
                 {thought.title == "" ? null : (
-                  <Text style={styles.thoughtTitle}>{thought.title}</Text>
+                  <Text
+                    style={[styles.thoughtTitle, dark && { color: "white" }]}
+                  >
+                    {thought.title}
+                  </Text>
                 )}
                 {thought.content == "" ? null : (
-                  <Text numberOfLines={1} style={styles.thoughtContent}>
+                  <Text
+                    numberOfLines={1}
+                    style={[styles.thoughtContent, dark && { color: "white" }]}
+                  >
                     {thought.content}
                   </Text>
                 )}
