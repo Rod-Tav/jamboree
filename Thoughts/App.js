@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { StatusBar, Appearance, useColorScheme } from "react-native";
 import {
   useFonts,
   Inter_300Light,
@@ -7,13 +6,15 @@ import {
   Inter_500Medium,
   Inter_700Bold,
 } from "@expo-google-fonts/inter";
-import MainContainer from "./navigation/MainContainer";
+import RootStack from "./navigation/RootStack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { LogBox } from "react-native";
+import { LogBox, Appearance } from "react-native";
+import { StatusBar } from "expo-status-bar";
 LogBox.ignoreLogs(["Sending"]);
 import { Provider } from "react-redux";
 import tokenReducer from "./store/reducers/token";
 import { createStore, combineReducers } from "redux";
+import { ThemeContext } from "./contexts/ThemeContext";
 
 const rootReducer = combineReducers({
   token: tokenReducer,
@@ -22,30 +23,69 @@ const rootReducer = combineReducers({
 const store = createStore(rootReducer);
 
 export default function App() {
-  let dark = global.dark;
-  global.dark = useColorScheme() === "dark";
-  const [theme, setTheme] = useState();
-  useEffect(() => {
-    loadTheme();
-    Appearance.setColorScheme(theme);
-  });
+  const [theme, setTheme] = useState({ mode: "light" });
 
-  const loadTheme = async () => {
+  const storeData = async (key, value) => {
     try {
-      const theme = await AsyncStorage.getItem("theme");
-      if (theme) {
-        setTheme(theme);
-        global.dark = theme === "dark";
-        dark = global.dark;
-      } else {
-        setTheme(Appearance.getColorScheme());
-        global.dark = useColorScheme() === "dark";
-        dark = global.dark;
-      }
-    } catch (error) {
-      console.log("Error loading theme:", error);
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem(key, jsonValue);
+    } catch ({ message }) {
+      alert(message);
     }
   };
+
+  const updateTheme = (newTheme) => {
+    let mode;
+    if (!newTheme) {
+      mode = theme.mode === "dark" ? "light" : "dark";
+      newTheme = { mode, system: false };
+    } else {
+      if (newTheme.system) {
+        const systemColorScheme = Appearance.getColorScheme();
+        mode = systemColorScheme === "dark" ? "dark" : "light";
+
+        newTheme = { ...newTheme, mode };
+      } else {
+        newTheme = { ...newTheme, system: false };
+      }
+    }
+    setTheme(newTheme);
+    storeData("theme", newTheme);
+  };
+
+  // monitor system for theme change
+  if (theme.system) {
+    Appearance.addChangeListener(({ colorScheme }) => {
+      updateTheme({ system: true, mode: colorScheme });
+    });
+  }
+
+  const getData = async (key) => {
+    try {
+      const jsonValue = await AsyncStorage.getItem(key);
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch ({ message }) {
+      alert(message);
+    }
+  };
+
+  const fetchStoredTheme = async () => {
+    try {
+      const themeData = await getData("theme");
+
+      if (themeData) {
+        updateTheme(themeData);
+      }
+    } catch ({ message }) {
+      console.log("Error: ", message);
+    } finally {
+      // setTimeout(() => SplashScreen.hideAsync(), 1000);
+    }
+  };
+
+  useEffect(() => {
+    fetchStoredTheme();
+  }, []);
 
   let [fontsLoaded] = useFonts({
     Inter_300Light,
@@ -57,15 +97,13 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
-  if (dark) {
-    StatusBar.setBarStyle("light-content");
-  } else {
-    StatusBar.setBarStyle("dark-content");
-  }
 
   return (
     <Provider store={store}>
-      <MainContainer />
+      <ThemeContext.Provider value={{ theme, updateTheme }}>
+        <RootStack />
+        <StatusBar style={theme.mode === "dark" ? "light" : "dark"} />
+      </ThemeContext.Provider>
     </Provider>
   );
 }

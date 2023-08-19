@@ -18,6 +18,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import SearchScreen from "./SearchScreen";
 import { Calendar } from "react-native-calendars";
 import SelectedDateThoughtsScreen from "./SelectedDateThoughtsScreen";
+import { useContext } from "react";
+import { ThemeContext } from "../../contexts/ThemeContext";
 
 const Stack = createStackNavigator();
 
@@ -46,10 +48,10 @@ const ProfileScreen = ({ dark, setDark }) => {
 };
 
 const ProfileScreenContainer = () => {
-  const dark = Appearance.getColorScheme() === "dark";
+  const { theme } = useContext(ThemeContext);
+  let dark = theme.mode == "dark";
   const navigation = useNavigation();
   const isFocused = useIsFocused();
-
   const [userImage, setUserImage] = useState("");
   const [userName, setUserName] = useState("");
   const [userBio, setUserBio] = useState("");
@@ -142,7 +144,7 @@ const ProfileScreenContainer = () => {
   });
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={[{ flex: 1 }, dark && { backgroundColor: "#535353" }]}>
       <View
         style={[proStyles.container, dark && { backgroundColor: "#2b2b2b" }]}
       >

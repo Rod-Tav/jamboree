@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   useColorScheme,
+  StatusBar,
   Appearance,
 } from "react-native";
 import styles from "../../styles/styles";
@@ -14,12 +15,24 @@ import { createStackNavigator } from "@react-navigation/stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as FileSystem from "expo-file-system";
 import ProfileImagePicker from "./ProfileImagePicker";
+import { useIsFocused } from "@react-navigation/native";
+import { useContext } from "react";
+import { ThemeContext } from "../../contexts/ThemeContext";
+import { colors } from "../../config/theme";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const Stack = createStackNavigator();
 
 const SettingsScreen = () => {
-  const [dark, setDark] = useState(global.dark);
+  const { theme, updateTheme } = useContext(ThemeContext);
+  let dark = theme.mode == "dark";
   const navigation = useNavigation();
+
+  const [isActive, setIsActive] = useState(theme.mode === "dark");
+  const handleSwitch = () => {
+    updateTheme();
+    setIsActive((previousState) => !previousState);
+  };
 
   // Set up the options for the header
   React.useLayoutEffect(() => {
@@ -74,12 +87,8 @@ const SettingsScreen = () => {
     navigation.navigate("Home");
   };
 
-  const handleThemeChange = async () => {
-    await AsyncStorage.setItem("theme", global.dark ? "dark" : "light");
-  };
-
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={[{ flex: 1 }, dark && { backgroundColor: "#535353" }]}>
       <View
         style={[
           styles.settingsContainer,
@@ -101,20 +110,22 @@ const SettingsScreen = () => {
           <View style={styles}>
             <ProfileImagePicker settings={true} changeImage={changeImage} />
           </View>
-          <View style={styles}>
-            <TouchableOpacity
-              onPress={() => {
-                Appearance.setColorScheme(
-                  Appearance.getColorScheme() == "dark" ? "light" : "dark"
-                );
-                setDark(!dark);
-                setDark(!dark);
-                global.dark = !global.dark;
-                handleThemeChange();
-              }}
-            >
-              <Text>Toggle Dark</Text>
-            </TouchableOpacity>
+          <View style={styles.section}>
+            <SettingsButton
+              label="Light"
+              isActive={theme.mode === "light" && !theme.system}
+              onPress={() => updateTheme({ mode: "light" })}
+            />
+            <SettingsButton
+              label="Dark"
+              isActive={theme.mode === "dark" && !theme.system}
+              onPress={() => updateTheme({ mode: "dark" })}
+            />
+            <SettingsButton
+              label="System"
+              isActive={theme.system}
+              onPress={() => updateTheme({ system: true })}
+            />
           </View>
         </View>
       </View>
@@ -123,3 +134,32 @@ const SettingsScreen = () => {
 };
 
 export default SettingsScreen;
+
+const SettingsButton = ({ label, isActive, ...props }) => {
+  const { theme } = useContext(ThemeContext);
+  let activeColors = colors[theme.mode];
+
+  return (
+    <TouchableOpacity
+      style={[
+        {
+          backgroundColor: activeColors.secondary,
+        },
+        styles.settingsItem,
+      ]}
+      {...props}
+    >
+      <View style={styles.labelGroup}>
+        <Text style={[{ color: activeColors.tertiary }, styles.label]}>
+          {label}
+        </Text>
+      </View>
+
+      <Ionicons
+        name={isActive ? "checkmark-circle" : "checkmark-circle-outline"}
+        size={24}
+        color={isActive ? activeColors.accent : activeColors.tertiary}
+      />
+    </TouchableOpacity>
+  );
+};

@@ -3928,9 +3928,9 @@ expo-screen-orientation@^3.0.0:
   dependencies:
     "@expo/config-plugins" "^3.0.0"
 
-expo-status-bar@~1.6.0:
+expo-status-bar@^1.6.0:
   version "1.6.0"
-  resolved "https://registry.npmjs.org/expo-status-bar/-/expo-status-bar-1.6.0.tgz"
+  resolved "https://registry.yarnpkg.com/expo-status-bar/-/expo-status-bar-1.6.0.tgz#e79ffdb9a84d2e0ec9a0dc7392d9ab364fefa9cf"
   integrity sha512-e//Oi2WPdomMlMDD3skE4+1ZarKCJ/suvcB4Jo/nO427niKug5oppcPNYO+csR6y3ZglGuypS+3pp/hJ+Xp6fQ==
 
 expo-web-browser@~12.3.0:

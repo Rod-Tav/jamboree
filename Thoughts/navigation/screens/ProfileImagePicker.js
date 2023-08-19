@@ -4,9 +4,12 @@ import * as ImagePicker from "expo-image-picker";
 import styles from "../../styles/styles";
 import CustomActionSheet from "../CustomActionSheet";
 import SkinnyIcon from "react-native-snappy";
+import { useContext } from "react";
+import { ThemeContext } from "../../contexts/ThemeContext";
 
 const ProfileImagePicker = ({ settings, changeImage }) => {
-  const dark = Appearance.getColorScheme() === "dark";
+  const { theme } = useContext(ThemeContext);
+  let dark = theme.mode == "dark";
   const handleAddImagesPress = () => {
     setShowCustomActionSheet(true);
   };

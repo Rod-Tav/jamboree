@@ -18,6 +18,8 @@ import DetailScreen from "./DetailScreen";
 import { createStackNavigator } from "@react-navigation/stack";
 import { TextInput } from "react-native-gesture-handler";
 import moodstyles from "../../styles/moodstyles";
+import { useContext } from "react";
+import { ThemeContext } from "../../contexts/ThemeContext";
 
 const Stack = createStackNavigator();
 
@@ -39,7 +41,8 @@ const SearchScreen = ({ route }) => {
 };
 
 const SearchScreenContainer = ({ route }) => {
-  const dark = Appearance.getColorScheme() === "dark";
+  const { theme } = useContext(ThemeContext);
+  let dark = theme.mode == "dark";
   const { thoughts } = route.params;
   const navigation = useNavigation();
   const [query, setQuery] = useState("");
@@ -266,7 +269,7 @@ const SearchScreenContainer = ({ route }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={[{ flex: 1 }, dark && { backgroundColor: "#535353" }]}>
       <View
         style={[proStyles.container2, dark && { backgroundColor: "#2b2b2b" }]}
       >

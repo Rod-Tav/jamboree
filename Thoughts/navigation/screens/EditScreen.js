@@ -10,7 +10,8 @@ import {
   Appearance,
 } from "react-native";
 import proStyles from "../../styles/profileStyles";
-
+import { useContext } from "react";
+import { ThemeContext } from "../../contexts/ThemeContext";
 import SkinnyIcon from "react-native-snappy";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -18,7 +19,8 @@ import * as FileSystem from "expo-file-system";
 import ProfileImagePicker from "./ProfileImagePicker";
 
 const EditScreen = ({ route }) => {
-  const dark = Appearance.getColorScheme() === "dark";
+  const { theme } = useContext(ThemeContext);
+  let dark = theme.mode == "dark";
   const userImage = route.params.userImage;
   const userName = route.params.userName;
   const userBio = route.params.userBio;
@@ -96,7 +98,7 @@ const EditScreen = ({ route }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={[{ flex: 1 }, dark && { backgroundColor: "#535353" }]}>
       <ScrollView
         style={[
           proStyles.containerEdit,

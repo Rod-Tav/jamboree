@@ -17,6 +17,8 @@ import { useNavigation } from "@react-navigation/native";
 import DetailScreen from "./DetailScreen";
 import { createStackNavigator } from "@react-navigation/stack";
 import moodstyles from "../../styles/moodstyles";
+import { useContext } from "react";
+import { ThemeContext } from "../../contexts/ThemeContext";
 
 const Stack = createStackNavigator();
 
@@ -41,7 +43,8 @@ const SelectedDateThoughtsScreen = ({ route }) => {
 };
 
 const SelectedDateThoughtsScreenContainer = ({ route }) => {
-  const dark = Appearance.getColorScheme() === "dark";
+  const { theme } = useContext(ThemeContext);
+  let dark = theme.mode == "dark";
   const { thoughtsList, date } = route.params;
   const navigation = useNavigation();
   const [query, setQuery] = useState("");
@@ -239,7 +242,7 @@ const SelectedDateThoughtsScreenContainer = ({ route }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={[{ flex: 1 }, dark && { backgroundColor: "#535353" }]}>
       <View
         style={[proStyles.container2, dark && { backgroundColor: "#2b2b2b" }]}
       >

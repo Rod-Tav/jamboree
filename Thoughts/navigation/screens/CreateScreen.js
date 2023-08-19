@@ -10,6 +10,7 @@ import {
   ScrollView,
   SafeAreaView,
   Appearance,
+  useColorScheme,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native"; // Import useRoute
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -19,9 +20,13 @@ import MoodPicker from "../MoodPicker";
 import SongPicker from "../SongPicker";
 import SkinnyIcon from "react-native-snappy";
 import * as FileSystem from "expo-file-system";
+import { useIsFocused } from "@react-navigation/native";
+import { useContext } from "react";
+import { ThemeContext } from "../../contexts/ThemeContext";
 
 const CreateScreen = () => {
-  const dark = Appearance.getColorScheme() === "dark";
+  const { theme } = useContext(ThemeContext);
+  let dark = theme.mode == "dark";
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [mood, setMood] = useState("");
@@ -206,7 +211,7 @@ const CreateScreen = () => {
   };
 
   return (
-    <SafeAreaView style={[{ flex: 1 }, dark && { backgroundColor: "black" }]}>
+    <SafeAreaView style={[{ flex: 1 }, dark && { backgroundColor: "#535353" }]}>
       <View style={[styles.container, dark && { backgroundColor: "#2B2B2B" }]}>
         <KeyboardAvoidingView behavior={"padding"}>
           <ScrollView

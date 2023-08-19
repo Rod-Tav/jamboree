@@ -3,9 +3,12 @@ import { View, TouchableOpacity, Text, Appearance } from "react-native";
 import SkinnyIcon from "react-native-snappy";
 import Modal from "react-native-modal";
 import styles from "../styles/styles";
+import { useContext } from "react";
+import { ThemeContext } from "../contexts/ThemeContext";
 
 const CustomActionSheet = ({ isVisible, onCancel, onSelectOption }) => {
-  const dark = Appearance.getColorScheme() === "dark";
+  const { theme } = useContext(ThemeContext);
+  let dark = theme.mode == "dark";
   const handleOptionPress = (option) => {
     onSelectOption(option);
   };

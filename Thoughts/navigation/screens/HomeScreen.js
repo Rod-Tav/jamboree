@@ -1,12 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  Linking,
-  Appearance,
-} from "react-native";
+import { View, Text, Image, TouchableOpacity, Linking } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "../../styles/styles";
@@ -21,6 +14,8 @@ import BottomSheet, {
 } from "@gorhom/bottom-sheet"; // Import BottomSheetScrollView
 import { SafeAreaView } from "react-native-safe-area-context"; // Import SafeAreaView
 import {} from "react-native";
+import { useContext } from "react";
+import { ThemeContext } from "../../contexts/ThemeContext";
 
 const Stack = createStackNavigator();
 
@@ -42,7 +37,8 @@ const HomeScreen = () => {
 };
 
 const HomeScreenContainer = () => {
-  const dark = Appearance.getColorScheme() === "dark";
+  const { theme } = useContext(ThemeContext);
+  let dark = theme.mode == "dark";
   const [thoughts, setThoughts] = useState({});
   const [coverImage, setCoverImage] = useState("");
   const [name, setName] = useState("");
@@ -273,7 +269,7 @@ const HomeScreenContainer = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={[{ flex: 1 }, dark && { backgroundColor: "#535353" }]}>
       <View style={[styles.imageWrapperHome2, { aspectRatio: 0.75 }]}>
         {coverImage.uri == "" ? (
           <Image

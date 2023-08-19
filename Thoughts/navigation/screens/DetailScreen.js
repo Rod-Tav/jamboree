@@ -19,9 +19,12 @@ import SkinnyIcon from "react-native-snappy";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import * as FileSystem from "expo-file-system";
+import { useContext } from "react";
+import { ThemeContext } from "../../contexts/ThemeContext";
 
 const DetailScreen = ({ route }) => {
-  const dark = Appearance.getColorScheme() === "dark";
+  const { theme } = useContext(ThemeContext);
+  let dark = theme.mode == "dark";
   const { thought } = route.params;
   const navigation = useNavigation();
   const [isImageViewVisible, setIsImageViewVisible] = useState(false);
@@ -354,7 +357,8 @@ const CustomActionSheet = ({
   handleEdit,
   handleDeleteModal,
 }) => {
-  const dark = Appearance.getColorScheme() === "dark";
+  const { theme } = useContext(ThemeContext);
+  let dark = theme.mode == "dark";
   return (
     <Modal
       isVisible={isVisible}

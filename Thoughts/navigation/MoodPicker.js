@@ -11,6 +11,8 @@ import {
 import moodstyles from "../styles/moodstyles";
 import styles from "../styles/styles";
 import SkinnyIcon from "react-native-snappy";
+import { useContext } from "react";
+import { ThemeContext } from "../contexts/ThemeContext";
 
 const MoodPicker = ({
   value,
@@ -27,7 +29,8 @@ const MoodPicker = ({
   const [textColor, setTextColor] = useState("");
   const [customMood, setCustomMood] = useState("");
   const [customColor, setCustomColor] = useState("");
-  const dark = Appearance.getColorScheme() === "dark";
+  const { theme } = useContext(ThemeContext);
+  let dark = theme.mode == "dark";
   const colorOrder = [6, 4, 7, 1, 5, 2, 3];
 
   useEffect(() => {
@@ -150,7 +153,7 @@ const MoodPicker = ({
         onPress={handleMoodPicker}
         style={[
           styles.buttonContainer,
-          dark && moodBgColorValue === "" && { backgroundColor: "#535353" },
+          dark && moodBgColorValue == "" && { backgroundColor: "#535353" },
           moodBgColorValue !== "" && { backgroundColor: moodBgColorValue },
         ]}
       >

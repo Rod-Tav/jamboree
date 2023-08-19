@@ -21,6 +21,8 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import styles from "../styles/styles";
 import proStyles from "../styles/profileStyles";
 import spotify from "../images/spotify.png";
+import { useContext } from "react";
+import { ThemeContext } from "../contexts/ThemeContext";
 
 const discovery = {
   authorizationEndpoint: "https://accounts.spotify.com/authorize",
@@ -54,7 +56,8 @@ const SongPicker = ({
   const [selectedItem, setSelectedItem] = useState(null);
   const [songPlaying, setSongPlaying] = useState("");
   const [play, setPlay] = useState("");
-  const dark = Appearance.getColorScheme() === "dark";
+  const { theme } = useContext(ThemeContext);
+  let dark = theme.mode == "dark";
   useEffect(() => {
     setName("");
     setArtist("");
