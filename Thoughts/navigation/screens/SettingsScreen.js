@@ -75,10 +75,7 @@ const SettingsScreen = () => {
   };
 
   const handleThemeChange = async () => {
-    await AsyncStorage.setItem(
-      "theme",
-      Appearance.getColorScheme() == "dark" ? "light" : "dark"
-    );
+    await AsyncStorage.setItem("theme", global.dark ? "dark" : "light");
   };
 
   return (

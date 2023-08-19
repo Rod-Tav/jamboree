@@ -24,10 +24,14 @@ const store = createStore(rootReducer);
 export default function App() {
   const [theme, setTheme] = useState();
   useEffect(() => {
+    console.log("hi");
     loadTheme();
+    Appearance.setColorScheme(theme);
+    console.log("set theme to " + theme);
   });
-  const dark = global.dark;
-  global.dark = useColorScheme() === "dark";
+
+  let dark = global.dark;
+  global.dark = Appearance.getColorScheme() === "dark";
 
   const loadTheme = async () => {
     try {
@@ -35,11 +39,12 @@ export default function App() {
       console.log(theme);
       if (theme) {
         setTheme(theme);
-        Appearance.setColorScheme(theme);
         global.dark = theme === "dark";
+        dark = global.dark;
       } else {
         setTheme(Appearance.getColorScheme());
         global.dark = useColorScheme() === "dark";
+        dark = global.dark;
       }
     } catch (error) {
       console.log("Error loading theme:", error);
