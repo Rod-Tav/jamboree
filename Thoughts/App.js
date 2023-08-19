@@ -22,21 +22,17 @@ const rootReducer = combineReducers({
 const store = createStore(rootReducer);
 
 export default function App() {
+  let dark = global.dark;
+  global.dark = useColorScheme() === "dark";
   const [theme, setTheme] = useState();
   useEffect(() => {
-    console.log("hi");
     loadTheme();
     Appearance.setColorScheme(theme);
-    console.log("set theme to " + theme);
   });
-
-  let dark = global.dark;
-  global.dark = Appearance.getColorScheme() === "dark";
 
   const loadTheme = async () => {
     try {
       const theme = await AsyncStorage.getItem("theme");
-      console.log(theme);
       if (theme) {
         setTheme(theme);
         global.dark = theme === "dark";
