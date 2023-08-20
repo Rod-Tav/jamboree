@@ -119,7 +119,7 @@ export default StyleSheet.create({
     paddingBottom: 12,
     paddingLeft: 16,
     paddingRight: 16,
-    backgroundColor: "#2F80ED",
+    backgroundColor: "#488a99",
   },
 
   saveButtonText: {

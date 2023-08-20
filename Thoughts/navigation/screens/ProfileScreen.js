@@ -234,9 +234,10 @@ const ProfileScreenContainer = () => {
               theme={{
                 calendarBackground: dark ? "#2b2b2b" : "white",
                 monthTextColor: dark ? "white" : "black",
-                arrowColor: dark ? "white" : "blue",
+                arrowColor: "#488a99",
                 dayTextColor: dark ? "white" : "black",
                 textDisabledColor: dark ? "grey" : "lightgrey",
+                dotColor: "#488a99",
               }}
             />
           </ScrollView>
