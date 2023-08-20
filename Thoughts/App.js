@@ -23,7 +23,7 @@ const rootReducer = combineReducers({
 const store = createStore(rootReducer);
 
 export default function App() {
-  const [theme, setTheme] = useState({ mode: "dark" });
+  const [theme, setTheme] = useState({ mode: "light", system: false });
 
   const storeData = async (key, value) => {
     try {

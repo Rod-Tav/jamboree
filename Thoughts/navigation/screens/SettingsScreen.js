@@ -18,7 +18,6 @@ import ProfileImagePicker from "./ProfileImagePicker";
 import { useIsFocused } from "@react-navigation/native";
 import { useContext } from "react";
 import { ThemeContext } from "../../contexts/ThemeContext";
-import { colors } from "../../config/theme";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 const Stack = createStackNavigator();
