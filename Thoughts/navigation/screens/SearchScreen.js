@@ -297,8 +297,10 @@ const SearchScreenContainer = ({ route }) => {
               },
             ]}
             placeholder={"Search your thoughts...                            "}
+            placeholderTextColor={"#979C9E"}
             value={query}
             onChangeText={setQuery}
+            autoCorrect={false}
             multiline={false}
             maxLength={33}
             onFocus={() => setInputFocused(true)} // Set input focus

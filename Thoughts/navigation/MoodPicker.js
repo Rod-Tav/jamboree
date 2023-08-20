@@ -268,6 +268,7 @@ const MoodPicker = ({
               onChangeText={handleCustomMoodSelection}
               placeholder="Or add your own..."
               placeholderTextColor={dark ? "#979C9E" : "#E3E5E5"}
+              autoCorrect={false}
             />
             {/* Color selection buttons */}
             <View style={moodstyles.customColorContainer}>

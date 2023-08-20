@@ -266,6 +266,7 @@ const CreateScreen = () => {
                     },
                   ]}
                   onChangeText={(text) => setTitle(text)}
+                  autoCorrect={false}
                   value={title}
                   placeholder="Title"
                   placeholderTextColor={dark ? "#979C9E" : "#E3E5E5"}
@@ -283,6 +284,7 @@ const CreateScreen = () => {
                     },
                   ]}
                   onChangeText={(text) => setContent(text)}
+                  autoCorrect={false}
                   value={content}
                   placeholder="Write your thoughts here..."
                   placeholderTextColor={dark ? "#979C9E" : "#E3E5E5"}

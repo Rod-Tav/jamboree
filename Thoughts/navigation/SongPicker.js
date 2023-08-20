@@ -389,6 +389,7 @@ const SongPicker = ({
                   value={searchBar}
                   onChangeText={setSearchBar}
                   onSubmitEditing={handleSearchSubmit}
+                  autoCorrect={false}
                 />
                 <TouchableOpacity
                   style={proStyles.xIcon}

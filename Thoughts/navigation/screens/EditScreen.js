@@ -149,6 +149,7 @@ const EditScreen = ({ route }) => {
                     color: "white",
                   },
                 ]}
+                autoCorrect={false}
                 placeholder="Name"
                 placeholderTextColor={dark ? "#979C9E" : "#E3E5E5"}
                 value={name}
@@ -168,6 +169,7 @@ const EditScreen = ({ route }) => {
                     color: "white",
                   },
                 ]}
+                autoCorrect={false}
                 placeholder="Bio"
                 placeholderTextColor={dark ? "#979C9E" : "#E3E5E5"}
                 value={bio}
