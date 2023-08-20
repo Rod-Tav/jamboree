@@ -11,7 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LogBox, Appearance } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import AppStateListener from "react-native-appstate-listener";
-import { AppState } from "react-native";
+import { AppState, BackHandler } from "react-native";
 import { Provider } from "react-redux";
 import tokenReducer from "./store/reducers/token";
 import { createStore, combineReducers } from "redux";
@@ -31,9 +31,22 @@ export default function App() {
   // Define a state variable to track the app's state
   const [appState, setAppState] = useState(AppState.currentState);
 
+  // Function to handle changes in the system's color scheme
+  const handleSystemColorSchemeChange = () => {
+    if (theme.system) {
+      const systemColorScheme = Appearance.getColorScheme();
+      updateTheme({ system: true, mode: systemColorScheme });
+    }
+  };
+
   // Update the appState variable when the app's state changes
   const handleAppStateChange = (nextAppState) => {
     setAppState(nextAppState);
+
+    if (nextAppState === "active") {
+      // The app has become active again, check for system color scheme changes
+      handleSystemColorSchemeChange();
+    }
   };
 
   useEffect(() => {
@@ -81,11 +94,10 @@ export default function App() {
   useEffect(() => {
     let appearanceSubscription;
 
-    if (theme.system && appState === "active") {
+    if (theme.system) {
       appearanceSubscription = Appearance.addChangeListener(
         ({ colorScheme }) => {
           updateTheme({ system: true, mode: colorScheme });
-          console.log("ran");
         }
       );
     }
@@ -96,7 +108,7 @@ export default function App() {
         appearanceSubscription.remove();
       }
     };
-  }, [theme.system, appState]);
+  }, [theme.system]);
 
   const getData = async (key) => {
     try {
