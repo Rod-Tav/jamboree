@@ -23,6 +23,7 @@ const rootReducer = combineReducers({
 const store = createStore(rootReducer);
 
 export default function App() {
+  console.log("in app");
   const [theme, setTheme] = useState({ mode: "light" });
 
   const storeData = async (key, value) => {
@@ -53,12 +54,37 @@ export default function App() {
     storeData("theme", newTheme);
   };
 
-  // monitor system for theme change
-  if (theme.system) {
-    Appearance.addChangeListener(({ colorScheme }) => {
-      updateTheme({ system: true, mode: colorScheme });
-    });
-  }
+  useEffect(() => {
+    const fetchStoredTheme = async () => {
+      try {
+        const themeData = await getData("theme");
+
+        if (themeData) {
+          updateTheme(themeData);
+        }
+      } catch ({ message }) {
+        console.log("Error: ", message);
+      }
+    };
+
+    fetchStoredTheme();
+  }, []);
+
+  useEffect(() => {
+    // Add change listener only when theme.system is true
+    if (theme.system) {
+      const listener = ({ colorScheme }) => {
+        updateTheme({ system: true, mode: colorScheme });
+      };
+
+      Appearance.addChangeListener(listener);
+
+      // Remove the change listener when the component unmounts
+      return () => {
+        Appearance.removeChangeListener(listener);
+      };
+    }
+  }, [theme.system]);
 
   const getData = async (key) => {
     try {
@@ -68,24 +94,6 @@ export default function App() {
       alert(message);
     }
   };
-
-  const fetchStoredTheme = async () => {
-    try {
-      const themeData = await getData("theme");
-
-      if (themeData) {
-        updateTheme(themeData);
-      }
-    } catch ({ message }) {
-      console.log("Error: ", message);
-    } finally {
-      // setTimeout(() => SplashScreen.hideAsync(), 1000);
-    }
-  };
-
-  useEffect(() => {
-    fetchStoredTheme();
-  }, []);
 
   let [fontsLoaded] = useFonts({
     Inter_300Light,
