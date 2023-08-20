@@ -23,6 +23,7 @@ const rootReducer = combineReducers({
 const store = createStore(rootReducer);
 
 export default function App() {
+  console.log("in app");
   const [theme, setTheme] = useState({ mode: "light" });
 
   const storeData = async (key, value) => {
@@ -53,36 +54,24 @@ export default function App() {
     storeData("theme", newTheme);
   };
 
+  // monitor system for theme change
   useEffect(() => {
-    const fetchStoredTheme = async () => {
-      try {
-        const themeData = await getData("theme");
-
-        if (themeData) {
-          updateTheme(themeData);
+    let appearanceSubscription;
+    if (theme.system) {
+      appearanceSubscription = Appearance.addChangeListener(
+        ({ colorScheme }) => {
+          updateTheme({ system: true, mode: colorScheme });
         }
-      } catch ({ message }) {
-        console.log("Error: ", message);
+      );
+    }
+
+    return () => {
+      // Remove the event listener when the component unmounts
+      if (appearanceSubscription) {
+        appearanceSubscription.remove();
       }
     };
-
-    fetchStoredTheme();
-  }, []);
-
-  const [listenerAdded, setListenerAdded] = useState(false);
-
-  useEffect(() => {
-    if (theme.system && !listenerAdded) {
-      const listener = ({ colorScheme }) => {
-        updateTheme({ system: true, mode: colorScheme });
-      };
-      Appearance.addChangeListener(listener);
-      setListenerAdded(true); // Set a flag to indicate the listener has been added
-      return () => {
-        // Cleanup logic here if necessary
-      };
-    }
-  }, [theme.system, listenerAdded]);
+  }, [theme.system]);
 
   const getData = async (key) => {
     try {
@@ -92,6 +81,24 @@ export default function App() {
       alert(message);
     }
   };
+
+  const fetchStoredTheme = async () => {
+    try {
+      const themeData = await getData("theme");
+
+      if (themeData) {
+        updateTheme(themeData);
+      }
+    } catch ({ message }) {
+      console.log("Error: ", message);
+    } finally {
+      // setTimeout(() => SplashScreen.hideAsync(), 1000);
+    }
+  };
+
+  useEffect(() => {
+    fetchStoredTheme();
+  }, []);
 
   let [fontsLoaded] = useFonts({
     Inter_300Light,
