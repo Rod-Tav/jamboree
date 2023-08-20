@@ -137,20 +137,21 @@ export default SettingsScreen;
 
 const SettingsButton = ({ label, isActive, ...props }) => {
   const { theme } = useContext(ThemeContext);
-  let activeColors = colors[theme.mode];
+  let dark = theme.mode == "dark";
 
   return (
     <TouchableOpacity
       style={[
-        {
-          backgroundColor: activeColors.secondary,
-        },
-        styles.settingsItem,
+        dark
+          ? {
+              backgroundColor: "#2b2b2b",
+            }
+          : { backgroundColor: "white" },
       ]}
       {...props}
     >
-      <View style={styles.labelGroup}>
-        <Text style={[{ color: activeColors.tertiary }, styles.label]}>
+      <View>
+        <Text style={[dark ? { color: "#d1d5db" } : { color: "#4b5563" }]}>
           {label}
         </Text>
       </View>
@@ -158,7 +159,15 @@ const SettingsButton = ({ label, isActive, ...props }) => {
       <Ionicons
         name={isActive ? "checkmark-circle" : "checkmark-circle-outline"}
         size={24}
-        color={isActive ? activeColors.accent : activeColors.tertiary}
+        color={
+          isActive
+            ? dark
+              ? "#0891b2"
+              : "#0891b2"
+            : dark
+            ? "#d1d5db"
+            : "#4b5563"
+        }
       />
     </TouchableOpacity>
   );
