@@ -6334,6 +6334,13 @@ react-native-app-auth@^6.4.3:
     invariant "2.2.4"
     react-native-base64 "0.0.2"
 
+react-native-appstate-listener@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-appstate-listener/-/react-native-appstate-listener-1.0.0.tgz#b6c596839fdb6f5ab448b27ca928c98fa866b22f"
+  integrity sha512-CxpiIfsB+J0pltCRwcHE9UGvuCsS1Ieq+eXtpCEgPpDC9Htpv78fP7ATIo0WtJdpp39UGV2tU4lWei+KL2eKxA==
+  dependencies:
+    prop-types "^15.5.10"
+
 react-native-base64@0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/react-native-base64/-/react-native-base64-0.0.2.tgz#c28463c2c6779ac3ec5fdd12979ebc8c5f9b410a"

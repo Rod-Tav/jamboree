@@ -10,7 +10,8 @@ import RootStack from "./navigation/RootStack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LogBox, Appearance } from "react-native";
 import { StatusBar } from "expo-status-bar";
-LogBox.ignoreLogs(["Sending"]);
+import AppStateListener from "react-native-appstate-listener";
+import { AppState } from "react-native";
 import { Provider } from "react-redux";
 import tokenReducer from "./store/reducers/token";
 import { createStore, combineReducers } from "redux";
@@ -23,7 +24,28 @@ const rootReducer = combineReducers({
 const store = createStore(rootReducer);
 
 export default function App() {
-  const [theme, setTheme] = useState({ mode: "light", system: false });
+  console.log("here");
+  const [theme, setTheme] = useState({ mode: "light" });
+  console.log("mode is", theme.mode);
+
+  // Define a state variable to track the app's state
+  const [appState, setAppState] = useState(AppState.currentState);
+
+  // Update the appState variable when the app's state changes
+  const handleAppStateChange = (nextAppState) => {
+    setAppState(nextAppState);
+  };
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener(
+      "change",
+      handleAppStateChange
+    );
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
 
   const storeData = async (key, value) => {
     try {
@@ -42,6 +64,7 @@ export default function App() {
     } else {
       if (newTheme.system) {
         const systemColorScheme = Appearance.getColorScheme();
+        console.log(systemColorScheme);
         mode = systemColorScheme === "dark" ? "dark" : "light";
 
         newTheme = { ...newTheme, mode };
@@ -49,17 +72,20 @@ export default function App() {
         newTheme = { ...newTheme, system: false };
       }
     }
+
     setTheme(newTheme);
     storeData("theme", newTheme);
   };
 
-  // monitor system for theme change
+  // Monitor system for theme change when the app is in the foreground
   useEffect(() => {
     let appearanceSubscription;
-    if (theme.system) {
+
+    if (theme.system && appState === "active") {
       appearanceSubscription = Appearance.addChangeListener(
         ({ colorScheme }) => {
           updateTheme({ system: true, mode: colorScheme });
+          console.log("ran");
         }
       );
     }
@@ -70,7 +96,7 @@ export default function App() {
         appearanceSubscription.remove();
       }
     };
-  }, [theme.system]);
+  }, [theme.system, appState]);
 
   const getData = async (key) => {
     try {

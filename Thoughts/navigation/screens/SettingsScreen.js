@@ -27,12 +27,6 @@ const SettingsScreen = () => {
   let dark = theme.mode == "dark";
   const navigation = useNavigation();
 
-  const [isActive, setIsActive] = useState(theme.mode === "dark");
-  const handleSwitch = () => {
-    updateTheme();
-    setIsActive((previousState) => !previousState);
-  };
-
   // Set up the options for the header
   React.useLayoutEffect(() => {
     navigation.setOptions({
