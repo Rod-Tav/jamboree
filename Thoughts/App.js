@@ -23,7 +23,6 @@ const rootReducer = combineReducers({
 const store = createStore(rootReducer);
 
 export default function App() {
-  console.log("in app");
   const [theme, setTheme] = useState({ mode: "light" });
 
   const storeData = async (key, value) => {
@@ -70,21 +69,20 @@ export default function App() {
     fetchStoredTheme();
   }, []);
 
+  const [listenerAdded, setListenerAdded] = useState(false);
+
   useEffect(() => {
-    // Add change listener only when theme.system is true
-    if (theme.system) {
+    if (theme.system && !listenerAdded) {
       const listener = ({ colorScheme }) => {
         updateTheme({ system: true, mode: colorScheme });
       };
-
       Appearance.addChangeListener(listener);
-
-      // Remove the change listener when the component unmounts
+      setListenerAdded(true); // Set a flag to indicate the listener has been added
       return () => {
-        Appearance.removeChangeListener(listener);
+        // Cleanup logic here if necessary
       };
     }
-  }, [theme.system]);
+  }, [theme.system, listenerAdded]);
 
   const getData = async (key) => {
     try {
