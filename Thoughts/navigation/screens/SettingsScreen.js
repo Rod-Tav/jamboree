@@ -72,7 +72,7 @@ const SettingsScreen = () => {
     const filename = new Date().getTime() + ".jpeg";
     const dest = imgDir + filename;
     await FileSystem.copyAsync({ from: newImage, to: dest });
-    return dest;
+    return "images/" + filename;
   };
 
   const changeImage = async (newImage) => {

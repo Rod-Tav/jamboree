@@ -88,7 +88,7 @@ const EditScreen = ({ route }) => {
       const filename = new Date().getTime() + ".jpeg";
       const dest = imgDir + filename;
       await FileSystem.copyAsync({ from: image, to: dest });
-      return dest;
+      return "images/" + filename;
     }
     return "";
   };

@@ -29,7 +29,7 @@
     "expo-splash-screen": "^0.20.5",
     "expo-status-bar": "^1.6.0",
     "react": "18.2.0",
-    "react-native": "0.72.3",
+    "react-native": "0.72.6",
     "react-native-action-sheet": "^2.2.0",
     "react-native-app-auth": "^6.4.3",
     "react-native-appstate-listener": "^1.0.0",

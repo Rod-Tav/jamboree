@@ -16,6 +16,7 @@ import { SafeAreaView } from "react-native-safe-area-context"; // Import SafeAre
 import {} from "react-native";
 import { useContext } from "react";
 import { ThemeContext } from "../../contexts/ThemeContext";
+import * as FileSystem from "expo-file-system";
 
 const Stack = createStackNavigator();
 
@@ -170,7 +171,11 @@ const HomeScreenContainer = () => {
                 ]}
               >
                 <Image
-                  source={{ uri: thought.imageSources[0].uri }}
+                  source={{
+                    uri: `${FileSystem.documentDirectory}images/${
+                      thought.imageSources[0].uri.split("images/")[1]
+                    }`,
+                  }}
                   style={styles.imageHome}
                   resizeMode="cover"
                 />
@@ -271,7 +276,7 @@ const HomeScreenContainer = () => {
   return (
     <SafeAreaView style={[{ flex: 1 }, dark && { backgroundColor: "#535353" }]}>
       <View style={[styles.imageWrapperHome2, { aspectRatio: 0.75 }]}>
-        {coverImage.uri == "" ? (
+        {!coverImage.uri ? (
           <Image
             source={require("../../images/placeholder.png")}
             style={styles.homeBackground}
@@ -279,7 +284,11 @@ const HomeScreenContainer = () => {
           />
         ) : (
           <Image
-            source={{ uri: coverImage.uri }}
+            source={{
+              uri: `${FileSystem.documentDirectory}images/${
+                coverImage.uri.split("images/")[1]
+              }`,
+            }}
             style={styles.homeBackground}
             resizeMode="cover"
           />

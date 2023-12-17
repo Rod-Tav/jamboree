@@ -1,8 +1,8 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarn add expo-av/build/AV
+  /usr/local/bin/node /usr/local/bin/yarnpkg add react-native@0.72.6
 
 PATH: 
-  /Library/Frameworks/Python.framework/Versions/3.11/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Library/Apple/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin
+  /Users/rodtavangar/Downloads/jamboree/Thoughts/node_modules/.bin:/Users/rodtavangar/Downloads/jamboree/Thoughts/node_modules/.bin:/Users/rodtavangar/Downloads/jamboree/node_modules/.bin:/Users/rodtavangar/Downloads/node_modules/.bin:/Users/rodtavangar/node_modules/.bin:/Users/node_modules/.bin:/node_modules/.bin:/usr/local/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/Library/Frameworks/Python.framework/Versions/3.11/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/X11/bin:/Library/Apple/usr/bin
 
 Yarn version: 
   1.22.19
@@ -14,17 +14,7 @@ Platform:
   darwin arm64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/expo-av%2fbuild/AV: Request "https://registry.yarnpkg.com/expo-av%2fbuild/AV" returned a 405
-      at params.callback [as _callback] (/usr/local/lib/node_modules/yarn/lib/cli.js:66154:18)
-      at self.callback (/usr/local/lib/node_modules/yarn/lib/cli.js:140890:22)
-      at Request.emit (node:events:513:28)
-      at Request.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:141862:10)
-      at Request.emit (node:events:513:28)
-      at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:141784:12)
-      at Object.onceWrapper (node:events:627:28)
-      at IncomingMessage.emit (node:events:525:35)
-      at endReadableNT (node:internal/streams/readable:1359:12)
-      at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
+  Error: EACCES: permission denied, unlink '/Users/rodtavangar/Downloads/jamboree/Thoughts/node_modules/.yarn-integrity'
 
 npm manifest: 
   {
@@ -49,22 +39,26 @@ npm manifest:
       "axios": "^1.4.0",
       "expo": "^49.0.0",
       "expo-auth-session": "^5.0.2",
+      "expo-av": "^13.4.1",
       "expo-constants": "~14.4.2",
       "expo-font": "^11.4.0",
       "expo-image-multiple-picker": "^4.8.3",
       "expo-image-picker": "~14.3.2",
       "expo-image-picker-multiple": "^1.4.1",
-      "expo-status-bar": "~1.6.0",
+      "expo-splash-screen": "^0.20.5",
+      "expo-status-bar": "^1.6.0",
       "react": "18.2.0",
       "react-native": "0.72.3",
       "react-native-action-sheet": "^2.2.0",
       "react-native-app-auth": "^6.4.3",
+      "react-native-appstate-listener": "^1.0.0",
       "react-native-calendars": "^1.1300.0",
       "react-native-gesture-handler": "~2.12.0",
       "react-native-image-crop-picker": "^0.40.0",
       "react-native-image-picker": "^5.6.0",
       "react-native-image-viewing": "^0.2.2",
       "react-native-keyboard-aware-scrollview": "^2.1.0",
+      "react-native-keychain": "^8.1.2",
       "react-native-modal": "^13.0.1",
       "react-native-paper": "^5.9.1",
       "react-native-picker-select": "^8.0.4",
@@ -3903,6 +3897,11 @@ Lockfile:
       invariant "^2.2.4"
       qs "^6.11.0"
   
+  expo-av@^13.4.1:
+    version "13.4.1"
+    resolved "https://registry.yarnpkg.com/expo-av/-/expo-av-13.4.1.tgz#83029b3202e64bf060f0a7a24591d93bf7ab728c"
+    integrity sha512-0K8QEFzZeNGrppzYUs8wOtjOyPPkxzlVYbEHM6WzIQOG1uYYNOJkJB3aQHVFXHmz+AzoHwMrUjcschofwaMNeg==
+  
   expo-constants@~14.4.2:
     version "14.4.2"
     resolved "https://registry.npmjs.org/expo-constants/-/expo-constants-14.4.2.tgz"
@@ -4013,9 +4012,16 @@ Lockfile:
     dependencies:
       "@expo/config-plugins" "^3.0.0"
   
-  expo-status-bar@~1.6.0:
+  expo-splash-screen@^0.20.5:
+    version "0.20.5"
+    resolved "https://registry.yarnpkg.com/expo-splash-screen/-/expo-splash-screen-0.20.5.tgz#ebeba3e3977606830f74f506ab2cc25042bb7efd"
+    integrity sha512-nTALYdjHpeEA30rdOWSguxn72ctv8WM8ptuUgpfRgsWyn4i6rwYds/rBXisX69XO5fg+XjHAQqijGx/b28+3tg==
+    dependencies:
+      "@expo/prebuild-config" "6.2.6"
+  
+  expo-status-bar@^1.6.0:
     version "1.6.0"
-    resolved "https://registry.npmjs.org/expo-status-bar/-/expo-status-bar-1.6.0.tgz"
+    resolved "https://registry.yarnpkg.com/expo-status-bar/-/expo-status-bar-1.6.0.tgz#e79ffdb9a84d2e0ec9a0dc7392d9ab364fefa9cf"
     integrity sha512-e//Oi2WPdomMlMDD3skE4+1ZarKCJ/suvcB4Jo/nO427niKug5oppcPNYO+csR6y3ZglGuypS+3pp/hJ+Xp6fQ==
   
   expo-web-browser@~12.3.0:
@@ -6412,6 +6418,13 @@ Lockfile:
       invariant "2.2.4"
       react-native-base64 "0.0.2"
   
+  react-native-appstate-listener@^1.0.0:
+    version "1.0.0"
+    resolved "https://registry.yarnpkg.com/react-native-appstate-listener/-/react-native-appstate-listener-1.0.0.tgz#b6c596839fdb6f5ab448b27ca928c98fa866b22f"
+    integrity sha512-CxpiIfsB+J0pltCRwcHE9UGvuCsS1Ieq+eXtpCEgPpDC9Htpv78fP7ATIo0WtJdpp39UGV2tU4lWei+KL2eKxA==
+    dependencies:
+      prop-types "^15.5.10"
+  
   react-native-base64@0.0.2:
     version "0.0.2"
     resolved "https://registry.yarnpkg.com/react-native-base64/-/react-native-base64-0.0.2.tgz#c28463c2c6779ac3ec5fdd12979ebc8c5f9b410a"
@@ -6462,6 +6475,11 @@ Lockfile:
     version "2.1.0"
     resolved "https://registry.npmjs.org/react-native-keyboard-aware-scrollview/-/react-native-keyboard-aware-scrollview-2.1.0.tgz"
     integrity sha512-XfWozWFPhdecfxN+wuqERX3mCGDrAim5siC6TWg3Qw7wK/zlwIwe1UIsHDNOQCzf9oIh0SkZXvoOFsMrnyIVmQ==
+  
+  react-native-keychain@^8.1.2:
+    version "8.1.2"
+    resolved "https://registry.yarnpkg.com/react-native-keychain/-/react-native-keychain-8.1.2.tgz#34291ae472878e5124d081211af5ede7d810e64f"
+    integrity sha512-bhHEui+yMp3Us41NMoRGtnWEJiBE0g8tw5VFpq4mpmXAx6XJYahuM6K3WN5CsUeUl83hYysSL9oFZNKSTPSvYw==
   
   react-native-modal@^13.0.1:
     version "13.0.1"

@@ -24,9 +24,9 @@ const rootReducer = combineReducers({
 const store = createStore(rootReducer);
 
 export default function App() {
-  console.log("here");
+  // console.log("here");
   const [theme, setTheme] = useState({ mode: "light" });
-  console.log("mode is", theme.mode);
+  // console.log("mode is", theme.mode);
 
   // Define a state variable to track the app's state
   const [appState, setAppState] = useState(AppState.currentState);
@@ -77,7 +77,7 @@ export default function App() {
     } else {
       if (newTheme.system) {
         const systemColorScheme = Appearance.getColorScheme();
-        console.log(systemColorScheme);
+        // console.log(systemColorScheme);
         mode = systemColorScheme === "dark" ? "dark" : "light";
 
         newTheme = { ...newTheme, mode };

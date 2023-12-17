@@ -66,7 +66,11 @@ const DetailScreen = ({ route }) => {
       }
 
       for (const image of thought.imageSources) {
-        await FileSystem.deleteAsync(image.uri);
+        await FileSystem.deleteAsync(
+          `${FileSystem.documentDirectory}images/${
+            image.uri.split("images/")[1]
+          }`
+        );
       }
 
       // Filter out the thought to be deleted from the thoughts array for the specific date
@@ -193,14 +197,20 @@ const DetailScreen = ({ route }) => {
                   return (
                     <TouchableOpacity
                       activeOpacity={0.85}
-                      key={image.uri}
+                      key={`${FileSystem.documentDirectory}images/${
+                        image.uri.split("images/")[1]
+                      }`}
                       onPress={() => handleImagePress(index)}
                     >
                       <View
                         style={[styles.imageWrapper, { width: imageWidth }]}
                       >
                         <Image
-                          source={{ uri: image.uri }}
+                          source={{
+                            uri: `${FileSystem.documentDirectory}images/${
+                              image.uri.split("images/")[1]
+                            }`,
+                          }}
                           style={styles.image}
                           resizeMode="cover"
                         />
@@ -212,7 +222,9 @@ const DetailScreen = ({ route }) => {
             ) : (
               <TouchableOpacity
                 activeOpacity={0.85}
-                key={thought.imageSources[0].uri}
+                key={`${FileSystem.documentDirectory}images/${
+                  thought.imageSources[0].uri.split("images/")[1]
+                }`}
                 onPress={() => handleImagePress(0)}
               >
                 <View
@@ -226,7 +238,11 @@ const DetailScreen = ({ route }) => {
                   ]}
                 >
                   <Image
-                    source={{ uri: thought.imageSources[0].uri }}
+                    source={{
+                      uri: `${FileSystem.documentDirectory}images/${
+                        thought.imageSources[0].uri.split("images/")[1]
+                      }`,
+                    }}
                     style={styles.imageHome}
                     resizeMode="cover"
                   />
@@ -320,7 +336,11 @@ const DetailScreen = ({ route }) => {
           </View>
         </View>
         <ImageViewing
-          images={thought.imageSources.map((image) => ({ uri: image.uri }))}
+          images={thought.imageSources.map((image) => ({
+            uri: `${FileSystem.documentDirectory}images/${
+              image.uri.split("images/")[1]
+            }`,
+          }))}
           imageIndex={selectedImageIndex}
           visible={isImageViewVisible}
           onRequestClose={closeImageView}

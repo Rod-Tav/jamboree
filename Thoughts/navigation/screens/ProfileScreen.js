@@ -158,7 +158,11 @@ const ProfileScreenContainer = () => {
             {userImage != "" ? (
               <View>
                 <Image
-                  source={{ uri: userImage }}
+                  source={{
+                    uri: `${FileSystem.documentDirectory}images/${
+                      userImage.split("images/")[1]
+                    }`,
+                  }}
                   style={proStyles.profilePic}
                   resizeMode="cover"
                 />

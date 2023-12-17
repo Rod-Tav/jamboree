@@ -118,7 +118,7 @@ const CreateScreen = () => {
     const filename = new Date().getTime() + ".jpeg";
     const dest = imgDir + filename;
     await FileSystem.copyAsync({ from: uri, to: dest });
-    return dest;
+    return "images/" + filename;
   };
 
   const storeImages = async (images) => {

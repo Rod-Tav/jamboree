@@ -19,6 +19,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { TextInput } from "react-native-gesture-handler";
 import moodstyles from "../../styles/moodstyles";
 import { useContext } from "react";
+import * as FileSystem from "expo-file-system";
 import { ThemeContext } from "../../contexts/ThemeContext";
 
 const Stack = createStackNavigator();
@@ -106,7 +107,11 @@ const SearchScreenContainer = ({ route }) => {
                 ]}
               >
                 <Image
-                  source={{ uri: thought.imageSources[0].uri }}
+                  source={{
+                    uri: `${FileSystem.documentDirectory}images/${
+                      thought.imageSources[0].uri.split("images/")[1]
+                    }`,
+                  }}
                   style={styles.imageHome}
                   resizeMode="cover"
                 />
