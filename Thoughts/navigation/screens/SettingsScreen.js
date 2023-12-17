@@ -100,22 +100,20 @@ const SettingsScreen = () => {
             Aesthetics
           </Text>
 
-          <View style={styles}>
+          <View style={styles.settingsContentContainer}>
             <ProfileImagePicker settings={true} changeImage={changeImage} />
-          </View>
-          <View style={styles.section}>
             <SettingsButton
-              label="Light"
+              label="Light Mode"
               isActive={theme.mode === "light" && !theme.system}
               onPress={() => updateTheme({ mode: "light" })}
             />
             <SettingsButton
-              label="Dark"
+              label="Dark Mode"
               isActive={theme.mode === "dark" && !theme.system}
               onPress={() => updateTheme({ mode: "dark" })}
             />
             <SettingsButton
-              label="System"
+              label="Automatic"
               isActive={theme.system}
               onPress={() => updateTheme({ system: true })}
             />
@@ -143,25 +141,30 @@ const SettingsButton = ({ label, isActive, ...props }) => {
       ]}
       {...props}
     >
-      <View>
-        <Text style={[dark ? { color: "#d1d5db" } : { color: "#4b5563" }]}>
+      <View style={styles.settingsOptionContainer}>
+        <Ionicons
+          name={isActive ? "checkmark-circle" : "checkmark-circle-outline"}
+          size={25}
+          color={
+            isActive
+              ? dark
+                ? "#488a99"
+                : "#488a99"
+              : dark
+              ? "lightgrey"
+              : "#828282"
+          }
+          style={{ paddingLeft: 1 }}
+        />
+        <Text
+          style={[
+            styles.settingsOptionText,
+            dark ? { color: "lightgrey" } : { color: "#828282" },
+          ]}
+        >
           {label}
         </Text>
       </View>
-
-      <Ionicons
-        name={isActive ? "checkmark-circle" : "checkmark-circle-outline"}
-        size={24}
-        color={
-          isActive
-            ? dark
-              ? "#0891b2"
-              : "#0891b2"
-            : dark
-            ? "#d1d5db"
-            : "#4b5563"
-        }
-      />
     </TouchableOpacity>
   );
 };

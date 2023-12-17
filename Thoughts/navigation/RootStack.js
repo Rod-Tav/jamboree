@@ -50,12 +50,13 @@ const RootStack = () => {
           tabBarStyle: [
             {
               display: "flex",
-              backgroundColor: dark ? "#535353" : "white",
+              backgroundColor: dark ? "#2b2b2b" : "white",
+              borderTopColor: dark ? "darkgrey" : "lightgrey",
             },
             // null,
           ],
           headerStyle: {
-            backgroundColor: dark ? "#535353" : "white",
+            backgroundColor: dark ? "#2b2b2b" : "white",
           },
           tabBarShowLabel: false,
           headerShown: false,

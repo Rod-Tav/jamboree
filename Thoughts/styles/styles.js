@@ -162,7 +162,7 @@ export default StyleSheet.create({
     paddingRight: 16,
     paddingTop: 12,
     paddingBottom: 12,
-    backgroundColor: "#2F80ED",
+    backgroundColor: "#488a99",
     textAlign: "center",
     justifyContent: "space-between",
     flexDirection: "row",
@@ -417,6 +417,10 @@ export default StyleSheet.create({
     gap: 15,
     borderTopColor: "#F2F4F5",
     borderTopWidth: 1,
+  },
+  settingsContentContainer: {
+    display: "flex",
+    gap: 15,
   },
   settingsOptionContainer: {
     display: "flex",
