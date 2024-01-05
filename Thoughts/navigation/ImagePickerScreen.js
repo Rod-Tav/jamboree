@@ -16,6 +16,7 @@ import styles from "../styles/styles";
 import CustomActionSheet from "./CustomActionSheet";
 import { useContext } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
+import * as FileSystem from "expo-file-system";
 
 const ImagePickerScreen = ({ imageSources, changeImageSources }) => {
   const [isImageViewVisible, setIsImageViewVisible] = useState(false);
@@ -153,7 +154,11 @@ const ImagePickerScreen = ({ imageSources, changeImageSources }) => {
                   >
                     <View style={[styles.imageWrapper, { width: imageWidth }]}>
                       <Image
-                        source={{ uri: image.uri }}
+                        source={{
+                          uri: `${FileSystem.documentDirectory}images/${
+                            image.uri.split("images/")[1]
+                          }`,
+                        }}
                         style={styles.image}
                         resizeMode="cover"
                       />
@@ -179,7 +184,11 @@ const ImagePickerScreen = ({ imageSources, changeImageSources }) => {
                 ]}
               >
                 <Image
-                  source={{ uri: imageSources[0].uri }}
+                  source={{
+                    uri: `${FileSystem.documentDirectory}images/${
+                      imageSources[0].uri.split("images/")[1]
+                    }`,
+                  }}
                   style={styles.imageHome}
                   resizeMode="cover"
                   onLoad={handleImageLoad(imageSources[0].uri)}

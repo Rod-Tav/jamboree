@@ -20,6 +20,7 @@ import { Calendar } from "react-native-calendars";
 import SelectedDateThoughtsScreen from "./SelectedDateThoughtsScreen";
 import { useContext } from "react";
 import { ThemeContext } from "../../contexts/ThemeContext";
+import * as FileSystem from "expo-file-system";
 
 const Stack = createStackNavigator();
 

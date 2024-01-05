@@ -109,7 +109,11 @@ const EditScreen = ({ route }) => {
           {image != "" ? (
             <View>
               <Image
-                source={{ uri: image }}
+                source={{
+                  uri: `${FileSystem.documentDirectory}images/${
+                    image.split("images/")[1]
+                  }`,
+                }}
                 style={proStyles.profilePic}
                 resizeMode="cover"
               />
